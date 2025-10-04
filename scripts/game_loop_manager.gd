@@ -1,5 +1,8 @@
 extends Node
 
+# Load InterestMatcher for generating buyer interests
+const InterestMatcher = preload("res://scripts/interest_matcher.gd")
+
 # Signals for day cycle and simulation
 signal day_started(day_number: int)
 signal day_ended(day_number: int)
@@ -71,12 +74,11 @@ func _roll_daily_encounters() -> void:
 			"arrival_time": randf() * day_duration * 0.8  # Arrive in first 80% of day
 		}
 
-		# Add type-specific interests
+		# Add type-specific interests using centralized InterestMatcher
 		if encounter_type == "buyer":
-			# Buyers want a soul from a specific era
-			var era = SoulData.Era.values().pick_random()
-			encounter["desired_era"] = era
-			
+			# Generate random interests (80% single, 20% multiple)
+			encounter["interests"] = InterestMatcher.generate_random_interests()
+
 		elif encounter_type == "seller":
 			# Sellers bring a soul to sell
 			encounter["soul_to_sell"] = SoulData.generate_random_soul()
@@ -88,7 +90,12 @@ func _roll_daily_encounters() -> void:
 	print("Rolled %d encounters for today:" % num_encounters)
 	for encounter in encounter_queue:
 		if encounter.type == "buyer":
-			print("  - %s arriving at %.1f seconds (wants %s)" % [encounter.type, encounter.arrival_time, encounter.desired_era])
+			var interests_str = ""
+			for interest in encounter.get("interests", []):
+				if interests_str != "":
+					interests_str += " AND "
+				interests_str += InterestMatcher.format_interest_for_display(interest)
+			print("  - %s arriving at %.1f seconds (wants: %s)" % [encounter.type, encounter.arrival_time, interests_str])
 		elif encounter.type == "seller":
 			print("  - %s arriving at %.1f seconds (selling %s)" % [encounter.type, encounter.arrival_time, encounter.soul_to_sell.name])
 		else:

@@ -17,7 +17,7 @@ func add_interaction(shade_data: Dictionary) -> void:
 
 	# Add type-specific data
 	if shade_data.type == "buyer":
-		interaction["desired_era"] = shade_data.get("desired_era", "common")
+		interaction["interests"] = shade_data.get("interests", [])
 		interaction["selected_soul_plinth"] = shade_data.get("selected_soul_plinth", null)
 	elif shade_data.type == "seller":
 		interaction["soul_to_sell"] = shade_data.get("soul_to_sell", null)

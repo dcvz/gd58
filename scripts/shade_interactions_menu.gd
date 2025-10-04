@@ -2,6 +2,9 @@ extends Control
 
 ## Menu for handling shade interactions (buyers and sellers)
 
+# Load InterestMatcher for formatting interests
+const InterestMatcher = preload("res://scripts/interest_matcher.gd")
+
 var interaction_manager: Node
 var game_loop_manager: Node
 var interaction_list: VBoxContainer
@@ -70,11 +73,17 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 
 	# Details based on type
 	if interaction.type == "buyer":
-		var detail_label = Label.new()
-		var desired_era = interaction.get("desired_era", 0)
-		var era_name = SoulData.Era.keys()[desired_era] if desired_era < SoulData.Era.size() else "unknown"
-		detail_label.text = "Wants: %s era soul" % era_name
-		vbox.add_child(detail_label)
+		# Display all interests using centralized formatter
+		var interests = interaction.get("interests", [])
+		if interests.size() > 0:
+			var wants_label = Label.new()
+			wants_label.text = "Wants:"
+			vbox.add_child(wants_label)
+
+			for interest in interests:
+				var interest_label = Label.new()
+				interest_label.text = "  • %s" % InterestMatcher.format_interest_for_display(interest)
+				vbox.add_child(interest_label)
 
 		# Action buttons
 		var button_hbox = HBoxContainer.new()

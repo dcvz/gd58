@@ -11,7 +11,3 @@ var displayed_soul: SoulData = null
 ## Get the world position where a soul should be placed
 func get_soul_position() -> Vector3:
 	return global_position + soul_offset
-
-## Check if this plinth has a soul with the specified rarity
-func has_era(era: int) -> bool:
-	return displayed_soul != null and displayed_soul.era == era

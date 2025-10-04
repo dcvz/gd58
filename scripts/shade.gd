@@ -2,6 +2,9 @@ extends CharacterBody3D
 
 ## Represents a customer in the shop
 
+# Load InterestMatcher for checking soul interests
+const InterestMatcher = preload("res://scripts/interest_matcher.gd")
+
 enum State {
 	BROWSING,           # Walking to plinths
 	INSPECTING,         # Looking at a soul on a plinth
@@ -60,7 +63,12 @@ func start_browsing(available_plinths: Array) -> void:
 		plinths_to_visit = shuffled.slice(0, num_to_visit)
 
 		if encounter_data.type == "buyer":
-			print("[Shade] Buyer browsing %d plinths, looking for %s era" % [num_to_visit, encounter_data.get("desired_era", "unknown")])
+			var interests_str = ""
+			for interest in encounter_data.get("interests", []):
+				if interests_str != "":
+					interests_str += " AND "
+				interests_str += InterestMatcher.format_interest_for_display(interest)
+			print("[Shade] Buyer browsing %d plinths, looking for: %s" % [num_to_visit, interests_str])
 		else:
 			print("[Shade] Broker browsing %d plinths" % num_to_visit)
 
@@ -127,15 +135,16 @@ func _inspect_behavior(delta: float) -> void:
 			leave_shop()
 			return
 
-		# Check if this plinth has what the buyer wants
-		if encounter_data.type == "buyer" and encounter_data.has("desired_era"):
+		# Check if this plinth has what the buyer wants (using centralized matcher)
+		if encounter_data.type == "buyer" and encounter_data.has("interests"):
 			var current_plinth = plinths_to_visit[current_plinth_index]
-			if current_plinth.has_era(encounter_data.desired_era):
-				# Found their desired era! Go to checkout
+			var soul = current_plinth.displayed_soul
+
+			if soul and InterestMatcher.soul_matches_interests(soul, encounter_data.interests):
+				# Found a soul matching ALL their interests! Go to checkout
 				will_buy = true
 				selected_soul_plinth = current_plinth
-				var soul_name = current_plinth.displayed_soul.name if current_plinth.displayed_soul else "Unknown"
-				print("[Shade] Buyer found %s era soul (%s) - heading to checkout!" % [str(encounter_data.desired_era), soul_name])
+				print("[Shade] Buyer found matching soul (%s) - heading to checkout!" % soul.name)
 
 		current_plinth_index += 1
 
@@ -149,7 +158,12 @@ func _inspect_behavior(delta: float) -> void:
 			else:
 				# Didn't find what they wanted, leave
 				if encounter_data.type == "buyer":
-					print("[Shade] Buyer didn't find %s era - leaving disappointed" % str(encounter_data.desired_era))
+					var interests_str = ""
+					for interest in encounter_data.get("interests", []):
+						if interests_str != "":
+							interests_str += " AND "
+						interests_str += InterestMatcher.format_interest_for_display(interest)
+					print("[Shade] Buyer didn't find matching soul - leaving disappointed (wanted: %s)" % interests_str)
 				else:
 					print("[Shade] Broker finished browsing - leaving")
 				leave_shop()
