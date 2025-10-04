@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bwdxmyedjgcag"]
+[gd_scene load_steps=3 format=3 uid="uid://bwdxmyedjgcag"]
 
 [ext_resource type="Script" uid="uid://xghpnwbwr2s1" path="res://scripts/game_loop_manager.gd" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://b2ndi0erarogm" path="res://Assets/Models/cube.blend" id="2_0xm2m"]
 
 [node name="Root" type="Node"]
 
@@ -10,3 +11,758 @@
 script = ExtResource("1_ig7tw")
 
 [node name="AudioManager" type="Node" parent="Gameplay"]
+
+[node name="World" type="Node" parent="."]
+
+[node name="FloorGeometry" type="Node" parent="World"]
+
+[node name="cube" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="cube2" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0022656, -1, 0)
+
+[node name="cube3" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1)
+
+[node name="cube4" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0022656, -1, 1)
+
+[node name="cube5" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -1, 0)
+
+[node name="cube6" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9977344, -1, 0)
+
+[node name="cube9" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -1)
+
+[node name="cube10" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0022656, -1, -1)
+
+[node name="cube11" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -1, -1)
+
+[node name="cube12" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9977344, -1, -1)
+
+[node name="cube7" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -1, 1)
+
+[node name="cube8" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9977344, -1, 1)
+
+[node name="cube13" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 2)
+
+[node name="cube14" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0022656, -1, 2)
+
+[node name="cube15" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -1, 2)
+
+[node name="cube16" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9977344, -1, 2)
+
+[node name="cube17" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -1, 0)
+
+[node name="cube18" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9977345, -1, 0)
+
+[node name="cube19" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -1, 1)
+
+[node name="cube20" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9977345, -1, 1)
+
+[node name="cube21" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -1, 0)
+
+[node name="cube22" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9977345, -1, 0)
+
+[node name="cube23" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -1, -1)
+
+[node name="cube24" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9977345, -1, -1)
+
+[node name="cube25" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -1, -1)
+
+[node name="cube26" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9977345, -1, -1)
+
+[node name="cube27" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -1, 1)
+
+[node name="cube28" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9977345, -1, 1)
+
+[node name="cube29" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -1, 2)
+
+[node name="cube30" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9977345, -1, 2)
+
+[node name="cube31" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -1, 2)
+
+[node name="cube32" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9977345, -1, 2)
+
+[node name="cube33" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -1, 0)
+
+[node name="cube34" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0022655, -1, 0)
+
+[node name="cube35" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -1, 1)
+
+[node name="cube36" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0022655, -1, 1)
+
+[node name="cube37" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -1, 0)
+
+[node name="cube38" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0022655, -1, 0)
+
+[node name="cube39" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -1, -1)
+
+[node name="cube40" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0022655, -1, -1)
+
+[node name="cube41" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -1, -1)
+
+[node name="cube42" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0022655, -1, -1)
+
+[node name="cube43" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -1, 1)
+
+[node name="cube44" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0022655, -1, 1)
+
+[node name="cube45" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -1, 2)
+
+[node name="cube46" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0022655, -1, 2)
+
+[node name="cube47" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -1, 2)
+
+[node name="cube48" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0022655, -1, 2)
+
+[node name="cube49" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -4)
+
+[node name="cube50" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0022656, -1, -4)
+
+[node name="cube51" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -3)
+
+[node name="cube52" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0022656, -1, -3)
+
+[node name="cube53" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -1, -4)
+
+[node name="cube54" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9977344, -1, -4)
+
+[node name="cube55" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -5)
+
+[node name="cube56" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0022656, -1, -5)
+
+[node name="cube57" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -1, -5)
+
+[node name="cube58" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9977344, -1, -5)
+
+[node name="cube59" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -1, -3)
+
+[node name="cube60" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9977344, -1, -3)
+
+[node name="cube61" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -2)
+
+[node name="cube62" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0022656, -1, -2)
+
+[node name="cube63" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -1, -2)
+
+[node name="cube64" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9977344, -1, -2)
+
+[node name="cube65" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -1, -4)
+
+[node name="cube66" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9977345, -1, -4)
+
+[node name="cube67" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -1, -3)
+
+[node name="cube68" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9977345, -1, -3)
+
+[node name="cube69" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -1, -4)
+
+[node name="cube70" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9977345, -1, -4)
+
+[node name="cube71" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -1, -5)
+
+[node name="cube72" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9977345, -1, -5)
+
+[node name="cube73" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -1, -5)
+
+[node name="cube74" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9977345, -1, -5)
+
+[node name="cube75" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -1, -3)
+
+[node name="cube76" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9977345, -1, -3)
+
+[node name="cube77" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -1, -2)
+
+[node name="cube78" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9977345, -1, -2)
+
+[node name="cube79" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -1, -2)
+
+[node name="cube80" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9977345, -1, -2)
+
+[node name="cube81" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -1, -4)
+
+[node name="cube82" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0022655, -1, -4)
+
+[node name="cube83" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -1, -3)
+
+[node name="cube84" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0022655, -1, -3)
+
+[node name="cube85" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -1, -4)
+
+[node name="cube86" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0022655, -1, -4)
+
+[node name="cube87" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -1, -5)
+
+[node name="cube88" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0022655, -1, -5)
+
+[node name="cube89" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -1, -5)
+
+[node name="cube90" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0022655, -1, -5)
+
+[node name="cube91" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -1, -3)
+
+[node name="cube92" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0022655, -1, -3)
+
+[node name="cube93" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -1, -2)
+
+[node name="cube94" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0022655, -1, -2)
+
+[node name="cube95" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -1, -2)
+
+[node name="cube96" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0022655, -1, -2)
+
+[node name="cube97" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 4)
+
+[node name="cube98" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0022656, -1, 4)
+
+[node name="cube99" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 5)
+
+[node name="cube100" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0022656, -1, 5)
+
+[node name="cube101" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -1, 4)
+
+[node name="cube102" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9977344, -1, 4)
+
+[node name="cube103" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 3)
+
+[node name="cube104" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0022656, -1, 3)
+
+[node name="cube105" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -1, 3)
+
+[node name="cube106" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9977344, -1, 3)
+
+[node name="cube107" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -1, 5)
+
+[node name="cube108" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9977344, -1, 5)
+
+[node name="cube109" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 6)
+
+[node name="cube110" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0022656, -1, 6)
+
+[node name="cube111" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -1, 6)
+
+[node name="cube112" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9977344, -1, 6)
+
+[node name="cube113" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -1, 4)
+
+[node name="cube114" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9977345, -1, 4)
+
+[node name="cube115" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -1, 5)
+
+[node name="cube116" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9977345, -1, 5)
+
+[node name="cube117" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -1, 4)
+
+[node name="cube118" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9977345, -1, 4)
+
+[node name="cube119" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -1, 3)
+
+[node name="cube120" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9977345, -1, 3)
+
+[node name="cube121" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -1, 3)
+
+[node name="cube122" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9977345, -1, 3)
+
+[node name="cube123" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -1, 5)
+
+[node name="cube124" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9977345, -1, 5)
+
+[node name="cube125" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -1, 6)
+
+[node name="cube126" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9977345, -1, 6)
+
+[node name="cube127" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -1, 6)
+
+[node name="cube128" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9977345, -1, 6)
+
+[node name="cube129" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -1, 4)
+
+[node name="cube130" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0022655, -1, 4)
+
+[node name="cube131" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -1, 5)
+
+[node name="cube132" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0022655, -1, 5)
+
+[node name="cube133" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -1, 4)
+
+[node name="cube134" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0022655, -1, 4)
+
+[node name="cube135" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -1, 3)
+
+[node name="cube136" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0022655, -1, 3)
+
+[node name="cube137" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -1, 3)
+
+[node name="cube138" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0022655, -1, 3)
+
+[node name="cube139" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -1, 5)
+
+[node name="cube140" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0022655, -1, 5)
+
+[node name="cube141" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -1, 6)
+
+[node name="cube142" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0022655, -1, 6)
+
+[node name="cube143" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -1, 6)
+
+[node name="cube144" parent="World/FloorGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0022655, -1, 6)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9622293, 1.4842978, 4.3501596)
+light_color = Color(1, 1, 0.6392157, 1)
+shadow_enabled = true
+
+[node name="WallGeometry" type="Node" parent="World"]
+
+[node name="cube21" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, -1, 0)
+
+[node name="cube25" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, -1, -1)
+
+[node name="cube27" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, -1, 1)
+
+[node name="cube31" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, -1, 2)
+
+[node name="cube69" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, -1, -4)
+
+[node name="cube73" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, -1, -5)
+
+[node name="cube75" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, -1, -3)
+
+[node name="cube79" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, -1, -2)
+
+[node name="cube117" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, -1, 4)
+
+[node name="cube121" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, -1, 3)
+
+[node name="cube123" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, -1, 5)
+
+[node name="cube127" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, -1, 6)
+
+[node name="cube26" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -1)
+
+[node name="cube32" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, 2)
+
+[node name="cube70" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -4)
+
+[node name="cube74" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -5)
+
+[node name="cube101" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, -1, -6)
+
+[node name="cube102" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -6)
+
+[node name="cube76" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -3)
+
+[node name="cube80" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -2)
+
+[node name="cube118" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, 4)
+
+[node name="cube122" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, 3)
+
+[node name="cube124" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, 5)
+
+[node name="cube128" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, 6)
+
+[node name="cube23" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, 0)
+
+[node name="cube29" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, -1)
+
+[node name="cube30" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, 1)
+
+[node name="cube33" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, 2)
+
+[node name="cube71" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, -4)
+
+[node name="cube77" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, -5)
+
+[node name="cube78" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, -3)
+
+[node name="cube81" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, -2)
+
+[node name="cube119" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, 4)
+
+[node name="cube125" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, 3)
+
+[node name="cube126" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, 5)
+
+[node name="cube129" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, 6)
+
+[node name="cube24" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
+
+[node name="cube34" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -1)
+
+[node name="cube35" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 1)
+
+[node name="cube36" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 2)
+
+[node name="cube72" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -4)
+
+[node name="cube82" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -5)
+
+[node name="cube83" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -3)
+
+[node name="cube84" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -2)
+
+[node name="cube120" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 4)
+
+[node name="cube130" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 3)
+
+[node name="cube131" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 5)
+
+[node name="cube132" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 6)
+
+[node name="cube149" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 7)
+
+[node name="cube37" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, -1, -7)
+
+[node name="cube38" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 1, -1, -7)
+
+[node name="cube39" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1, -1, -7)
+
+[node name="cube40" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2, -1, -7)
+
+[node name="cube85" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 4, -1, -7)
+
+[node name="cube86" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5, -1, -6.9999995)
+
+[node name="cube87" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3, -1, -7)
+
+[node name="cube88" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2, -1, -7)
+
+[node name="cube133" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -4, -1, -7)
+
+[node name="cube134" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -3, -1, -7)
+
+[node name="cube135" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -5, -1, -7)
+
+[node name="cube136" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -6, -1, -7.0000005)
+
+[node name="cube41" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, -7)
+
+[node name="cube42" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 1, 0, -7)
+
+[node name="cube43" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1, 0, -7)
+
+[node name="cube44" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2, 0, -7)
+
+[node name="cube89" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 4, 0, -7)
+
+[node name="cube90" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5, 0, -6.9999995)
+
+[node name="cube103" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 6, -1, -6.9999995)
+
+[node name="cube104" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 6, 0, -6.9999995)
+
+[node name="cube91" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3, 0, -7)
+
+[node name="cube92" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2, 0, -7)
+
+[node name="cube137" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -4, 0, -7)
+
+[node name="cube138" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -3, 0, -7)
+
+[node name="cube139" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -5, 0, -7)
+
+[node name="cube140" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -6, 0, -7.0000005)
+
+[node name="cube45" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, -1, 6)
+
+[node name="cube46" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 1, -1, 6)
+
+[node name="cube47" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1, -1, 6)
+
+[node name="cube48" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2, -1, 6)
+
+[node name="cube93" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 4, -1, 6)
+
+[node name="cube94" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5, -1, 6.0000005)
+
+[node name="cube95" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3, -1, 6)
+
+[node name="cube96" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2, -1, 6)
+
+[node name="cube141" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -4, -1, 6)
+
+[node name="cube142" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -3, -1, 6)
+
+[node name="cube143" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -5, -1, 6)
+
+[node name="cube144" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -6, -1, 5.9999995)
+
+[node name="cube49" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 6)
+
+[node name="cube50" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 1, 0, 6)
+
+[node name="cube51" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1, 0, 6)
+
+[node name="cube52" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2, 0, 6)
+
+[node name="cube97" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 4, 0, 6)
+
+[node name="cube98" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5, 0, 6.0000005)
+
+[node name="cube99" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3, 0, 6)
+
+[node name="cube100" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2, 0, 6)
+
+[node name="cube145" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -4, 0, 6)
+
+[node name="cube146" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -3, 0, 6)
+
+[node name="cube147" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -5, 0, 6)
+
+[node name="cube148" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -6, 0, 5.9999995)
+
+[node name="cube150" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7, -1, 5.9999995)
+
+[node name="cube151" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7, 0, 5.9999995)
+
+[node name="plinth" parent="." instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 3)
+
+[node name="plinth3" parent="." instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 3)
+
+[node name="plinth2" parent="." instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -2)
