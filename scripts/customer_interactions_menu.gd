@@ -91,9 +91,36 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 	elif interaction.type == "seller":
 		var soul_to_sell = interaction.get("soul_to_sell")
 		if soul_to_sell:
-			var detail_label = Label.new()
-			detail_label.text = "Selling: %s (%s)" % [soul_to_sell.name, str(SoulData.Era.keys()[soul_to_sell.era])]
-			vbox.add_child(detail_label)
+			# Soul name
+			var name_label = Label.new()
+			name_label.text = "Selling: %s" % soul_to_sell.name
+			vbox.add_child(name_label)
+
+			# Era
+			var era_label = Label.new()
+			era_label.text = "Era: %s" % SoulData.Era.keys()[soul_to_sell.era]
+			vbox.add_child(era_label)
+
+			# Cause of Death
+			var death_label = Label.new()
+			death_label.text = "Cause of Death: %s" % SoulData.CauseOfDeath.keys()[soul_to_sell.causeOfDeath]
+			vbox.add_child(death_label)
+
+			# Stats
+			if soul_to_sell.stats.size() > 0:
+				var stats_label = Label.new()
+				stats_label.text = "Stats:"
+				vbox.add_child(stats_label)
+
+				for stat_key in soul_to_sell.stats.keys():
+					var stat_value = soul_to_sell.stats[stat_key]
+					var stat_item = Label.new()
+					stat_item.text = "  - %s: %d%%" % [SoulData.SoulAttribute.keys()[stat_key], int(stat_value)]
+					vbox.add_child(stat_item)
+			else:
+				var no_stats_label = Label.new()
+				no_stats_label.text = "Stats: None"
+				vbox.add_child(no_stats_label)
 
 		# Action buttons
 		var button_hbox = HBoxContainer.new()
