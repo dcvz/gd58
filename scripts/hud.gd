@@ -2,9 +2,11 @@ extends Control
 
 @onready var day_counter: Label = $BottomLeft/DayCounter
 @onready var time_label: Label = $BottomLeft/TimeLabel
+@onready var kp_label: Label = $BottomLeft/KPLabel
 @onready var menu_button: Button = $TopRight/MenuButton
 @onready var interactions_button: Button = $TopRight/InteractionsButton
 @onready var game_loop_manager: Node = get_node("/root/Root/Gameplay/GameLoopManager")
+@onready var currency_manager: Node = get_node("/root/Root/Gameplay/CurrencyManager")
 @onready var interaction_menu: Control = get_node("/root/Root/UI/InteractionMenu")
 @onready var shade_interactions_menu: Control = get_node("/root/Root/UI/ShadeInteractionsMenu")
 @onready var end_of_day_menu: Control = get_node("/root/Root/UI/EndOfDayMenu")
@@ -23,7 +25,11 @@ func _ready() -> void:
 	interaction_manager.interaction_added.connect(_update_interactions_count)
 	interaction_manager.interaction_removed.connect(_update_interactions_count)
 
+	# Connect to currency manager
+	currency_manager.currency_changed.connect(_update_kp_display)
+
 	_update_interactions_count()
+	_update_kp_display(currency_manager.get_kp())
 
 func _process(_delta: float) -> void:
 	# Update time display
@@ -58,3 +64,6 @@ func _on_interactions_button_pressed() -> void:
 func _update_interactions_count(_interaction: Dictionary = {}) -> void:
 	var count = interaction_manager.get_pending_interactions().size()
 	interactions_button.text = "Interactions (%d)" % count
+
+func _update_kp_display(amount: int) -> void:
+	kp_label.text = "%d KP" % amount

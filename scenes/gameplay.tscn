@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://c8j2dxgj88535" path="res://scripts/display_manager.gd" id="3_ocj2s"]
 [ext_resource type="Script" path="res://scripts/shade_manager.gd" id="4_customer"]
 [ext_resource type="Script" path="res://scripts/interaction_manager.gd" id="5_interaction"]
+[ext_resource type="Script" path="res://scripts/currency_manager.gd" id="6_currency"]
 
 [node name="Gameplay" type="Node"]
 
@@ -22,5 +23,8 @@ script = ExtResource("4_customer")
 
 [node name="InteractionManager" type="Node" parent="."]
 script = ExtResource("5_interaction")
+
+[node name="CurrencyManager" type="Node" parent="."]
+script = ExtResource("6_currency")
 
 [node name="AudioManager" type="Node" parent="."]

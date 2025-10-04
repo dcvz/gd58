@@ -28,7 +28,7 @@ anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 16.0
-offset_top = -80.0
+offset_top = -100.0
 offset_right = 200.0
 offset_bottom = -16.0
 grow_vertical = 0
@@ -41,6 +41,11 @@ label_settings = SubResource("LabelSettings_day")
 [node name="TimeLabel" type="Label" parent="HUD/BottomLeft"]
 layout_mode = 2
 text = "Time: 0%"
+label_settings = SubResource("LabelSettings_time")
+
+[node name="KPLabel" type="Label" parent="HUD/BottomLeft"]
+layout_mode = 2
+text = "100 KP"
 label_settings = SubResource("LabelSettings_time")
 
 [node name="TopRight" type="VBoxContainer" parent="HUD"]
