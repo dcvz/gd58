@@ -3,6 +3,7 @@ extends Control
 ## Menu for handling customer interactions (buyers and sellers)
 
 var interaction_manager: Node
+var game_loop_manager: Node
 var interaction_list: VBoxContainer
 var close_button: Button
 
@@ -11,6 +12,7 @@ func _ready() -> void:
 
 	# Get references
 	interaction_manager = get_node("/root/Root/Gameplay/InteractionManager")
+	game_loop_manager = get_node("/root/Root/Gameplay/GameLoopManager")
 	interaction_list = $Panel/VBoxContainer/ScrollContainer/InteractionList
 	close_button = $Panel/VBoxContainer/CloseButton
 
@@ -24,10 +26,12 @@ func _ready() -> void:
 
 func show_menu() -> void:
 	visible = true
+	game_loop_manager.is_simulation_paused = true
 	_refresh_list()
 
 func hide_menu() -> void:
 	visible = false
+	game_loop_manager.is_simulation_paused = false
 
 func _on_close_pressed() -> void:
 	hide_menu()
