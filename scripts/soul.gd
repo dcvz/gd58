@@ -39,10 +39,8 @@ enum GradientMode {
 }
 
 # Soul data (for future expansion)
-var soul_tags: Array[String] = []
+var soul_stats: Dictionary = {}
 var soul_era: String = ""
-var rarity: String = "common"
-var condition: float = 1.0  # 0.0 to 1.0
 
 @onready var particles: GPUParticles3D = $GPUParticles3D
 
@@ -171,18 +169,6 @@ func set_time_scale(speed: float) -> void:
 	update_shader_parameters()
 
 # Future: Add soul-specific data
-func set_soul_data(tags: Array[String], era: String, soul_rarity: String, soul_condition: float) -> void:
-	soul_tags = tags
+func set_soul_data(stats: Dictionary, era: String) -> void:
+	soul_stats = stats
 	soul_era = era
-	rarity = soul_rarity
-	condition = soul_condition
-
-	# Could adjust visuals based on rarity/condition
-	match rarity:
-		"common":
-			set_emission_intensity(1.0)
-		"rare":
-			set_emission_intensity(1.5)
-		"legendary":
-			set_emission_intensity(2.5)
-			set_time_scale(3.0)

@@ -73,17 +73,9 @@ func _roll_daily_encounters() -> void:
 
 		# Add type-specific interests
 		if encounter_type == "buyer":
-			# Buyers want a specific rarity
-			#var rarities = ["common", "rare", "legendary"]
-			#var weights = [60, 30, 10]  # More likely to want common/rare than legendary
-			#encounter["desired_era"] = _weighted_random(rarities, weights)
-
+			# Buyers want a soul from a specific era
 			var era = SoulData.Era.values().pick_random()
-			encounter["desired_era"] = era;
-			
-			#var search_types = ["property", "era", "death"]
-			#var search_type = _weighted_random(search_types, [33, 33, 33])
-			#if search_type == "property":
+			encounter["desired_era"] = era
 			
 		elif encounter_type == "seller":
 			# Sellers bring a soul to sell

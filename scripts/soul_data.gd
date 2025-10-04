@@ -13,7 +13,7 @@ enum SoulAttribute { ARTISTIC, SCIENTIFIC, FUNNY, FAMOUS, RICH, BEAUTIFUL, GENER
 @export var name: String = ""
 @export var era: Era = Era.MODERN
 @export var causeOfDeath: CauseOfDeath = CauseOfDeath.NATURAL
-@export var tags: Dictionary
+@export var stats: Dictionary
 @export var visual_color: Color = Color(0.5, 0.8, 1.0)
 
 func _init(soul_id: String = "", soul_name: String = "", soul_era: Era = Era.MODERN) -> void:
@@ -33,7 +33,7 @@ static func generate_random_soul() -> SoulData:
 	soul.name = "Common Soul %d" % (randomId)
 	soul.era = Era.values().pick_random()
 	soul.causeOfDeath = CauseOfDeath.values().pick_random()
-	soul.tags = _get_random_properties_for_soul()
+	soul.stats = _get_random_properties_for_soul()
 	soul.visual_color = randomColor
 	
 	return soul
