@@ -30,7 +30,10 @@ func add_interaction(shade_data: Dictionary) -> void:
 			interaction["offer_price"] = offer_price
 			print("[InteractionManager] Buyer offering %d KP for %s" % [offer_price, soul.name])
 		else:
-			interaction["offer_price"] = 0
+			# No valid soul - buyer arrived but soul was removed/sold before they could interact
+			# Don't add this buyer to the queue
+			print("[InteractionManager] WARNING: Buyer arrived but soul is no longer available, skipping interaction")
+			return
 
 	elif shade_data.type == "seller":
 		interaction["soul_to_sell"] = shade_data.get("soul_to_sell", null)
