@@ -38,6 +38,7 @@ func _ready() -> void:
 
 	# Connect to game loop
 	game_loop_manager.day_started.connect(_on_day_started)
+	game_loop_manager.day_ended.connect(_on_day_ended)
 
 	# Load encounters for current day if already started
 	if game_loop_manager.is_day_active:
@@ -51,9 +52,29 @@ func _process(delta: float) -> void:
 	_check_spawn_shades()
 
 func _on_day_started(day_number: int) -> void:
+	# Clear any remaining shades from previous day
+	_clear_all_shades()
+
 	# Get encounters from game loop
 	encounters_to_spawn = game_loop_manager.encounter_queue.duplicate()
 	next_spawn_index = 0
+
+func _on_day_ended(_day_number: int) -> void:
+	# Day ended - shades will walk out via their own signal handler
+	pass
+
+func _clear_all_shades() -> void:
+	# Immediately despawn all shades (used when starting new day)
+	for shade in browsing_shades.duplicate():
+		if is_instance_valid(shade):
+			shade.queue_free()
+	for shade in checkout_queue.duplicate():
+		if is_instance_valid(shade):
+			shade.queue_free()
+
+	browsing_shades.clear()
+	checkout_queue.clear()
+	print("[ShadeManager] Cleared all shades")
 
 func _check_spawn_shades() -> void:
 	if next_spawn_index >= encounters_to_spawn.size():

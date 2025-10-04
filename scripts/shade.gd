@@ -37,6 +37,9 @@ func _ready() -> void:
 	# Get game loop manager reference
 	game_loop_manager = get_node("/root/Root/Gameplay/GameLoopManager")
 
+	# Listen for day ending
+	game_loop_manager.day_ended.connect(_on_day_ended)
+
 	# Create attention icon (hidden by default)
 	attention_icon = icon_scene.instantiate()
 	add_child(attention_icon)
@@ -83,6 +86,15 @@ func _process(delta: float) -> void:
 	if game_loop_manager and game_loop_manager.is_simulation_paused:
 		return
 
+	# Allow movement when leaving, even if day is over
+	if current_state == State.WALKING_TO_EXIT:
+		_walk_to_exit_behavior(delta)
+		return
+
+	# Don't do other behaviors if day is over
+	if game_loop_manager and not game_loop_manager.is_day_active:
+		return
+
 	match current_state:
 		State.BROWSING:
 			_browse_behavior(delta)
@@ -90,8 +102,6 @@ func _process(delta: float) -> void:
 			_inspect_behavior(delta)
 		State.WALKING_TO_CHECKOUT:
 			_walk_to_checkout_behavior(delta)
-		State.WALKING_TO_EXIT:
-			_walk_to_exit_behavior(delta)
 
 func _browse_behavior(delta: float) -> void:
 	# Move toward current target (plinth)
@@ -202,6 +212,11 @@ func leave_shop() -> void:
 	current_state = State.WALKING_TO_EXIT
 	current_target = spawn_position
 	attention_icon.visible = false
+
+func _on_day_ended(_day_number: int) -> void:
+	# When day ends, everyone goes home immediately
+	print("[Shade] Day ended - going home")
+	leave_shop()
 
 func _walk_to_exit_behavior(delta: float) -> void:
 	# Move back toward spawn position
