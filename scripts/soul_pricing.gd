@@ -74,9 +74,12 @@ static func calculate_base_value(soul: SoulData) -> int:
 static func calculate_customer_offer(soul: SoulData, customer_interests: Array) -> int:
 	var base_value = calculate_base_value(soul)
 
+	# Safety: ensure base value is at least 10 KP
+	base_value = maxi(base_value, 10)
+
 	if customer_interests.size() == 0:
 		# No interests means lowball offer (60-80% of base value)
-		return int(base_value * randf_range(0.6, 0.8))
+		return maxi(int(base_value * randf_range(0.6, 0.8)), 15)
 
 	# Buyer found what they want! They'll pay premium
 	# Single interest: 120-140% of base value
@@ -92,7 +95,7 @@ static func calculate_customer_offer(soul: SoulData, customer_interests: Array) 
 	var premium = randf_range(premium_min, premium_max)
 	var offer = int(base_value * premium)
 
-	return maxi(offer, 20)  # Minimum offer of 20 KP
+	return maxi(offer, 25)  # Minimum offer of 25 KP
 
 ## Calculate how much you should pay a seller for their soul
 static func calculate_seller_asking_price(soul: SoulData, seller_interests: Array) -> int:
@@ -100,9 +103,12 @@ static func calculate_seller_asking_price(soul: SoulData, seller_interests: Arra
 	# This allows players to profit when they find matching buyers (120-150%)
 	var base_price = calculate_base_value(soul)
 
+	# Safety: ensure base price is at least 10 KP
+	base_price = maxi(base_price, 10)
+
 	# Add slight variation (95-105% of base value)
 	var variation = randf_range(0.95, 1.05)
-	return int(base_price * variation)
+	return maxi(int(base_price * variation), 15)  # Minimum 15 KP
 
 ## Helper: Get value of a single stat based on its rarity
 static func _get_stat_value(stat_value: int) -> int:
