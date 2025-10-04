@@ -2,9 +2,11 @@
 
 [ext_resource type="Script" uid="uid://xghpnwbwr2s1" path="res://scripts/game_loop_manager.gd" id="1_ig7tw"]
 
-[node name="Gameplay" type="Node"]
+[node name="Root" type="Node"]
 
-[node name="GameLoopManager" type="Node" parent="."]
+[node name="Gameplay" type="Node" parent="."]
+
+[node name="GameLoopManager" type="Node" parent="Gameplay"]
 script = ExtResource("1_ig7tw")
 
-[node name="AudioManager" type="Node" parent="."]
+[node name="AudioManager" type="Node" parent="Gameplay"]
