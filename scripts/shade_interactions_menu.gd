@@ -85,12 +85,19 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 				interest_label.text = "  • %s" % InterestMatcher.format_interest_for_display(interest)
 				vbox.add_child(interest_label)
 
+		# Display offer price
+		var offer_price = interaction.get("offer_price", 0)
+		var price_label = Label.new()
+		price_label.text = "Offering: %d KP" % offer_price
+		price_label.add_theme_color_override("font_color", Color(0.2, 1.0, 0.3))  # Green
+		vbox.add_child(price_label)
+
 		# Action buttons
 		var button_hbox = HBoxContainer.new()
 		vbox.add_child(button_hbox)
 
 		var sell_button = Button.new()
-		sell_button.text = "Sell Soul"
+		sell_button.text = "Sell Soul (%d KP)" % offer_price
 		sell_button.pressed.connect(func(): _handle_buyer_transaction(index, interaction))
 		button_hbox.add_child(sell_button)
 
@@ -133,12 +140,19 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 				no_stats_label.text = "Stats: None"
 				vbox.add_child(no_stats_label)
 
+		# Display asking price
+		var asking_price = interaction.get("asking_price", 0)
+		var price_label = Label.new()
+		price_label.text = "Asking: %d KP" % asking_price
+		price_label.add_theme_color_override("font_color", Color(1.0, 0.5, 0.2))  # Orange
+		vbox.add_child(price_label)
+
 		# Action buttons
 		var button_hbox = HBoxContainer.new()
 		vbox.add_child(button_hbox)
 
 		var buy_button = Button.new()
-		buy_button.text = "Buy Soul"
+		buy_button.text = "Buy Soul (%d KP)" % asking_price
 		buy_button.pressed.connect(func(): _handle_seller_transaction(index, interaction))
 		button_hbox.add_child(buy_button)
 
@@ -156,11 +170,16 @@ func _handle_buyer_transaction(index: int, interaction: Dictionary) -> void:
 	var selected_plinth = interaction.get("selected_soul_plinth")
 	if selected_plinth and selected_plinth.displayed_soul:
 		var soul_to_sell = selected_plinth.displayed_soul
+		var offer_price = interaction.get("offer_price", 0)
 		var inventory_manager = get_node("/root/Root/Gameplay/InventoryManager")
+		var currency_manager = get_node("/root/Root/Gameplay/CurrencyManager")
+
+		# Add currency from sale
+		currency_manager.add_kp(offer_price)
+		print("Sold soul: %s (%s) for %d KP" % [soul_to_sell.name, soul_to_sell.id, offer_price])
 
 		# Remove soul from inventory (also removes from display)
 		inventory_manager.remove_soul(soul_to_sell.id)
-		print("Sold soul: %s (%s)" % [soul_to_sell.name, soul_to_sell.id])
 
 		# Remove all other interactions requesting this same soul
 		_remove_interactions_for_soul(soul_to_sell.id, index)
@@ -171,11 +190,25 @@ func _handle_buyer_transaction(index: int, interaction: Dictionary) -> void:
 func _handle_seller_transaction(index: int, interaction: Dictionary) -> void:
 	print("Handling seller transaction for interaction %d" % index)
 	var soul_to_sell = interaction.get("soul_to_sell")
+	var asking_price = interaction.get("asking_price", 0)
+	var currency_manager = get_node("/root/Root/Gameplay/CurrencyManager")
+
 	if soul_to_sell:
-		# Add soul to inventory
-		var inventory_manager = get_node("/root/Root/Gameplay/InventoryManager")
-		inventory_manager.add_soul(soul_to_sell)
-		print("Bought soul: %s" % soul_to_sell.name)
+		# Check if we can afford it
+		if currency_manager.can_afford(asking_price):
+			# Spend currency
+			if currency_manager.spend_kp(asking_price):
+				# Add soul to inventory
+				var inventory_manager = get_node("/root/Root/Gameplay/InventoryManager")
+				inventory_manager.add_soul(soul_to_sell)
+				print("Bought soul: %s for %d KP" % [soul_to_sell.name, asking_price])
+			else:
+				print("Failed to spend KP!")
+				return
+		else:
+			print("Cannot afford soul! Need %d KP" % asking_price)
+			return
+
 	# Remove the interaction
 	interaction_manager.remove_interaction(index)
 

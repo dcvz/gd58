@@ -4,7 +4,7 @@ extends Node
 
 signal currency_changed(new_amount: int)
 
-var karmic_points: int = 100  # Starting balance
+var karmic_points: int = 200  # Starting balance
 
 func _ready() -> void:
 	print("CurrencyManager initialized with %d KP" % karmic_points)

@@ -2,6 +2,8 @@ extends Node
 
 ## Manages pending shade interactions (buyers and sellers at checkout)
 
+const SoulPricing = preload("res://scripts/soul_pricing.gd")
+
 signal interaction_added(interaction: Dictionary)
 signal interaction_removed(interaction: Dictionary)
 
@@ -19,8 +21,28 @@ func add_interaction(shade_data: Dictionary) -> void:
 	if shade_data.type == "buyer":
 		interaction["interests"] = shade_data.get("interests", [])
 		interaction["selected_soul_plinth"] = shade_data.get("selected_soul_plinth", null)
+
+		# Calculate the price the buyer is willing to pay
+		var plinth = shade_data.get("selected_soul_plinth", null)
+		if plinth and plinth.displayed_soul:
+			var soul = plinth.displayed_soul
+			var offer_price = SoulPricing.calculate_customer_offer(soul, shade_data.get("interests", []))
+			interaction["offer_price"] = offer_price
+			print("[InteractionManager] Buyer offering %d KP for %s" % [offer_price, soul.name])
+		else:
+			interaction["offer_price"] = 0
+
 	elif shade_data.type == "seller":
 		interaction["soul_to_sell"] = shade_data.get("soul_to_sell", null)
+
+		# Calculate the price the seller is asking
+		var soul = shade_data.get("soul_to_sell", null)
+		if soul:
+			var asking_price = SoulPricing.calculate_seller_asking_price(soul, [])
+			interaction["asking_price"] = asking_price
+			print("[InteractionManager] Seller asking %d KP for %s" % [asking_price, soul.name])
+		else:
+			interaction["asking_price"] = 0
 
 	pending_interactions.append(interaction)
 	interaction_added.emit(interaction)
