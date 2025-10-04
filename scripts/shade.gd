@@ -165,7 +165,7 @@ func _go_to_checkout() -> void:
 	var checkout_desks = get_tree().get_nodes_in_group("checkout_desk")
 	if checkout_desks.size() > 0:
 		var desk = checkout_desks[0]
-		current_target = desk.get_customer_position()
+		current_target = desk.get_shade_position()
 		current_state = State.WALKING_TO_CHECKOUT
 
 func move_to_checkout() -> void:

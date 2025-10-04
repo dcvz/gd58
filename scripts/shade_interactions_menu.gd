@@ -1,6 +1,6 @@
 extends Control
 
-## Menu for handling customer interactions (buyers and sellers)
+## Menu for handling shade interactions (buyers and sellers)
 
 var interaction_manager: Node
 var game_loop_manager: Node

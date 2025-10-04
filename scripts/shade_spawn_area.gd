@@ -1,6 +1,6 @@
 extends Node3D
 
-## Defines an area where customers can spawn
+## Defines an area where shades can spawn
 
 ## Size of the spawn area
 @export var area_size: Vector2 = Vector2(2.0, 2.0)

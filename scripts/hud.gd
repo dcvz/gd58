@@ -6,7 +6,7 @@ extends Control
 @onready var interactions_button: Button = $TopRight/InteractionsButton
 @onready var game_loop_manager: Node = get_node("/root/Root/Gameplay/GameLoopManager")
 @onready var interaction_menu: Control = get_node("/root/Root/UI/InteractionMenu")
-@onready var customer_interactions_menu: Control = get_node("/root/Root/UI/CustomerInteractionsMenu")
+@onready var shade_interactions_menu: Control = get_node("/root/Root/UI/ShadeInteractionsMenu")
 @onready var end_of_day_menu: Control = get_node("/root/Root/UI/EndOfDayMenu")
 @onready var interaction_manager: Node = get_node("/root/Root/Gameplay/InteractionManager")
 
@@ -43,7 +43,7 @@ func _on_menu_button_pressed() -> void:
 	interaction_menu.open_menu()
 
 func _on_interactions_button_pressed() -> void:
-	customer_interactions_menu.show_menu()
+	shade_interactions_menu.show_menu()
 
 func _update_interactions_count(_interaction: Dictionary = {}) -> void:
 	var count = interaction_manager.get_pending_interactions().size()

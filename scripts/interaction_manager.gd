@@ -1,6 +1,6 @@
 extends Node
 
-## Manages pending customer interactions (buyers and sellers at checkout)
+## Manages pending shade interactions (buyers and sellers at checkout)
 
 signal interaction_added(interaction: Dictionary)
 signal interaction_removed(interaction: Dictionary)
@@ -8,19 +8,19 @@ signal interaction_removed(interaction: Dictionary)
 # Queue of pending interactions
 var pending_interactions: Array[Dictionary] = []
 
-func add_interaction(customer_data: Dictionary) -> void:
-	"""Add a customer interaction to the queue"""
+func add_interaction(shade_data: Dictionary) -> void:
+	"""Add a shade interaction to the queue"""
 	var interaction = {
-		"type": customer_data.type,
+		"type": shade_data.type,
 		"timestamp": Time.get_ticks_msec()
 	}
 
 	# Add type-specific data
-	if customer_data.type == "buyer":
-		interaction["desired_era"] = customer_data.get("desired_era", "common")
-		interaction["selected_soul_plinth"] = customer_data.get("selected_soul_plinth", null)
-	elif customer_data.type == "seller":
-		interaction["soul_to_sell"] = customer_data.get("soul_to_sell", null)
+	if shade_data.type == "buyer":
+		interaction["desired_era"] = shade_data.get("desired_era", "common")
+		interaction["selected_soul_plinth"] = shade_data.get("selected_soul_plinth", null)
+	elif shade_data.type == "seller":
+		interaction["soul_to_sell"] = shade_data.get("soul_to_sell", null)
 
 	pending_interactions.append(interaction)
 	interaction_added.emit(interaction)

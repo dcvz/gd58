@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://c8kqm3saxbx4q"]
 
-[ext_resource type="Script" path="res://scripts/customer_interactions_menu.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/shade_interactions_menu.gd" id="1_script"]
 
-[node name="CustomerInteractionsMenu" type="Control"]
+[node name="ShadeInteractionsMenu" type="Control"]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -40,7 +40,7 @@ grow_vertical = 2
 
 [node name="Title" type="Label" parent="Panel/VBoxContainer"]
 layout_mode = 2
-text = "Customer Interactions"
+text = "Shade Interactions"
 horizontal_alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBoxContainer"]
