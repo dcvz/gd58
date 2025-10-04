@@ -14,6 +14,7 @@ enum State {
 var current_state: State = State.BROWSING
 var encounter_data: Dictionary = {}
 var attention_icon: Node3D
+var game_loop_manager: Node
 
 # Movement variables
 var move_speed: float = 2.0
@@ -30,6 +31,9 @@ var spawn_position: Vector3 = Vector3.ZERO
 @onready var icon_scene: PackedScene = preload("res://scenes/attention_icon.tscn")
 
 func _ready() -> void:
+	# Get game loop manager reference
+	game_loop_manager = get_node("/root/Root/Gameplay/GameLoopManager")
+
 	# Create attention icon (hidden by default)
 	attention_icon = icon_scene.instantiate()
 	add_child(attention_icon)
@@ -63,6 +67,10 @@ func start_browsing(available_plinths: Array) -> void:
 		_go_to_next_plinth()
 
 func _process(delta: float) -> void:
+	# Don't move if simulation is paused
+	if game_loop_manager and game_loop_manager.is_simulation_paused:
+		return
+
 	match current_state:
 		State.BROWSING:
 			_browse_behavior(delta)
