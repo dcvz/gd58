@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://c62d0ivtek4bc"]
+
+[ext_resource type="Texture2D" uid="uid://j7aa8tu8dvdk" path="res://assets/textures/shade01.png" id="1_hb6gk"]
+
+[node name="Shade" type="Node"]
+
+[node name="ShadeSprite" type="Sprite2D" parent="."]
+position = Vector2(16, -16)
+texture = ExtResource("1_hb6gk")
