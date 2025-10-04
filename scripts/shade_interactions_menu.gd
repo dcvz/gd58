@@ -174,8 +174,9 @@ func _handle_buyer_transaction(index: int, interaction: Dictionary) -> void:
 		var inventory_manager = get_node("/root/Root/Gameplay/InventoryManager")
 		var currency_manager = get_node("/root/Root/Gameplay/CurrencyManager")
 
-		# Add currency from sale
+		# Add currency from sale and track the sale
 		currency_manager.add_kp(offer_price)
+		currency_manager.record_soul_sale()
 		print("Sold soul: %s (%s) for %d KP" % [soul_to_sell.name, soul_to_sell.id, offer_price])
 
 		# Remove soul from inventory (also removes from display)
@@ -196,8 +197,9 @@ func _handle_seller_transaction(index: int, interaction: Dictionary) -> void:
 	if soul_to_sell:
 		# Check if we can afford it
 		if currency_manager.can_afford(asking_price):
-			# Spend currency
+			# Spend currency and track the purchase
 			if currency_manager.spend_kp(asking_price):
+				currency_manager.record_soul_purchase()
 				# Add soul to inventory
 				var inventory_manager = get_node("/root/Root/Gameplay/InventoryManager")
 				inventory_manager.add_soul(soul_to_sell)

@@ -75,15 +75,23 @@ func _update_display() -> void:
 	var old_assignments = soul_plinth_assignments.keys()
 	for soul_id in old_assignments:
 		if soul_id not in current_soul_ids:
+			print("[DisplayManager] Removing stale plinth assignment for soul: %s" % soul_id)
 			soul_plinth_assignments.erase(soul_id)
 
 	# Track which plinths are already used by existing souls
 	var used_plinths: Array = []
 	for soul_id in soul_plinth_assignments.keys():
 		var assigned_plinth = soul_plinth_assignments[soul_id]
-		# Only track if plinth is still in available plinths
-		if assigned_plinth in available_plinths:
-			used_plinths.append(assigned_plinth)
+		# Validate: plinth must exist and be in available plinths
+		if assigned_plinth == null:
+			print("[DisplayManager] WARNING: Null plinth for soul %s, removing assignment" % soul_id)
+			soul_plinth_assignments.erase(soul_id)
+			continue
+		if assigned_plinth not in available_plinths:
+			print("[DisplayManager] WARNING: Plinth for soul %s is not available, removing assignment" % soul_id)
+			soul_plinth_assignments.erase(soul_id)
+			continue
+		used_plinths.append(assigned_plinth)
 
 	# Create new soul visuals for displayed souls
 	for soul_data in displayed_souls:

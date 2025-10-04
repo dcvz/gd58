@@ -29,7 +29,7 @@ var current_menu: Menu = Menu.NONE
 
 # Day simulation variables
 var day_time_elapsed: float = 0.0
-@export var day_duration: float = 30.0  # Total seconds per day (adjustable in editor)
+@export var day_duration: float = 90.0  # Total seconds per day (adjustable in editor)
 var encounter_queue: Array = []
 var has_special_opportunity: bool = false
 
