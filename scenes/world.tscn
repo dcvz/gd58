@@ -455,17 +455,43 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0022655, -1, 6)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 10, 0)
-light_energy = 0.5
+light_energy = 0.3
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_world")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9622293, 1.4842978, 4.3501596)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.410817, 1.4842978, 4.3575606)
 light_color = Color(1, 1, 0.6392157, 1)
 light_energy = 0.3
 shadow_enabled = true
+omni_range = 10.0
+omni_attenuation = 2.0
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.338375, 1.4842978, -4.408148)
+light_color = Color(1, 1, 0.6392157, 1)
+light_energy = 0.3
+shadow_enabled = true
+omni_range = 10.0
+omni_attenuation = 2.0
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3985896, 1.4842978, -4.7648053)
+light_color = Color(1, 1, 0.6392157, 1)
+light_energy = 0.3
+shadow_enabled = true
+omni_range = 10.0
+omni_attenuation = 2.0
+
+[node name="OmniLight3D4" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3985896, 1.4842978, 4.1711097)
+light_color = Color(1, 1, 0.6392157, 1)
+light_energy = 0.3
+shadow_enabled = true
+omni_range = 10.0
+omni_attenuation = 2.0
 
 [node name="WallGeometry" type="Node" parent="."]
 
