@@ -13,5 +13,5 @@ func get_soul_position() -> Vector3:
 	return global_position + soul_offset
 
 ## Check if this plinth has a soul with the specified rarity
-func has_rarity(rarity: String) -> bool:
-	return displayed_soul != null and displayed_soul.rarity == rarity
+func has_era(era: int) -> bool:
+	return displayed_soul != null and displayed_soul.era == era

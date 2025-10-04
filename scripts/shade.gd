@@ -60,7 +60,7 @@ func start_browsing(available_plinths: Array) -> void:
 		plinths_to_visit = shuffled.slice(0, num_to_visit)
 
 		if encounter_data.type == "buyer":
-			print("[Shade] Buyer browsing %d plinths, looking for %s rarity" % [num_to_visit, encounter_data.get("desired_rarity", "unknown")])
+			print("[Shade] Buyer browsing %d plinths, looking for %s era" % [num_to_visit, encounter_data.get("desired_era", "unknown")])
 		else:
 			print("[Shade] Broker browsing %d plinths" % num_to_visit)
 
@@ -114,14 +114,14 @@ func _inspect_behavior(delta: float) -> void:
 
 	if inspection_timer <= 0:
 		# Check if this plinth has what the buyer wants
-		if encounter_data.type == "buyer" and encounter_data.has("desired_rarity"):
+		if encounter_data.type == "buyer" and encounter_data.has("desired_era"):
 			var current_plinth = plinths_to_visit[current_plinth_index]
-			if current_plinth.has_rarity(encounter_data.desired_rarity):
+			if current_plinth.has_era(encounter_data.desired_era):
 				# Found their desired rarity! Go to checkout
 				will_buy = true
 				selected_soul_plinth = current_plinth
 				var soul_name = current_plinth.displayed_soul.name if current_plinth.displayed_soul else "Unknown"
-				print("[Shade] Buyer found %s rarity soul (%s) - heading to checkout!" % [encounter_data.desired_rarity, soul_name])
+				print("[Shade] Buyer found %s era soul (%s) - heading to checkout!" % [encounter_data.desired_era, soul_name])
 
 		current_plinth_index += 1
 
@@ -135,7 +135,7 @@ func _inspect_behavior(delta: float) -> void:
 			else:
 				# Didn't find what they wanted, leave
 				if encounter_data.type == "buyer":
-					print("[Shade] Buyer didn't find %s rarity - leaving disappointed" % encounter_data.desired_rarity)
+					print("[Shade] Buyer didn't find %s era - leaving disappointed" % encounter_data.desired_era)
 				else:
 					print("[Shade] Broker finished browsing - leaving")
 				leave_shop()

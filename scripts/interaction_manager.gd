@@ -17,7 +17,7 @@ func add_interaction(customer_data: Dictionary) -> void:
 
 	# Add type-specific data
 	if customer_data.type == "buyer":
-		interaction["desired_rarity"] = customer_data.get("desired_rarity", "common")
+		interaction["desired_era"] = customer_data.get("desired_era", "common")
 		interaction["selected_soul_plinth"] = customer_data.get("selected_soul_plinth", null)
 	elif customer_data.type == "seller":
 		interaction["soul_to_sell"] = customer_data.get("soul_to_sell", null)

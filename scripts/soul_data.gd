@@ -34,8 +34,6 @@ static func generate_random_soul() -> SoulData:
 	soul.era = Era.values().pick_random()
 	soul.causeOfDeath = CauseOfDeath.values().pick_random()
 	soul.tags = _get_random_properties_for_soul()
-	soul.rarity = "common"
-	soul.condition = 1.0
 	soul.visual_color = randomColor
 	
 	return soul
@@ -47,7 +45,7 @@ static func _get_random_properties_for_soul() -> Dictionary:
 	for x in numProperties:
 		var attribute = SoulAttribute.values().pick_random()
 		# check that its not already in properties
-		var proficiency = randfn(0.5, 1) * 100
+		var proficiency = clamp(randfn(0.5, 0.18), 0.0, 1.0) * 100
 		properties[attribute] = proficiency
 		
 	return properties

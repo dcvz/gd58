@@ -71,7 +71,7 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 	# Details based on type
 	if interaction.type == "buyer":
 		var detail_label = Label.new()
-		detail_label.text = "Wants: %s rarity soul" % interaction.get("desired_rarity", "unknown")
+		detail_label.text = "Wants: %s era soul" % interaction.get("desired_era", "unknown")
 		vbox.add_child(detail_label)
 
 		# Action buttons
@@ -92,7 +92,7 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 		var soul_to_sell = interaction.get("soul_to_sell")
 		if soul_to_sell:
 			var detail_label = Label.new()
-			detail_label.text = "Selling: %s (%s, %s)" % [soul_to_sell.name, soul_to_sell.rarity, soul_to_sell.era]
+			detail_label.text = "Selling: %s (%s, %s)" % [soul_to_sell.name, soul_to_sell.era]
 			vbox.add_child(detail_label)
 
 		# Action buttons
