@@ -33,9 +33,12 @@ func _process(_delta: float) -> void:
 		time_label.text = "%d/%d" % [elapsed, total]
 
 func _input(event: InputEvent) -> void:
-	# Open menu with ESC key
+	# Toggle menu with ESC key
 	if event.is_action_pressed("ui_cancel"):
-		if not interaction_menu.visible and not shade_interactions_menu.visible and not end_of_day_menu.visible:
+		if interaction_menu.visible:
+			interaction_menu.close_menu()
+			get_viewport().set_input_as_handled()
+		elif not shade_interactions_menu.visible and not end_of_day_menu.visible:
 			_on_menu_button_pressed()
 			get_viewport().set_input_as_handled()
 
