@@ -26,7 +26,7 @@ var current_menu: Menu = Menu.NONE
 
 # Day simulation variables
 var day_time_elapsed: float = 0.0
-var day_duration: float = 300.0  # Total seconds per day
+@export var day_duration: float = 30.0  # Total seconds per day (adjustable in editor)
 var encounter_queue: Array = []
 var has_special_opportunity: bool = false
 
@@ -73,7 +73,9 @@ func _roll_daily_encounters() -> void:
 
 	# Sort by arrival time
 	encounter_queue.sort_custom(func(a, b): return a.arrival_time < b.arrival_time)
-	print("Rolled %d encounters for today" % num_encounters)
+	print("Rolled %d encounters for today:" % num_encounters)
+	for encounter in encounter_queue:
+		print("  - %s arriving at %.1f seconds" % [encounter.type, encounter.arrival_time])
 
 func _roll_special_opportunity() -> void:
 	# Random chance for special opportunity

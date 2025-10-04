@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://b2k3m4n5p6q7r"]
+
+[ext_resource type="PackedScene" uid="uid://cthjhe3vr1n3c" path="res://assets/models/cube.blend" id="1_cube"]
+[ext_resource type="Script" uid="uid://dn3mincwyp2jx" path="res://scripts/customer_spawn_area.gd" id="2_spawn"]
+
+[node name="CustomerSpawnArea" type="Node3D" groups=["customer_spawn_area"]]
+script = ExtResource("2_spawn")
+
+[node name="VisualMarker" parent="." instance=ExtResource("1_cube")]
+transform = Transform3D(2, 0, 0, 0, 0.1, 0, 0, 0, 1, 1, 0, 1)
