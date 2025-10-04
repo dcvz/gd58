@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://nqkjgntp5ulj"]
 
 [ext_resource type="PackedScene" uid="uid://cthjhe3vr1n3c" path="res://assets/models/cube.blend" id="1_rwgxs"]
-[ext_resource type="PackedScene" path="res://scenes/display_plinth.tscn" id="3_plinth"]
-[ext_resource type="PackedScene" path="res://scenes/checkout_desk.tscn" id="4_desk"]
+[ext_resource type="PackedScene" uid="uid://dpk5m8x3xar1q" path="res://scenes/display_plinth.tscn" id="3_plinth"]
+[ext_resource type="PackedScene" uid="uid://cak2m3n4p5q6r" path="res://scenes/checkout_desk.tscn" id="4_desk"]
 [ext_resource type="PackedScene" uid="uid://b2k3m4n5p6q7r" path="res://scenes/customer_spawn_area.tscn" id="5_spawn"]
 
 [sub_resource type="Environment" id="Environment_world"]
@@ -576,6 +576,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, 5)
 
 [node name="cube129" parent="WallGeometry" instance=ExtResource("1_rwgxs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, 6)
+
+[node name="cube152" parent="WallGeometry" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, 7)
 
 [node name="cube24" parent="WallGeometry" instance=ExtResource("1_rwgxs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
