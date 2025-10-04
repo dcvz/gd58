@@ -2,7 +2,7 @@
 
 # Core Fantasy
 
-You run a soul shop. Sellers bring souls to offload, buyers come looking for specific vibes (tags).  The objective is to collect a full legendary set of souls.
+You run a soul shop. Sellers bring souls to offload, buyers come looking for specific vibes (tags). The objective is to collect a full legendary set of souls.
 
 # Pillars
 	•	Shop: fast buy/sell decisions, simple UI.

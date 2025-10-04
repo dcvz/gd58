@@ -1,7 +1,10 @@
-[gd_scene format=3 uid="uid://bwdxmyedjgcag"]
+[gd_scene load_steps=2 format=3 uid="uid://bwdxmyedjgcag"]
+
+[ext_resource type="Script" uid="uid://xghpnwbwr2s1" path="res://scripts/game_loop_manager.gd" id="1_ig7tw"]
 
 [node name="Gameplay" type="Node"]
 
 [node name="GameLoopManager" type="Node" parent="."]
+script = ExtResource("1_ig7tw")
 
 [node name="AudioManager" type="Node" parent="."]
