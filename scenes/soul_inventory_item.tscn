@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxk3yj4r5m8pq"]
+
+[ext_resource type="Script" path="res://scripts/soul_inventory_item.gd" id="1_item"]
+
+[node name="SoulInventoryItem" type="HBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+script = ExtResource("1_item")
+
+[node name="NameLabel" type="Label" parent="."]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Soul Name"
+
+[node name="EraLabel" type="Label" parent="."]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Era"
+
+[node name="DisplayButton" type="Button" parent="."]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Put for Sale"
