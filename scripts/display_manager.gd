@@ -55,6 +55,7 @@ func set_unlocked_slots(count: int) -> void:
 
 func _update_display() -> void:
 	var displayed_souls = inventory_manager.get_display_souls()
+	print("[DisplayManager] Updating display with %d souls" % displayed_souls.size())
 
 	# Remove all existing soul visuals
 	for soul_visual in soul_visuals:
@@ -91,20 +92,27 @@ func _update_display() -> void:
 		# If this soul already has a plinth assignment AND it's still available, use it
 		if soul_plinth_assignments.has(soul_data.id) and soul_plinth_assignments[soul_data.id] in available_plinths:
 			plinth = soul_plinth_assignments[soul_data.id]
+			print("[DisplayManager] Soul '%s' reusing plinth" % soul_data.name)
 		else:
 			# Find a random unused plinth
 			var unused_plinths = available_plinths.filter(func(p): return p not in used_plinths)
+			print("[DisplayManager] Finding plinth for '%s': %d unused plinths available" % [soul_data.name, unused_plinths.size()])
 			if unused_plinths.size() == 0:
+				print("[DisplayManager] ERROR: No plinths for soul '%s'" % soul_data.name)
 				break  # No more plinths available
 
 			unused_plinths.shuffle()
 			plinth = unused_plinths[0]
 			soul_plinth_assignments[soul_data.id] = plinth
 			used_plinths.append(plinth)
+			print("[DisplayManager] Soul '%s' assigned new plinth" % soul_data.name)
 
 		# Safety check: ensure plinth is still in tree
 		if not is_instance_valid(plinth) or not plinth.is_inside_tree():
+			print("[DisplayManager] ERROR: Plinth invalid for soul '%s'" % soul_data.name)
 			continue
+
+		print("[DisplayManager] Creating visual for soul '%s'" % soul_data.name)
 
 		var soul_instance = soul_scene.instantiate()
 

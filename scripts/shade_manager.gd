@@ -108,9 +108,13 @@ func _spawn_shade(encounter: Dictionary) -> void:
 
 	# Start browsing with available plinths
 	shade.start_browsing(available_plinths)
-	browsing_shades.append(shade)
 
-	print("Spawned %s shade at %s (browsing %d available plinths)" % [encounter.type, shade.global_position, available_plinths.size()])
+	# Only add to browsing list if they're actually browsing (sellers go straight to checkout)
+	if encounter.type != "seller":
+		browsing_shades.append(shade)
+		print("Spawned %s shade at %s (browsing %d available plinths)" % [encounter.type, shade.global_position, available_plinths.size()])
+	else:
+		print("Spawned %s shade at %s (going to checkout)" % [encounter.type, shade.global_position])
 
 func _send_to_checkout(shade: Node3D) -> void:
 	if shade in browsing_shades:
