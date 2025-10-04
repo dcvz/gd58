@@ -57,7 +57,6 @@ func _on_day_started(day_number: int) -> void:
 	# Get encounters from game loop
 	encounters_to_spawn = game_loop_manager.encounter_queue.duplicate()
 	next_spawn_index = 0
-	print("Customer Manager: %d encounters scheduled for today" % encounters_to_spawn.size())
 
 func _check_spawn_customers() -> void:
 	if next_spawn_index >= encounters_to_spawn.size():

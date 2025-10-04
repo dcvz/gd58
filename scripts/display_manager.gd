@@ -60,6 +60,10 @@ func _update_display() -> void:
 		soul_visual.queue_free()
 	soul_visuals.clear()
 
+	# Clear all plinths first
+	for plinth in display_plinths:
+		plinth.displayed_soul = null
+
 	# Only create souls for unlocked slots
 	var available_slots = mini(unlocked_slot_count, display_plinths.size())
 
@@ -72,6 +76,9 @@ func _update_display() -> void:
 		# Set position and properties using plinth's position
 		soul_instance.global_position = plinth.get_soul_position()
 		soul_instance.soul_color = soul_data.visual_color
+
+		# Store soul data on plinth so customers can check it
+		plinth.displayed_soul = soul_data
 
 		# Add to scene
 		objects_node.add_child(soul_instance)

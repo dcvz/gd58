@@ -43,6 +43,7 @@ func start_browsing(available_plinths: Array) -> void:
 	# Set up browsing path based on customer type
 	if encounter_data.type == "seller":
 		# Sellers go straight to checkout
+		print("[Shade] Seller heading directly to checkout")
 		_go_to_checkout()
 		return
 
@@ -54,8 +55,10 @@ func start_browsing(available_plinths: Array) -> void:
 		shuffled.shuffle()
 		plinths_to_visit = shuffled.slice(0, num_to_visit)
 
-		# Buyers might purchase
-		will_buy = encounter_data.type == "buyer" and randf() > 0.3
+		if encounter_data.type == "buyer":
+			print("[Shade] Buyer browsing %d plinths, looking for %s rarity" % [num_to_visit, encounter_data.get("desired_rarity", "unknown")])
+		else:
+			print("[Shade] Broker browsing %d plinths" % num_to_visit)
 
 		_go_to_next_plinth()
 
@@ -102,6 +105,16 @@ func _inspect_behavior(delta: float) -> void:
 	inspection_timer -= delta
 
 	if inspection_timer <= 0:
+		# Check if this plinth has what the buyer wants
+		if encounter_data.type == "buyer" and encounter_data.has("desired_rarity"):
+			var current_plinth = plinths_to_visit[current_plinth_index]
+			if current_plinth.has_rarity(encounter_data.desired_rarity):
+				# Found their desired rarity! Go to checkout
+				will_buy = true
+				selected_soul_plinth = current_plinth
+				var soul_name = current_plinth.displayed_soul.name if current_plinth.displayed_soul else "Unknown"
+				print("[Shade] Buyer found %s rarity soul (%s) - heading to checkout!" % [encounter_data.desired_rarity, soul_name])
+
 		current_plinth_index += 1
 
 		if current_plinth_index < plinths_to_visit.size():
@@ -110,11 +123,13 @@ func _inspect_behavior(delta: float) -> void:
 		else:
 			# Done browsing, decide what to do
 			if will_buy:
-				# Pick a random plinth we visited to "buy" from
-				selected_soul_plinth = plinths_to_visit[randi() % plinths_to_visit.size()]
 				_go_to_checkout()
 			else:
-				# Just leave
+				# Didn't find what they wanted, leave
+				if encounter_data.type == "buyer":
+					print("[Shade] Buyer didn't find %s rarity - leaving disappointed" % encounter_data.desired_rarity)
+				else:
+					print("[Shade] Broker finished browsing - leaving")
 				leave_shop()
 
 func _go_to_next_plinth() -> void:
@@ -134,7 +149,18 @@ func _go_to_checkout() -> void:
 func move_to_checkout() -> void:
 	# Called when arriving at checkout
 	current_state = State.AT_CHECKOUT
-	attention_icon.visible = true
+
+	# Add to interaction queue instead of showing icon
+	var interaction_manager = get_node("/root/Root/Gameplay/InteractionManager")
+	if interaction_manager:
+		var interaction_data = encounter_data.duplicate()
+		if selected_soul_plinth:
+			interaction_data["selected_soul_plinth"] = selected_soul_plinth
+		interaction_manager.add_interaction(interaction_data)
+		print("[Shade] %s arrived at checkout - added to interaction queue" % encounter_data.type.capitalize())
+
+	# Disappear - despawn immediately
+	queue_free()
 
 func leave_shop() -> void:
 	current_state = State.WALKING_TO_EXIT

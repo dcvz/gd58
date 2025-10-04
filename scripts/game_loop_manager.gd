@@ -66,16 +66,72 @@ func _roll_daily_encounters() -> void:
 	for i in range(num_encounters):
 		var encounter_types = ["seller", "buyer", "broker"]
 		var encounter_type = encounter_types[randi() % encounter_types.size()]
-		encounter_queue.append({
+		var encounter = {
 			"type": encounter_type,
 			"arrival_time": randf() * day_duration * 0.8  # Arrive in first 80% of day
-		})
+		}
+
+		# Add type-specific interests
+		if encounter_type == "buyer":
+			# Buyers want a specific rarity
+			var rarities = ["common", "rare", "legendary"]
+			var weights = [60, 30, 10]  # More likely to want common/rare than legendary
+			encounter["desired_rarity"] = _weighted_random(rarities, weights)
+		elif encounter_type == "seller":
+			# Sellers bring a soul to sell
+			encounter["soul_to_sell"] = _generate_random_soul()
+
+		encounter_queue.append(encounter)
 
 	# Sort by arrival time
 	encounter_queue.sort_custom(func(a, b): return a.arrival_time < b.arrival_time)
 	print("Rolled %d encounters for today:" % num_encounters)
 	for encounter in encounter_queue:
-		print("  - %s arriving at %.1f seconds" % [encounter.type, encounter.arrival_time])
+		if encounter.type == "buyer":
+			print("  - %s arriving at %.1f seconds (wants %s)" % [encounter.type, encounter.arrival_time, encounter.desired_rarity])
+		elif encounter.type == "seller":
+			print("  - %s arriving at %.1f seconds (selling %s)" % [encounter.type, encounter.arrival_time, encounter.soul_to_sell.name])
+		else:
+			print("  - %s arriving at %.1f seconds" % [encounter.type, encounter.arrival_time])
+
+func _weighted_random(options: Array, weights: Array) -> String:
+	var total_weight = 0
+	for w in weights:
+		total_weight += w
+
+	var random_value = randf() * total_weight
+	var cumulative = 0
+
+	for i in range(options.size()):
+		cumulative += weights[i]
+		if random_value <= cumulative:
+			return options[i]
+
+	return options[0]  # Fallback
+
+func _generate_random_soul() -> SoulData:
+	# Generate a random soul for sellers
+	var rarities = ["common", "rare", "legendary"]
+	var weights = [60, 30, 10]
+	var rarity = _weighted_random(rarities, weights)
+
+	var soul = SoulData.new()
+	soul.id = "soul_%d" % randi()
+	soul.name = "Soul %d" % randi_range(1000, 9999)
+	soul.era = ["ancient", "medieval", "modern"][randi() % 3]
+	soul.rarity = rarity
+	soul.condition = randf_range(0.5, 1.0)
+
+	# Set color based on rarity
+	match rarity:
+		"common":
+			soul.visual_color = Color(0.5, 0.8, 1.0)  # Blue
+		"rare":
+			soul.visual_color = Color(0.8, 0.5, 1.0)  # Purple
+		"legendary":
+			soul.visual_color = Color(1.0, 0.8, 0.2)  # Gold
+
+	return soul
 
 func _roll_special_opportunity() -> void:
 	# Random chance for special opportunity

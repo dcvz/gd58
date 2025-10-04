@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://c5k6m7n8qaq0r"]
 
 [ext_resource type="Texture2D" uid="uid://j7aa8tu8dvdk" path="res://assets/textures/shade01.png" id="1_shade"]
-[ext_resource type="Script" path="res://scripts/customer.gd" id="2_customer"]
+[ext_resource type="Script" path="res://scripts/shade.gd" id="2_shade"]
 
 [node name="Shade" type="Node3D"]
-script = ExtResource("2_customer")
+script = ExtResource("2_shade")
 
 [node name="ShadeSprite" type="Sprite3D" parent="."]
 transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, 0, 1, 0)
