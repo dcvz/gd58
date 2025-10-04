@@ -79,14 +79,17 @@ func _update_display() -> void:
 	# Track which plinths are already used by existing souls
 	var used_plinths: Array = []
 	for soul_id in soul_plinth_assignments.keys():
-		used_plinths.append(soul_plinth_assignments[soul_id])
+		var assigned_plinth = soul_plinth_assignments[soul_id]
+		# Only track if plinth is still in available plinths
+		if assigned_plinth in available_plinths:
+			used_plinths.append(assigned_plinth)
 
 	# Create new soul visuals for displayed souls
 	for soul_data in displayed_souls:
 		var plinth: Node3D
 
-		# If this soul already has a plinth assignment, use it
-		if soul_plinth_assignments.has(soul_data.id):
+		# If this soul already has a plinth assignment AND it's still available, use it
+		if soul_plinth_assignments.has(soul_data.id) and soul_plinth_assignments[soul_data.id] in available_plinths:
 			plinth = soul_plinth_assignments[soul_data.id]
 		else:
 			# Find a random unused plinth
