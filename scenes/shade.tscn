@@ -1,14 +1,67 @@
-[gd_scene load_steps=3 format=3 uid="uid://c5k6m7n8qaq0r"]
+[gd_scene load_steps=10 format=3 uid="uid://c5k6m7n8qaq0r"]
 
 [ext_resource type="Texture2D" uid="uid://j7aa8tu8dvdk" path="res://assets/textures/shade01.png" id="1_shade"]
 [ext_resource type="Script" uid="uid://qeoxjqyoku27" path="res://scripts/shade.gd" id="2_shade"]
+[ext_resource type="Texture2D" uid="uid://c0qo8dolj8o8b" path="res://assets/textures/shadesheet01.png" id="3_pqa6p"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pwra0"]
+atlas = ExtResource("3_pqa6p")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ob0sx"]
+atlas = ExtResource("3_pqa6p")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2iio3"]
+atlas = ExtResource("3_pqa6p")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gpnml"]
+atlas = ExtResource("3_pqa6p")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6k4e1"]
+atlas = ExtResource("3_pqa6p")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_eta1p"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pwra0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ob0sx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2iio3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gpnml")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6k4e1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="Shade" type="Node3D"]
 script = ExtResource("2_shade")
 
 [node name="ShadeSprite" type="Sprite3D" parent="."]
 transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, 0, 1, 0)
+visible = false
 offset = Vector2(0, -8)
 billboard = 1
 texture_filter = 0
 texture = ExtResource("1_shade")
+
+[node name="ShadeAnimatedSprite3D" type="AnimatedSprite3D" parent="."]
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, 0, 0.9, 0)
+billboard = 1
+texture_filter = 0
+sprite_frames = SubResource("SpriteFrames_eta1p")
+autoplay = "default"
+frame_progress = 0.10162021

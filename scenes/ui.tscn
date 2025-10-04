@@ -1,9 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://xs3cr8c04y46"]
 
 [ext_resource type="Script" uid="uid://drq4pjecf7mlj" path="res://scripts/hud.gd" id="1_x4jx1"]
-[ext_resource type="PackedScene" path="res://scenes/interaction_menu.tscn" id="2_yev5y"]
+[ext_resource type="PackedScene" uid="uid://b5kqm2r8xax3p" path="res://scenes/interaction_menu.tscn" id="2_yev5y"]
 [ext_resource type="PackedScene" uid="uid://c7n8k3nap2q1r" path="res://scenes/end_of_day_menu.tscn" id="3_eod"]
-[ext_resource type="PackedScene" uid="uid://c8kqm3r9xbx4q" path="res://scenes/customer_interactions_menu.tscn" id="4_customer_interactions"]
+[ext_resource type="PackedScene" path="res://scenes/customer_interactions_menu.tscn" id="4_customer_interactions"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_day"]
 font_size = 20
