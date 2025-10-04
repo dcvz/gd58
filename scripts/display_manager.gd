@@ -13,7 +13,7 @@ var objects_node: Node
 var display_plinths: Array = []
 
 ## Number of display slots currently unlocked (can be increased via progression)
-@export var unlocked_slot_count: int = 3
+@export var unlocked_slot_count: int = 10
 
 func _ready() -> void:
 	# Wait for scene to be fully loaded
