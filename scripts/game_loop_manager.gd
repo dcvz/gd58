@@ -62,9 +62,9 @@ func start_new_day() -> void:
 	print("=== Day %d Started ===" % current_day)
 
 func _roll_daily_encounters() -> void:
-	# Roll 3-5 encounters for the day
+	# Roll 9-15 encounters for the day (tripled from 3-5)
 	encounter_queue.clear()
-	var num_encounters = randi_range(3, 5)
+	var num_encounters = randi_range(9, 15)
 
 	for i in range(num_encounters):
 		# Weighted encounter types: 50% buyers, 30% sellers, 20% brokers
@@ -78,7 +78,7 @@ func _roll_daily_encounters() -> void:
 			encounter_type = "broker"
 		var encounter = {
 			"type": encounter_type,
-			"arrival_time": randf() * day_duration * 0.8  # Arrive in first 80% of day
+			"arrival_time": randf() * day_duration * 0.75  # Arrive in first 75% of day (avoid last quarter)
 		}
 
 		# Add type-specific interests using centralized InterestMatcher
