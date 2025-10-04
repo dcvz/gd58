@@ -1,8 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://c5k6m7n8qaq0r"]
+[gd_scene load_steps=11 format=3 uid="uid://c5k6m7n8qaq0r"]
 
 [ext_resource type="Texture2D" uid="uid://j7aa8tu8dvdk" path="res://assets/textures/shade01.png" id="1_shade"]
 [ext_resource type="Script" uid="uid://qeoxjqyoku27" path="res://scripts/shade.gd" id="2_shade"]
 [ext_resource type="Texture2D" uid="uid://c0qo8dolj8o8b" path="res://assets/textures/shadesheet01.png" id="3_pqa6p"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_shade"]
+height = 1.5
+radius = 0.3
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pwra0"]
 atlas = ExtResource("3_pqa6p")
@@ -47,8 +51,12 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Shade" type="Node3D"]
+[node name="Shade" type="CharacterBody3D"]
 script = ExtResource("2_shade")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("CylinderShape3D_shade")
 
 [node name="ShadeSprite" type="Sprite3D" parent="."]
 transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, 0, 1, 0)

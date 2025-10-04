@@ -1,4 +1,4 @@
-extends Node3D
+extends CharacterBody3D
 
 ## Represents a customer in the shop
 
@@ -65,6 +65,10 @@ func start_browsing(available_plinths: Array) -> void:
 			print("[Shade] Broker browsing %d plinths" % num_to_visit)
 
 		_go_to_next_plinth()
+	else:
+		# No plinths available, just leave
+		print("[Shade] No plinths available to browse, leaving")
+		leave_shop()
 
 func _process(delta: float) -> void:
 	# Don't move if simulation is paused
@@ -89,11 +93,13 @@ func _browse_behavior(delta: float) -> void:
 		# Reached plinth, start inspecting
 		current_state = State.INSPECTING
 		inspection_timer = randf_range(1.5, 3.0)
+		velocity = Vector3.ZERO
 		return
 
 	# Move toward target
 	var direction = (current_target - global_position).normalized()
-	global_position += direction * move_speed * delta
+	velocity = direction * move_speed
+	move_and_slide()
 
 func _walk_to_checkout_behavior(delta: float) -> void:
 	# Move toward checkout desk
@@ -101,24 +107,31 @@ func _walk_to_checkout_behavior(delta: float) -> void:
 
 	if distance_to_target < 0.3:
 		# Arrived at checkout
+		velocity = Vector3.ZERO
 		move_to_checkout()
 		return
 
 	# Move toward target
 	var direction = (current_target - global_position).normalized()
-	global_position += direction * move_speed * delta
+	velocity = direction * move_speed
+	move_and_slide()
 
 func _inspect_behavior(delta: float) -> void:
 	# Look at soul for a bit
 	inspection_timer -= delta
 
 	if inspection_timer <= 0:
+		# Safety check: ensure we have a valid plinth to inspect
+		if current_plinth_index >= plinths_to_visit.size():
+			print("[Shade] Error: Invalid plinth index, leaving")
+			leave_shop()
+			return
+
 		# Check if this plinth has what the buyer wants
 		if encounter_data.type == "buyer" and encounter_data.has("desired_era"):
 			var current_plinth = plinths_to_visit[current_plinth_index]
 			if current_plinth.has_era(encounter_data.desired_era):
-				# Found their desired rarity! Go to checkout
-				# TODO: add some randomness of if they will or won't buy
+				# Found their desired era! Go to checkout
 				will_buy = true
 				selected_soul_plinth = current_plinth
 				var soul_name = current_plinth.displayed_soul.name if current_plinth.displayed_soul else "Unknown"
@@ -183,9 +196,11 @@ func _walk_to_exit_behavior(delta: float) -> void:
 	if distance_to_exit < 0.3:
 		# Reached exit, despawn
 		current_state = State.LEAVING
+		velocity = Vector3.ZERO
 		queue_free()
 		return
 
 	# Move toward exit
 	var direction = (current_target - global_position).normalized()
-	global_position += direction * move_speed * delta
+	velocity = direction * move_speed
+	move_and_slide()
