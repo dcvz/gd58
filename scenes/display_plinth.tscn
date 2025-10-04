@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://dpk5m8x3xar1q"]
+
+[ext_resource type="PackedScene" uid="uid://cthjhe3vr1n3c" path="res://assets/models/cube.blend" id="1_cube"]
+[ext_resource type="Script" path="res://scripts/display_plinth.gd" id="2_plinth"]
+
+[node name="DisplayPlinth" type="Node3D" groups=["display_plinth"]]
+script = ExtResource("2_plinth")
+
+[node name="cube" parent="." instance=ExtResource("1_cube")]

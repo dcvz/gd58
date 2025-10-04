@@ -6,13 +6,7 @@ var inventory_manager: Node
 var soul_scene: PackedScene = preload("res://scenes/soul.tscn")
 var soul_visuals: Array[Node3D] = []
 var objects_node: Node
-
-## Display slot positions - add more as needed
-@export var display_positions: Array[Vector3] = [
-	Vector3(1.5, 1.5, 2.5),   # Plinth 1
-	Vector3(-2.5, 1.5, 2.6),  # Plinth 2
-	Vector3(1.5, 1.5, -2.4)   # Plinth 3
-]
+var display_plinths: Array = []
 
 func _ready() -> void:
 	# Wait for scene to be fully loaded
@@ -23,8 +17,12 @@ func _ready() -> void:
 	var world = get_node("/root/Root/World")
 	objects_node = world.get_node("Objects")
 
-	# Sync max display slots with available positions
-	inventory_manager.max_display_slots = display_positions.size()
+	# Find all display plinths in the scene
+	display_plinths = get_tree().get_nodes_in_group("display_plinth")
+	print("Found %d display plinths" % display_plinths.size())
+
+	# Sync max display slots with available plinths
+	inventory_manager.max_display_slots = display_plinths.size()
 
 	# Connect to inventory changes
 	inventory_manager.inventory_changed.connect(_update_display)
@@ -41,12 +39,13 @@ func _update_display() -> void:
 	soul_visuals.clear()
 
 	# Create new soul visuals for displayed souls
-	for i in range(min(displayed_souls.size(), display_positions.size())):
+	for i in range(min(displayed_souls.size(), display_plinths.size())):
 		var soul_data = displayed_souls[i]
+		var plinth = display_plinths[i]
 		var soul_instance = soul_scene.instantiate()
 
-		# Set position and properties
-		soul_instance.position = display_positions[i]
+		# Set position and properties using plinth's position
+		soul_instance.global_position = plinth.get_soul_position()
 		soul_instance.soul_color = soul_data.visual_color
 
 		# Add to scene
