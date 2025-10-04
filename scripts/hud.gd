@@ -5,6 +5,7 @@ extends Control
 @onready var menu_button: Button = $MenuButton
 @onready var game_loop_manager: Node = get_node("/root/Root/Gameplay/GameLoopManager")
 @onready var interaction_menu: Control = get_node("/root/Root/UI/InteractionMenu")
+@onready var end_of_day_menu: Control = get_node("/root/Root/UI/EndOfDayMenu")
 
 func _ready() -> void:
 	# Connect to game loop signals
@@ -26,6 +27,7 @@ func _on_day_started(day_number: int) -> void:
 
 func _on_day_ended(day_number: int) -> void:
 	time_label.text = "Day Complete"
+	end_of_day_menu.show_menu(day_number)
 
 func _on_menu_button_pressed() -> void:
 	interaction_menu.open_menu()
