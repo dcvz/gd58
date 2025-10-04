@@ -118,10 +118,11 @@ func _inspect_behavior(delta: float) -> void:
 			var current_plinth = plinths_to_visit[current_plinth_index]
 			if current_plinth.has_era(encounter_data.desired_era):
 				# Found their desired rarity! Go to checkout
+				# TODO: add some randomness of if they will or won't buy
 				will_buy = true
 				selected_soul_plinth = current_plinth
 				var soul_name = current_plinth.displayed_soul.name if current_plinth.displayed_soul else "Unknown"
-				print("[Shade] Buyer found %s era soul (%s) - heading to checkout!" % [encounter_data.desired_era, soul_name])
+				print("[Shade] Buyer found %s era soul (%s) - heading to checkout!" % [str(encounter_data.desired_era), soul_name])
 
 		current_plinth_index += 1
 
@@ -135,7 +136,7 @@ func _inspect_behavior(delta: float) -> void:
 			else:
 				# Didn't find what they wanted, leave
 				if encounter_data.type == "buyer":
-					print("[Shade] Buyer didn't find %s era - leaving disappointed" % encounter_data.desired_era)
+					print("[Shade] Buyer didn't find %s era - leaving disappointed" % str(encounter_data.desired_era))
 				else:
 					print("[Shade] Broker finished browsing - leaving")
 				leave_shop()

@@ -92,7 +92,7 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 		var soul_to_sell = interaction.get("soul_to_sell")
 		if soul_to_sell:
 			var detail_label = Label.new()
-			detail_label.text = "Selling: %s (%s, %s)" % [soul_to_sell.name, soul_to_sell.era]
+			detail_label.text = "Selling: %s (%s)" % [soul_to_sell.name, str(SoulData.Era.keys()[soul_to_sell.era])]
 			vbox.add_child(detail_label)
 
 		# Action buttons
