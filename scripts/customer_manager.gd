@@ -77,10 +77,10 @@ func _spawn_customer(encounter: Dictionary) -> void:
 	else:
 		spawn_pos = Vector3(0, 0, 0)
 
+	# Add to tree first, then set position
+	world_node.add_child(customer)
 	customer.global_position = spawn_pos
 	customer.spawn_position = spawn_pos  # Remember where we spawned for exit
-
-	world_node.add_child(customer)
 
 	# Get browsable plinths from DisplayManager
 	var available_plinths = display_manager.get_browsable_plinths()

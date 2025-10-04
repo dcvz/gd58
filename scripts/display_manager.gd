@@ -73,6 +73,9 @@ func _update_display() -> void:
 		var plinth = display_plinths[i]
 		var soul_instance = soul_scene.instantiate()
 
+		# Add to scene first
+		objects_node.add_child(soul_instance)
+
 		# Set position and properties using plinth's position
 		soul_instance.global_position = plinth.get_soul_position()
 		soul_instance.soul_color = soul_data.visual_color
@@ -80,8 +83,6 @@ func _update_display() -> void:
 		# Store soul data on plinth so customers can check it
 		plinth.displayed_soul = soul_data
 
-		# Add to scene
-		objects_node.add_child(soul_instance)
 		soul_visuals.append(soul_instance)
 
 ## Get plinths that are unlocked and have souls displayed (for customers to browse)
