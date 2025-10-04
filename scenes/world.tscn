@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://nqkjgntp5ulj"]
+[gd_scene load_steps=10 format=3 uid="uid://nqkjgntp5ulj"]
 
 [ext_resource type="PackedScene" uid="uid://cthjhe3vr1n3c" path="res://assets/models/cube.blend" id="1_rwgxs"]
 [ext_resource type="PackedScene" uid="uid://dpk5m8x3xar1q" path="res://scenes/display_plinth.tscn" id="3_plinth"]
@@ -11,6 +11,16 @@ background_color = Color(0.15, 0.15, 0.2, 1)
 ambient_light_source = 2
 ambient_light_color = Color(0.5, 0.5, 0.6, 1)
 ambient_light_energy = 0.3
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_71j4m"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_k0juu"]
+points = PackedVector3Array(0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, -6, 1, 1, 0, 0, 1, -6, 1, 0, -6, 1, 1, -6)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_k0juu"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_qfnet"]
+points = PackedVector3Array(0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 6, 0, 1, 6, 0, 0, 6, 1, 0, 6, 0, 1, 0)
 
 [node name="World" type="Node"]
 
@@ -501,6 +511,55 @@ omni_attenuation = 2.0
 
 [node name="WallGeometry" type="Node" parent="."]
 
+[node name="StaticBody3D2" type="StaticBody3D" parent="WallGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -1)
+physics_material_override = SubResource("PhysicsMaterial_71j4m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallGeometry/StaticBody3D2"]
+shape = SubResource("ConvexPolygonShape3D_k0juu")
+
+[node name="cube26" parent="WallGeometry/StaticBody3D2" instance=ExtResource("1_rwgxs")]
+
+[node name="cube70" parent="WallGeometry/StaticBody3D2" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="cube74" parent="WallGeometry/StaticBody3D2" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="cube102" parent="WallGeometry/StaticBody3D2" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="cube76" parent="WallGeometry/StaticBody3D2" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="cube80" parent="WallGeometry/StaticBody3D2" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="WallGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, 1)
+physics_material_override = SubResource("PhysicsMaterial_k0juu")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallGeometry/StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_qfnet")
+
+[node name="cube32" parent="WallGeometry/StaticBody3D" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="cube118" parent="WallGeometry/StaticBody3D" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+
+[node name="cube122" parent="WallGeometry/StaticBody3D" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="cube124" parent="WallGeometry/StaticBody3D" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="cube128" parent="WallGeometry/StaticBody3D" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+
+[node name="cube151" parent="WallGeometry/StaticBody3D" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 4.9999995)
+
 [node name="cube21" parent="WallGeometry" instance=ExtResource("1_rwgxs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, -1, 0)
 
@@ -549,41 +608,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, -1, 5)
 [node name="cube127" parent="WallGeometry" instance=ExtResource("1_rwgxs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, -1, 6)
 
-[node name="cube26" parent="WallGeometry" instance=ExtResource("1_rwgxs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -1)
-
-[node name="cube32" parent="WallGeometry" instance=ExtResource("1_rwgxs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, 2)
-
-[node name="cube70" parent="WallGeometry" instance=ExtResource("1_rwgxs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -4)
-
-[node name="cube74" parent="WallGeometry" instance=ExtResource("1_rwgxs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -5)
-
 [node name="cube101" parent="WallGeometry" instance=ExtResource("1_rwgxs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, -1, -6)
-
-[node name="cube102" parent="WallGeometry" instance=ExtResource("1_rwgxs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -6)
-
-[node name="cube76" parent="WallGeometry" instance=ExtResource("1_rwgxs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -3)
-
-[node name="cube80" parent="WallGeometry" instance=ExtResource("1_rwgxs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -2)
-
-[node name="cube118" parent="WallGeometry" instance=ExtResource("1_rwgxs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, 4)
-
-[node name="cube122" parent="WallGeometry" instance=ExtResource("1_rwgxs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, 3)
-
-[node name="cube124" parent="WallGeometry" instance=ExtResource("1_rwgxs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, 5)
-
-[node name="cube128" parent="WallGeometry" instance=ExtResource("1_rwgxs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, 6)
 
 [node name="cube23" parent="WallGeometry" instance=ExtResource("1_rwgxs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, 0)
@@ -815,9 +841,6 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -6, 
 
 [node name="cube150" parent="WallGeometry" instance=ExtResource("1_rwgxs")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7, -1, 5.9999995)
-
-[node name="cube151" parent="WallGeometry" instance=ExtResource("1_rwgxs")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7, 0, 5.9999995)
 
 [node name="Objects" type="Node" parent="."]
 
