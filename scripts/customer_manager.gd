@@ -3,11 +3,11 @@ extends Node
 ## Manages customer spawning and checkout queue
 
 var game_loop_manager: Node
+var display_manager: Node
 var customer_scene: PackedScene = preload("res://scenes/shade.tscn")
 var checkout_desk: Node3D
 var spawn_area: Node3D
 var world_node: Node
-var display_plinths: Array = []
 
 # Active customers in the shop
 var browsing_customers: Array[Node3D] = []
@@ -21,6 +21,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 
 	game_loop_manager = get_node("/root/Root/Gameplay/GameLoopManager")
+	display_manager = get_node("/root/Root/Gameplay/DisplayManager")
 	world_node = get_node("/root/Root/World")
 
 	# Find checkout desk
@@ -34,10 +35,6 @@ func _ready() -> void:
 	if spawn_areas.size() > 0:
 		spawn_area = spawn_areas[0]
 		print("Found customer spawn area at: ", spawn_area.global_position)
-
-	# Find display plinths
-	display_plinths = get_tree().get_nodes_in_group("display_plinth")
-	print("Found %d display plinths for customers to browse" % display_plinths.size())
 
 	# Connect to game loop
 	game_loop_manager.day_started.connect(_on_day_started)
@@ -85,11 +82,14 @@ func _spawn_customer(encounter: Dictionary) -> void:
 
 	world_node.add_child(customer)
 
+	# Get browsable plinths from DisplayManager
+	var available_plinths = display_manager.get_browsable_plinths()
+
 	# Start browsing with available plinths
-	customer.start_browsing(display_plinths)
+	customer.start_browsing(available_plinths)
 	browsing_customers.append(customer)
 
-	print("Spawned %s customer at %s" % [encounter.type, customer.global_position])
+	print("Spawned %s customer at %s (browsing %d available plinths)" % [encounter.type, customer.global_position, available_plinths.size()])
 
 func _send_to_checkout(customer: Node3D) -> void:
 	if customer in browsing_customers:

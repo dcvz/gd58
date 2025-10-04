@@ -83,3 +83,15 @@ func _update_display() -> void:
 		# Add to scene
 		objects_node.add_child(soul_instance)
 		soul_visuals.append(soul_instance)
+
+## Get plinths that are unlocked and have souls displayed (for customers to browse)
+func get_browsable_plinths() -> Array:
+	var browsable: Array = []
+	var available_slots = mini(unlocked_slot_count, display_plinths.size())
+
+	for i in range(available_slots):
+		var plinth = display_plinths[i]
+		if plinth.displayed_soul != null:
+			browsable.append(plinth)
+
+	return browsable
