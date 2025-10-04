@@ -1,9 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://c62d0ivtek4bc"]
+[gd_scene load_steps=3 format=3 uid="uid://c5k6m7n8qaq0r"]
 
-[ext_resource type="Texture2D" uid="uid://j7aa8tu8dvdk" path="res://assets/textures/shade01.png" id="1_hb6gk"]
+[ext_resource type="Texture2D" uid="uid://j7aa8tu8dvdk" path="res://assets/textures/shade01.png" id="1_shade"]
+[ext_resource type="Script" path="res://scripts/customer.gd" id="2_customer"]
 
-[node name="Shade" type="Node"]
+[node name="Shade" type="Node3D"]
+script = ExtResource("2_customer")
 
-[node name="ShadeSprite" type="Sprite2D" parent="."]
-position = Vector2(16, -16)
-texture = ExtResource("1_hb6gk")
+[node name="ShadeSprite" type="Sprite3D" parent="."]
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, 0, 1, 0)
+billboard = 1
+offset = Vector2(0, -8)
+texture = ExtResource("1_shade")

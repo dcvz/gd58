@@ -3,7 +3,7 @@ extends Node
 ## Manages customer spawning and checkout queue
 
 var game_loop_manager: Node
-var customer_scene: PackedScene = preload("res://scenes/customer.tscn")
+var customer_scene: PackedScene = preload("res://scenes/shade.tscn")
 var checkout_desk: Node3D
 var spawn_area: Node3D
 var world_node: Node
