@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://bwdxmyedjgcag"]
+[gd_scene load_steps=9 format=3 uid="uid://bwdxmyedjgcag"]
 
 [ext_resource type="Script" uid="uid://xghpnwbwr2s1" path="res://scripts/game_loop_manager.gd" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://cthjhe3vr1n3c" path="res://assets/models/cube.blend" id="2_0xm2m"]
 [ext_resource type="Script" uid="uid://drq4pjecf7mlj" path="res://scripts/hud.gd" id="2_hud"]
 [ext_resource type="PackedScene" uid="uid://c8xj4y5kqr3pq" path="res://scenes/soul.tscn" id="4_soul"]
+[ext_resource type="Script" uid="uid://brndu3ejogy7q" path="res://scripts/inventory_manager.gd" id="6_inventory"]
 
 [sub_resource type="Environment" id="Environment_world"]
 background_mode = 1
@@ -23,6 +24,9 @@ font_size = 20
 
 [node name="GameLoopManager" type="Node" parent="Gameplay"]
 script = ExtResource("1_ig7tw")
+
+[node name="InventoryManager" type="Node" parent="Gameplay"]
+script = ExtResource("6_inventory")
 
 [node name="AudioManager" type="Node" parent="Gameplay"]
 
@@ -804,7 +808,7 @@ add_hot_core = false
 
 [node name="Soul2" parent="World/Objects" instance=ExtResource("4_soul")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 1.5, 2.6335692)
-soul_color = Color(0.15946919, 0.5978969, 0.99999005, 1)
+soul_color = Color(0.1313403, 0.16682225, 0.19966573, 1)
 add_hot_core = false
 
 [node name="Soul3" parent="World/Objects" instance=ExtResource("4_soul")]
