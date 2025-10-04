@@ -53,6 +53,6 @@ static func _get_random_properties_for_soul() -> Dictionary:
 static func _generate_random_hsv_color() -> Color:
 	return Color.from_hsv(
 		  randf(), # HUE
-		  randf_range(0.2, 0.6), # SATURATION
-		  randf_range(0.9, 1.0), # BRIGHTNESS
+		  randf_range(0.5, 0.9), # SATURATION - Higher for more vibrant colors
+		  randf_range(0.4, 0.7), # BRIGHTNESS - Lower to avoid washed out colors
 	)
