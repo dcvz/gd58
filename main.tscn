@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bwdxmyedjgcag"]
+
+[node name="Gameplay" type="Node"]
+
+[node name="GameLoopManager" type="Node" parent="."]
+
+[node name="AudioManager" type="Node" parent="."]
