@@ -7,6 +7,7 @@ enum State {
 	INSPECTING,         # Looking at a soul on a plinth
 	WALKING_TO_CHECKOUT,# Walking to checkout
 	AT_CHECKOUT,        # Waiting at checkout desk
+	WALKING_TO_EXIT,    # Walking back to spawn to leave
 	LEAVING             # Exiting the shop
 }
 
@@ -24,6 +25,7 @@ var plinths_to_visit: Array = []
 var current_plinth_index: int = 0
 var will_buy: bool = false
 var selected_soul_plinth: Node3D = null
+var spawn_position: Vector3 = Vector3.ZERO
 
 @onready var icon_scene: PackedScene = preload("res://scenes/attention_icon.tscn")
 
@@ -65,6 +67,8 @@ func _process(delta: float) -> void:
 			_inspect_behavior(delta)
 		State.WALKING_TO_CHECKOUT:
 			_walk_to_checkout_behavior(delta)
+		State.WALKING_TO_EXIT:
+			_walk_to_exit_behavior(delta)
 
 func _browse_behavior(delta: float) -> void:
 	# Move toward current target (plinth)
@@ -133,7 +137,20 @@ func move_to_checkout() -> void:
 	attention_icon.visible = true
 
 func leave_shop() -> void:
-	current_state = State.LEAVING
+	current_state = State.WALKING_TO_EXIT
+	current_target = spawn_position
 	attention_icon.visible = false
-	# Animate leaving, then queue_free()
-	queue_free()
+
+func _walk_to_exit_behavior(delta: float) -> void:
+	# Move back toward spawn position
+	var distance_to_exit = global_position.distance_to(current_target)
+
+	if distance_to_exit < 0.3:
+		# Reached exit, despawn
+		current_state = State.LEAVING
+		queue_free()
+		return
+
+	# Move toward exit
+	var direction = (current_target - global_position).normalized()
+	global_position += direction * move_speed * delta

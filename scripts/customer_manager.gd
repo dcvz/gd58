@@ -75,10 +75,14 @@ func _spawn_customer(encounter: Dictionary) -> void:
 	customer.setup(encounter)
 
 	# Place at spawn area
+	var spawn_pos: Vector3
 	if spawn_area:
-		customer.global_position = spawn_area.get_random_spawn_position()
+		spawn_pos = spawn_area.get_random_spawn_position()
 	else:
-		customer.global_position = Vector3(0, 0, 0)
+		spawn_pos = Vector3(0, 0, 0)
+
+	customer.global_position = spawn_pos
+	customer.spawn_position = spawn_pos  # Remember where we spawned for exit
 
 	world_node.add_child(customer)
 
