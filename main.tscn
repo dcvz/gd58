@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bwdxmyedjgcag"]
+[gd_scene load_steps=8 format=3 uid="uid://bwdxmyedjgcag"]
 
 [ext_resource type="Script" uid="uid://xghpnwbwr2s1" path="res://scripts/game_loop_manager.gd" id="1_ig7tw"]
-[ext_resource type="PackedScene" uid="uid://b2ndi0erarogm" path="res://Assets/Models/cube.blend" id="2_0xm2m"]
-[ext_resource type="Script" path="res://scripts/hud.gd" id="2_hud"]
+[ext_resource type="PackedScene" uid="uid://cthjhe3vr1n3c" path="res://assets/models/cube.blend" id="2_0xm2m"]
+[ext_resource type="Script" uid="uid://drq4pjecf7mlj" path="res://scripts/hud.gd" id="2_hud"]
+[ext_resource type="PackedScene" uid="uid://c8xj4y5kqr3pq" path="res://scenes/soul.tscn" id="4_soul"]
 
 [sub_resource type="Environment" id="Environment_world"]
 background_mode = 1
@@ -15,7 +16,6 @@ ambient_light_energy = 0.3
 font_size = 20
 
 [sub_resource type="LabelSettings" id="LabelSettings_time"]
-font_size = 16
 
 [node name="Root" type="Node"]
 
@@ -786,14 +786,31 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7, 
 [node name="cube151" parent="World/WallGeometry" instance=ExtResource("2_0xm2m")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7, 0, 5.9999995)
 
-[node name="plinth" parent="." instance=ExtResource("2_0xm2m")]
+[node name="Objects" type="Node" parent="World"]
+
+[node name="plinth" parent="World/Objects" instance=ExtResource("2_0xm2m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 3)
 
-[node name="plinth3" parent="." instance=ExtResource("2_0xm2m")]
+[node name="plinth3" parent="World/Objects" instance=ExtResource("2_0xm2m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 3)
 
-[node name="plinth2" parent="." instance=ExtResource("2_0xm2m")]
+[node name="plinth2" parent="World/Objects" instance=ExtResource("2_0xm2m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -2)
+
+[node name="Soul1" parent="World/Objects" instance=ExtResource("4_soul")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 1.5, 2.5472646)
+soul_color = Color(0.1758225, 0.9999998, 0.20298225, 1)
+add_hot_core = false
+
+[node name="Soul2" parent="World/Objects" instance=ExtResource("4_soul")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 1.5, 2.6335692)
+soul_color = Color(0.15946919, 0.5978969, 0.99999005, 1)
+add_hot_core = false
+
+[node name="Soul3" parent="World/Objects" instance=ExtResource("4_soul")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 1.5, -2.4462705)
+soul_color = Color(0.9999996, 0.27954558, 0.2859507, 1)
+add_hot_core = false
 
 [node name="UI" type="CanvasLayer" parent="."]
 
