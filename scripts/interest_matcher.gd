@@ -56,8 +56,8 @@ static func _matches_single_interest(soul: SoulData, interest: Dictionary) -> bo
 static func generate_random_interests() -> Array:
 	var interests: Array = []
 
-	# 80% chance of single interest, 20% chance of 2-3 interests
-	var num_interests = 1 if randf() < 0.8 else randi_range(2, 3)
+	# 80% chance of single interest, 20% chance of 2 interests
+	var num_interests = 1 if randf() < 0.8 else 2
 
 	for i in range(num_interests):
 		interests.append(_generate_single_interest())

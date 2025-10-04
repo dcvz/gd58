@@ -32,6 +32,13 @@ func _process(_delta: float) -> void:
 		var total = int(game_loop_manager.day_duration)
 		time_label.text = "%d/%d" % [elapsed, total]
 
+func _input(event: InputEvent) -> void:
+	# Open menu with ESC key
+	if event.is_action_pressed("ui_cancel"):
+		if not interaction_menu.visible and not shade_interactions_menu.visible and not end_of_day_menu.visible:
+			_on_menu_button_pressed()
+			get_viewport().set_input_as_handled()
+
 func _on_day_started(day_number: int) -> void:
 	day_counter.text = "Day %d" % day_number
 
