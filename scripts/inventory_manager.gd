@@ -109,17 +109,8 @@ func _generate_soul_id() -> String:
 
 ## Create starting souls for the player
 func _create_starting_souls() -> void:
-	var starting_color = Color("#212b33")
-
 	for i in range(3):
-		var soul = SoulData.new()
-		soul.id = "soul_starter_%d" % (i + 1)
-		soul.name = "Common Soul %d" % (i + 1)
-		soul.era = "Modern"
-		soul.tags = ["unidentified"]
-		soul.rarity = "common"
-		soul.condition = 1.0
-		soul.visual_color = starting_color
+		var soul = SoulData.generate_random_soul()
 
 		add_soul(soul)
 		add_to_display(soul.id)

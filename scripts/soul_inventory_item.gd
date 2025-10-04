@@ -16,7 +16,7 @@ func setup(soul: SoulData, on_display: bool) -> void:
 	is_on_display = on_display
 
 	name_label.text = soul.name
-	era_label.text = soul.era
+	era_label.text = String("%s", soul.era)
 
 	_update_button_text()
 
