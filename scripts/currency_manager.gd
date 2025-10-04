@@ -4,7 +4,7 @@ extends Node
 
 signal currency_changed(new_amount: int)
 
-var karmic_points: int = 200  # Starting balance
+var karmic_points: int = 800  # Starting balance
 
 # Daily transaction tracking
 var daily_kp_earned: int = 0

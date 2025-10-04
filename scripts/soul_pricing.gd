@@ -70,45 +70,39 @@ static func calculate_base_value(soul: SoulData) -> int:
 	return total_value
 
 ## Calculate what a customer would offer/pay for a soul
-## Based on THEIR valuation (what they care about), not objective rarity
+## Buyers pay PREMIUM when soul matches their interests (120-150% of base value)
 static func calculate_customer_offer(soul: SoulData, customer_interests: Array) -> int:
-	if customer_interests.size() == 0:
-		# No interests means random lowball offer
-		return randi_range(10, 30)
-
-	# Base offer for finding what they want (regardless of rarity)
-	var base_offer = 30  # They found what they came for!
-
-	# Add value per interest they're satisfying
-	var interest_value = 25 * customer_interests.size()
-
-	# Apply multi-interest bonus (they're getting exactly what they want!)
-	if customer_interests.size() > 1:
-		interest_value = int(interest_value * MULTI_INTEREST_BONUS)
-
-	var total_offer = base_offer + interest_value
-
-	# Add small recognition of objective rarity (10-20% of base value)
-	# Even if they don't care about specific attributes, they recognize overall quality
 	var base_value = calculate_base_value(soul)
-	var rarity_bonus = int(base_value * randf_range(0.1, 0.2))
 
-	total_offer += rarity_bonus
+	if customer_interests.size() == 0:
+		# No interests means lowball offer (60-80% of base value)
+		return int(base_value * randf_range(0.6, 0.8))
 
-	# Add some randomness (buyer desperation/budget variation)
-	var desperation = randf_range(0.8, 1.2)
-	total_offer = int(total_offer * desperation)
+	# Buyer found what they want! They'll pay premium
+	# Single interest: 120-140% of base value
+	# Multiple interests: 130-150% of base value (even better match!)
+	var premium_min = 1.2
+	var premium_max = 1.4
 
-	return maxi(total_offer, 15)  # Minimum offer of 15 KP
+	if customer_interests.size() > 1:
+		premium_min = 1.3
+		premium_max = 1.5
+
+	# Add buyer desperation factor
+	var premium = randf_range(premium_min, premium_max)
+	var offer = int(base_value * premium)
+
+	return maxi(offer, 20)  # Minimum offer of 20 KP
 
 ## Calculate how much you should pay a seller for their soul
 static func calculate_seller_asking_price(soul: SoulData, seller_interests: Array) -> int:
-	# Sellers price based on what they think is valuable about the soul
-	# Similar to customer offers, but slightly higher
+	# Sellers ask fair market price (base value)
+	# This allows players to profit when they find matching buyers (120-150%)
 	var base_price = calculate_base_value(soul)
 
-	# Sellers ask for about 120% of base value
-	return int(base_price * 1.2)
+	# Add slight variation (95-105% of base value)
+	var variation = randf_range(0.95, 1.05)
+	return int(base_price * variation)
 
 ## Helper: Get value of a single stat based on its rarity
 static func _get_stat_value(stat_value: int) -> int:

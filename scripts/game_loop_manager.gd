@@ -67,8 +67,15 @@ func _roll_daily_encounters() -> void:
 	var num_encounters = randi_range(3, 5)
 
 	for i in range(num_encounters):
-		var encounter_types = ["seller", "buyer", "broker"]
-		var encounter_type = encounter_types[randi() % encounter_types.size()]
+		# Weighted encounter types: 50% buyers, 30% sellers, 20% brokers
+		var roll = randf()
+		var encounter_type: String
+		if roll < 0.5:
+			encounter_type = "buyer"
+		elif roll < 0.8:
+			encounter_type = "seller"
+		else:
+			encounter_type = "broker"
 		var encounter = {
 			"type": encounter_type,
 			"arrival_time": randf() * day_duration * 0.8  # Arrive in first 80% of day
