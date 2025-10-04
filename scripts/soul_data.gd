@@ -41,7 +41,7 @@ static func generate_random_soul() -> SoulData:
 static func _get_random_properties_for_soul() -> Dictionary:
 	var properties = {}
 
-	var numProperties = randi() % 3
+	var numProperties = (randi() % 3) + 1
 	for x in numProperties:
 		var attribute = SoulAttribute.values().pick_random()
 		# check that its not already in properties

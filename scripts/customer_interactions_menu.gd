@@ -71,7 +71,9 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 	# Details based on type
 	if interaction.type == "buyer":
 		var detail_label = Label.new()
-		detail_label.text = "Wants: %s era soul" % interaction.get("desired_era", "unknown")
+		var desired_era = interaction.get("desired_era", 0)
+		var era_name = SoulData.Era.keys()[desired_era] if desired_era < SoulData.Era.size() else "unknown"
+		detail_label.text = "Wants: %s era soul" % era_name
 		vbox.add_child(detail_label)
 
 		# Action buttons

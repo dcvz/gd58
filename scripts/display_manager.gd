@@ -11,6 +11,7 @@ var soul_scene: PackedScene = preload("res://scenes/soul.tscn")
 var soul_visuals: Array[Node3D] = []
 var objects_node: Node
 var display_plinths: Array = []
+var soul_plinth_assignments: Dictionary = {}  # Maps soul_id -> plinth
 
 ## Number of display slots currently unlocked (can be increased via progression)
 @export var unlocked_slot_count: int = 10
@@ -64,13 +65,44 @@ func _update_display() -> void:
 	for plinth in display_plinths:
 		plinth.displayed_soul = null
 
-	# Only create souls for unlocked slots
+	# Get available plinths
 	var available_slots = mini(unlocked_slot_count, display_plinths.size())
+	var available_plinths = display_plinths.slice(0, available_slots).duplicate()
+
+	# Remove souls that are no longer displayed from assignments
+	var current_soul_ids = displayed_souls.map(func(soul): return soul.id)
+	var old_assignments = soul_plinth_assignments.keys()
+	for soul_id in old_assignments:
+		if soul_id not in current_soul_ids:
+			soul_plinth_assignments.erase(soul_id)
+
+	# Track which plinths are already used by existing souls
+	var used_plinths: Array = []
+	for soul_id in soul_plinth_assignments.keys():
+		used_plinths.append(soul_plinth_assignments[soul_id])
 
 	# Create new soul visuals for displayed souls
-	for i in range(min(displayed_souls.size(), available_slots)):
-		var soul_data = displayed_souls[i]
-		var plinth = display_plinths[i]
+	for soul_data in displayed_souls:
+		var plinth: Node3D
+
+		# If this soul already has a plinth assignment, use it
+		if soul_plinth_assignments.has(soul_data.id):
+			plinth = soul_plinth_assignments[soul_data.id]
+		else:
+			# Find a random unused plinth
+			var unused_plinths = available_plinths.filter(func(p): return p not in used_plinths)
+			if unused_plinths.size() == 0:
+				break  # No more plinths available
+
+			unused_plinths.shuffle()
+			plinth = unused_plinths[0]
+			soul_plinth_assignments[soul_data.id] = plinth
+			used_plinths.append(plinth)
+
+		# Safety check: ensure plinth is still in tree
+		if not is_instance_valid(plinth) or not plinth.is_inside_tree():
+			continue
+
 		var soul_instance = soul_scene.instantiate()
 
 		# Add to scene first
