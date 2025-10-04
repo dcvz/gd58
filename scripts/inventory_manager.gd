@@ -10,13 +10,12 @@ signal inventory_changed()
 var souls: Dictionary = {}  # Key: soul_id, Value: SoulData
 
 # Display slots (limited number of souls that can be shown in shop)
-@export var max_display_slots: int
+@export var max_display_slots: int = 10
 var display_slots: Array[String] = []  # Array of soul IDs currently on display
 
 func _ready() -> void:
 	print("InventoryManager initialized")
 	_create_starting_souls()
-	max_display_slots = get_tree().get_nodes_in_group("display_plinth").size()
 
 ## Add a soul to inventory
 func add_soul(soul: SoulData) -> void:
