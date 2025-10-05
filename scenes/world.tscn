@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://nqkjgntp5ulj"]
 
 [ext_resource type="PackedScene" uid="uid://cthjhe3vr1n3c" path="res://assets/models/cube.blend" id="1_rwgxs"]
-[ext_resource type="Script" path="res://scripts/components/camera_controller.gd" id="2_camera"]
+[ext_resource type="Script" uid="uid://v0hsogwb2o1" path="res://scripts/components/camera_controller.gd" id="2_camera"]
 [ext_resource type="PackedScene" uid="uid://dpk5m8x3xar1q" path="res://scenes/display_plinth.tscn" id="3_plinth"]
 [ext_resource type="PackedScene" uid="uid://cak2m3n4p5q6r" path="res://scenes/checkout_desk.tscn" id="4_desk"]
 [ext_resource type="PackedScene" uid="uid://b2k3m4n5p6q7r" path="res://scenes/shade_spawn_area.tscn" id="5_spawn"]

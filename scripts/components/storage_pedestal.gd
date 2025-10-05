@@ -55,7 +55,13 @@ func _create_soul_visual() -> void:
 	if soul_visual:
 		soul_visual.queue_free()
 
-	# Simple glowing sphere for now
+	# Container for soul visual with collision
+	var soul_container = Node3D.new()
+	soul_container.position = Vector3(0, 0.5, 0)
+	soul_visual = soul_container
+	add_child(soul_visual)
+
+	# Simple glowing sphere
 	var mesh_instance = MeshInstance3D.new()
 	var sphere = SphereMesh.new()
 	sphere.radius = 0.3
@@ -70,15 +76,21 @@ func _create_soul_visual() -> void:
 	material.emission_energy_multiplier = 2.0
 	mesh_instance.material_override = material
 
-	# Position above platform
-	mesh_instance.position = Vector3(0, 0.5, 0)
+	soul_container.add_child(mesh_instance)
 
-	soul_visual = mesh_instance
-	add_child(soul_visual)
+	# Add StaticBody3D with larger collision for easier clicking
+	var body = StaticBody3D.new()
+	soul_container.add_child(body)
 
-	# Add gentle floating animation
+	var collision = CollisionShape3D.new()
+	var sphere_shape = SphereShape3D.new()
+	sphere_shape.radius = 0.4  # Slightly larger than visual for easier clicking
+	collision.shape = sphere_shape
+	body.add_child(collision)
+
+	# Add gentle floating animation to the container
 	var tween = create_tween()
-	tween.set_loops()
+	tween.set_loops(0)  # 0 = infinite loops
 	tween.tween_property(soul_visual, "position:y", 0.6, 1.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tween.tween_property(soul_visual, "position:y", 0.5, 1.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
