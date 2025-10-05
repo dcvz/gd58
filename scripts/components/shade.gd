@@ -161,11 +161,18 @@ func _inspect_behavior(delta: float) -> void:
 			var current_plinth = plinths_to_visit[current_plinth_index]
 			var soul = current_plinth.displayed_soul
 
-			if soul and InterestMatcher.soul_matches_interests(soul, encounter_data.interests):
-				# Found a soul matching ALL their interests! Go to checkout
-				will_buy = true
-				selected_soul_plinth = current_plinth
-				print("[Shade] Buyer found matching soul (%s) - heading to checkout!" % soul.name)
+			if soul:
+				# Get what we're advertising about this soul
+				var advertisement_manager = get_node("/root/Root/Gameplay/AdvertisementManager")
+				var ad = advertisement_manager.get_advertisement(soul.id)
+				var advertised_soul = advertisement_manager.create_advertised_soul(soul, ad)
+
+				# Buyer only sees advertised properties
+				if InterestMatcher.advertised_soul_matches_interests(advertised_soul, soul, encounter_data.interests):
+					# Found a soul matching ALL their interests! Go to checkout
+					will_buy = true
+					selected_soul_plinth = current_plinth
+					print("[Shade] Buyer found matching soul (%s) - heading to checkout!" % soul.name)
 
 		current_plinth_index += 1
 

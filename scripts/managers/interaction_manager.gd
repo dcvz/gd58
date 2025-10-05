@@ -56,13 +56,17 @@ func add_interaction(shade_data: Dictionary) -> void:
 		interaction["interests"] = shade_data.get("interests", [])
 		interaction["selected_soul_plinth"] = shade_data.get("selected_soul_plinth", null)
 
-		# Calculate the price the buyer is willing to pay
+		# Calculate the price the buyer is willing to pay (based on advertised properties)
 		var plinth = shade_data.get("selected_soul_plinth", null)
 		if plinth and plinth.displayed_soul:
 			var soul = plinth.displayed_soul
-			var offer_price = SoulPricing.calculate_customer_offer(soul, shade_data.get("interests", []))
+			var advertisement_manager = get_node("/root/Root/Gameplay/AdvertisementManager")
+			var ad = advertisement_manager.get_advertisement(soul.id)
+			var advertised_soul = advertisement_manager.create_advertised_soul(soul, ad)
+
+			var offer_price = SoulPricing.calculate_advertised_offer(advertised_soul, soul, shade_data.get("interests", []))
 			interaction["offer_price"] = offer_price
-			print("[InteractionManager] Buyer offering %d KP for %s" % [offer_price, soul.name])
+			print("[InteractionManager] Buyer offering %d KP for %s (based on advertised properties)" % [offer_price, soul.name])
 		else:
 			# No valid soul - buyer arrived but soul was removed/sold before they could interact
 			# Don't add this buyer to the queue
@@ -72,12 +76,14 @@ func add_interaction(shade_data: Dictionary) -> void:
 	elif shade_data.type == "seller":
 		interaction["soul_to_sell"] = shade_data.get("soul_to_sell", null)
 
-		# Calculate the price the seller is asking
+		# Calculate the price the seller is asking (based on what they know)
 		var soul = shade_data.get("soul_to_sell", null)
 		if soul:
-			var asking_price = SoulPricing.calculate_seller_asking_price(soul, [])
+			var discovery_manager = get_node("/root/Root/Gameplay/DiscoveryManager")
+			var discovery_log = discovery_manager.get_discovery_log(soul.id)
+			var asking_price = SoulPricing.calculate_seller_price_from_discoveries(soul, discovery_log)
 			interaction["asking_price"] = asking_price
-			print("[InteractionManager] Seller asking %d KP for %s" % [asking_price, soul.name])
+			print("[InteractionManager] Seller asking %d KP for %s (based on what they know)" % [asking_price, soul.name])
 		else:
 			interaction["asking_price"] = 0
 
