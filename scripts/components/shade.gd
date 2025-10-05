@@ -9,13 +9,15 @@ enum State {
 	WALKING_TO_CHECKOUT,# Walking to checkout
 	AT_CHECKOUT,        # Waiting at checkout desk
 	WALKING_TO_EXIT,    # Walking back to spawn to leave
-	LEAVING             # Exiting the shop
+	LEAVING,            # Exiting the shop
+	FADING              # Disappearing into thin air
 }
 
 var current_state: State = State.BROWSING
 var encounter_data: Dictionary = {}
 var attention_icon: Node3D
 var game_loop_manager: Node
+var shadeSprite: AnimatedSprite3D
 
 # Movement variables
 var move_speed: float = 2.0
@@ -32,8 +34,9 @@ var spawn_position: Vector3 = Vector3.ZERO
 @onready var icon_scene: PackedScene = preload("res://scenes/attention_icon.tscn")
 
 func _ready() -> void:
-	# Get game loop manager reference
+	# Get game loop manager reference + animations
 	game_loop_manager = get_node("/root/Root/Gameplay/GameLoopManager")
+	shadeSprite = get_node("ShadeAnimatedSprite3D")
 
 	# Listen for day ending
 	game_loop_manager.day_ended.connect(_on_day_ended)
@@ -100,6 +103,16 @@ func _process(delta: float) -> void:
 			_inspect_behavior(delta)
 		State.WALKING_TO_CHECKOUT:
 			_walk_to_checkout_behavior(delta)
+		State.FADING:
+			_fade_behavior(delta)
+
+func fade() -> void:
+	shadeSprite.play("fade")
+	current_state = State.FADING
+	
+func _fade_behavior(delta: float) -> void:
+	if !shadeSprite.is_playing():
+		queue_free()
 
 func _browse_behavior(delta: float) -> void:
 	# Move toward current target (plinth)
@@ -202,9 +215,9 @@ func move_to_checkout() -> void:
 			interaction_data["selected_soul_plinth"] = selected_soul_plinth
 		interaction_manager.add_interaction(interaction_data)
 		print("[Shade] %s arrived at checkout - added to interaction queue" % encounter_data.type.capitalize())
-
-	# Disappear - despawn immediately
-	queue_free()
+	
+	# fade from the shop
+	fade()
 
 func leave_shop() -> void:
 	current_state = State.WALKING_TO_EXIT
@@ -224,7 +237,7 @@ func _walk_to_exit_behavior(delta: float) -> void:
 		# Reached exit, despawn
 		current_state = State.LEAVING
 		velocity = Vector3.ZERO
-		queue_free()
+		fade()
 		return
 
 	# Move toward exit

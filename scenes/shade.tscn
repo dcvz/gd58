@@ -86,7 +86,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_mst65")
 }],
-"loop": true,
+"loop": false,
 "name": &"fade",
 "speed": 5.0
 }]
@@ -113,4 +113,3 @@ texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_eta1p")
 animation = &"fade"
 autoplay = "default"
-frame_progress = 0.42670235
