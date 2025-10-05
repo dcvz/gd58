@@ -10,6 +10,10 @@ signal job_completed(job: MachineJob)
 var owned_machines: Array[MachineData.MachineType] = []
 var active_jobs: Array[MachineJob] = []
 
+# For MULTI_PROPERTY machines: store which stats each can detect
+# machine_type -> Array of stat keys (SoulAttribute enum values)
+var multi_property_stats: Dictionary = {}
+
 func _ready() -> void:
 	pass
 
@@ -45,6 +49,18 @@ func purchase_machine(type: MachineData.MachineType) -> bool:
 
 	if currency_manager.spend_kp(cost):
 		owned_machines.append(type)
+
+		# For MULTI_PROPERTY, randomly select 6 stats this machine can detect
+		if type == MachineData.MachineType.MULTI_PROPERTY:
+			var all_stats = SoulData.SoulAttribute.values()
+			all_stats.shuffle()
+			var selected_stats = all_stats.slice(0, 6)  # Take first 6 after shuffle
+			multi_property_stats[type] = selected_stats
+			var stat_names = []
+			for stat in selected_stats:
+				stat_names.append(SoulData.SoulAttribute.keys()[stat])
+			print("Multi-Property Scanner can detect: %s" % ", ".join(stat_names))
+
 		machine_purchased.emit(type)
 		machines_changed.emit()
 		print("Purchased %s for %d KP" % [MachineData.get_machine_name(type), cost])
@@ -63,6 +79,13 @@ func get_available_machines() -> Array[MachineData.MachineType]:
 		if not has_machine(type):
 			available.append(type)
 	return available
+
+## Get which stats a MULTI_PROPERTY machine can detect
+## Returns array of stat keys, or empty array if not applicable
+func get_multi_property_stats(machine_type: MachineData.MachineType) -> Array:
+	if machine_type == MachineData.MachineType.MULTI_PROPERTY:
+		return multi_property_stats.get(machine_type, [])
+	return []
 
 ## Start a machine job on a soul
 func start_job(soul_id: String, soul: SoulData, machine_type: MachineData.MachineType) -> bool:
@@ -136,8 +159,7 @@ func _process_completed_job(job: MachineJob) -> void:
 		MachineData.MachineType.RANDOM_RANGE_NARROW:
 			_discover_random_stat_narrow_range(job.soul_id, soul, discovery_manager)
 		MachineData.MachineType.MULTI_PROPERTY:
-			# TODO: This needs user input for which 6 stats
-			pass
+			_discover_multiple_properties(job.soul_id, soul, discovery_manager)
 		MachineData.MachineType.ELIMINATE_OPTIONS:
 			_eliminate_era_or_death_options(job.soul_id, soul, discovery_manager)
 		MachineData.MachineType.REVEAL_INFO:
@@ -212,6 +234,27 @@ func _discover_random_stat_narrow_range(soul_id: String, soul: SoulData, discove
 		var max_range = min(100, actual_value + offset_above)
 		var hint = "%d-%d" % [int(min_range), int(max_range)]
 		discovery_manager.add_stat_hint(soul_id, stat_key, hint)
+
+## Machine 4: Discover 6 specific properties (presence only, no values)
+## Only detects the 6 stats this machine was configured to detect
+func _discover_multiple_properties(soul_id: String, soul: SoulData, discovery_manager: Node) -> void:
+	var disc_log = discovery_manager.get_discovery_log(soul_id)
+
+	# Get the specific stats this machine can detect
+	var detectable_stats = multi_property_stats.get(MachineData.MachineType.MULTI_PROPERTY, [])
+	if detectable_stats.size() == 0:
+		print("[Machine] Warning: Multi-Property Scanner has no assigned stats!")
+		return
+
+	# Check each of the 6 assigned stats
+	for stat_key in detectable_stats:
+		# Only discover if:
+		# 1. The soul actually has this stat
+		# 2. We don't already know about it
+		if soul.stats.has(stat_key):
+			if not disc_log.knows_stat(stat_key) and not disc_log.has_stat_hints(stat_key):
+				# Add hint showing only that this stat exists (value unknown)
+				discovery_manager.add_stat_hint(soul_id, stat_key, "Present")
 
 ## Machine 5: Remove 2 possibilities from Era or Cause of Death
 func _eliminate_era_or_death_options(soul_id: String, soul: SoulData, discovery_manager: Node) -> void:

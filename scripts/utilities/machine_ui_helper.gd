@@ -55,6 +55,14 @@ static func show_machine_selection_popup(parent: Node, soul: SoulData, on_machin
 		var machine_name = MachineData.get_machine_name(machine_type)
 		var is_in_use = machine_manager.is_machine_in_use(machine_type)
 
+		# For MULTI_PROPERTY, show which stats it detects
+		if machine_type == MachineData.MachineType.MULTI_PROPERTY:
+			var stats = machine_manager.get_multi_property_stats(machine_type)
+			var stat_names = []
+			for stat in stats:
+				stat_names.append(SoulData.SoulAttribute.keys()[stat])
+			machine_name = "%s [%s]" % [machine_name, ", ".join(stat_names)]
+
 		if is_in_use:
 			# Add disabled item with "In Use" suffix
 			popup.add_item("%s (In Use)" % machine_name, machine_type)

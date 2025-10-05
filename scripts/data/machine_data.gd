@@ -33,7 +33,7 @@ static func get_machine_description(type: MachineType) -> String:
 		MachineType.RANDOM_PROPERTY:
 			return "Discover 1 random undiscovered property"
 		MachineType.SPECIFIC_RANGE_WIDE:
-			return "Discover the value of a specific property within 20-40 points\ne.g. Scientific 55 → \"Scientific 52-82\""
+			return "Discover the value of a specific property within 15-40 points\ne.g. Scientific 55 → \"Scientific 52-82\""
 		MachineType.RANDOM_RANGE_NARROW:
 			return "Discover the value of a random property within 20 points\ne.g. Scientific 55 → \"Scientific 52-72\""
 		MachineType.MULTI_PROPERTY:
