@@ -27,15 +27,15 @@ func _to_string() -> String:
 static func generate_random_soul() -> SoulData:
 	var randomId = randi();
 	var randomColor = _generate_random_hsv_color()
-	
+
 	var soul = SoulData.new()
-	soul.id = "soul_starter_%d" % (randomId)
-	soul.name = "Common Soul %d" % (randomId)
+	soul.id = "soul_%d" % (randomId)
 	soul.era = Era.values().pick_random()
+	soul.name = NameGenerator.generate_soul_name(soul.era)  # Pass era for appropriate title
 	soul.causeOfDeath = CauseOfDeath.values().pick_random()
 	soul.stats = _get_random_properties_for_soul()
 	soul.visual_color = randomColor
-	
+
 	return soul
 	
 static func _get_random_properties_for_soul() -> Dictionary:
