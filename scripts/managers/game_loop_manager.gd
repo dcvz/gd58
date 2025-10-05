@@ -95,7 +95,12 @@ func _roll_daily_encounters() -> void:
 
 		elif encounter_type == "seller":
 			# Sellers bring a soul to sell
-			encounter["soul_to_sell"] = SoulData.generate_random_soul()
+			var soul = SoulData.generate_random_soul()
+			encounter["soul_to_sell"] = soul
+
+			# Seller knows some things about their soul (initialize discoveries)
+			var discovery_manager = get_node("/root/Root/Gameplay/DiscoveryManager")
+			discovery_manager.initialize_from_seller(soul.id, soul)
 
 		encounter_queue.append(encounter)
 

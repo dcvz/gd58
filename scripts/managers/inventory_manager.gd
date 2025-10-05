@@ -79,6 +79,13 @@ func add_to_display(soul_id: String) -> bool:
 		return false
 
 	display_slots.append(soul_id)
+
+	# Auto-advertise everything we know about this soul
+	var discovery_manager = get_node("/root/Root/Gameplay/DiscoveryManager")
+	var advertisement_manager = get_node("/root/Root/Gameplay/AdvertisementManager")
+	var discovery_log = discovery_manager.get_discovery_log(soul_id)
+	advertisement_manager.auto_advertise_all_known(soul_id, discovery_log)
+
 	inventory_changed.emit()
 	return true
 
@@ -88,6 +95,11 @@ func remove_from_display(soul_id: String) -> bool:
 		return false
 
 	display_slots.erase(soul_id)
+
+	# Clear advertisement when removed from display
+	var advertisement_manager = get_node("/root/Root/Gameplay/AdvertisementManager")
+	advertisement_manager.clear_advertisement(soul_id)
+
 	inventory_changed.emit()
 	return true
 

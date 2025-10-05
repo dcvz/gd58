@@ -159,8 +159,26 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 			selling_label.add_theme_color_override("font_color", Color(0.4, 0.8, 1.0))  # Blue
 			vbox.add_child(selling_label)
 
-			# Use centralized soul display helper
-			SoulDisplayHelper.add_soul_details_to_container(vbox, soul_to_sell)
+			# Show discoveries with two-column layout (known vs clues)
+			var discovery_manager = get_node("/root/Root/Gameplay/DiscoveryManager")
+			var discovery_log = discovery_manager.get_discovery_log(soul_to_sell.id)
+
+			var columns_hbox = HBoxContainer.new()
+			vbox.add_child(columns_hbox)
+
+			var left_vbox = VBoxContainer.new()
+			left_vbox.custom_minimum_size = Vector2(230, 0)
+			columns_hbox.add_child(left_vbox)
+
+			var spacer = Control.new()
+			spacer.custom_minimum_size = Vector2(20, 0)
+			columns_hbox.add_child(spacer)
+
+			var right_vbox = VBoxContainer.new()
+			right_vbox.custom_minimum_size = Vector2(230, 0)
+			columns_hbox.add_child(right_vbox)
+
+			SoulDisplayHelper.add_soul_details_with_discoveries(left_vbox, right_vbox, soul_to_sell, discovery_log)
 
 			# Add separator
 			var separator = HSeparator.new()
@@ -181,6 +199,11 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 		buy_button.text = "Buy Soul (%d KP)" % asking_price
 		buy_button.pressed.connect(func(): _handle_seller_transaction(index, interaction))
 		button_hbox.add_child(buy_button)
+
+		var machine_button = Button.new()
+		machine_button.text = "Use Machine"
+		machine_button.pressed.connect(func(): _show_seller_machine_menu(soul_to_sell))
+		button_hbox.add_child(machine_button)
 
 		var reject_button = Button.new()
 		reject_button.text = "Reject"
@@ -286,3 +309,34 @@ func _remove_interactions_for_soul(soul_id: String, exclude_index: int) -> void:
 	for idx in indices_to_remove:
 		print("Removing duplicate buyer request for sold soul")
 		interaction_manager.remove_interaction(idx)
+
+func _show_seller_machine_menu(soul: SoulData) -> void:
+	var machine_manager = get_node("/root/Root/Gameplay/MachineManager")
+
+	# Check if already being analyzed
+	if machine_manager.is_soul_being_analyzed(soul.id):
+		print("Soul is already being analyzed!")
+		return
+
+	# Get owned machines
+	var owned = machine_manager.get_owned_machines()
+	if owned.size() == 0:
+		print("No machines owned!")
+		return
+
+	# Create popup menu
+	var popup = PopupMenu.new()
+	add_child(popup)
+
+	for machine_type in owned:
+		popup.add_item(MachineData.get_machine_name(machine_type), machine_type)
+
+	popup.index_pressed.connect(func(index):
+		var machine_type = popup.get_item_id(index)
+		machine_manager.start_job(soul.id, soul, machine_type)
+		popup.queue_free()
+		# Refresh to show job status
+		_refresh_list()
+	)
+
+	popup.popup_centered()

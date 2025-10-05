@@ -68,6 +68,10 @@ func _ready() -> void:
 	var machine_manager = get_node("/root/Root/Gameplay/MachineManager")
 	machine_manager.job_completed.connect(_on_job_completed)
 
+	# Connect to advertisement manager signals
+	var advertisement_manager = get_node("/root/Root/Gameplay/AdvertisementManager")
+	advertisement_manager.advertisement_changed.connect(_on_advertisement_changed)
+
 func _process(delta: float) -> void:
 	# Refresh details periodically if expanded and job is running
 	if is_expanded:
@@ -81,6 +85,11 @@ func _process(delta: float) -> void:
 func _on_job_completed(job: MachineJob) -> void:
 	# Refresh if this job was for our soul
 	if job.soul_id == soul_data.id and is_expanded:
+		_populate_details()
+
+func _on_advertisement_changed(soul_id: String) -> void:
+	# Refresh if advertisement changed for our soul and we're expanded
+	if soul_id == soul_data.id and is_expanded:
 		_populate_details()
 
 func setup(soul: SoulData, on_display: bool) -> void:
@@ -165,6 +174,10 @@ func _populate_details() -> void:
 		status_label.add_theme_color_override("font_color", Color(0.3, 0.8, 1.0))
 		job_status.add_child(status_label)
 
+	# Add advertisement controls (only show if soul is on display)
+	if is_on_display:
+		_add_advertisement_controls(details_container, discovery_log)
+
 func _show_machine_selection_popup() -> void:
 	var machine_manager = get_node("/root/Root/Gameplay/MachineManager")
 
@@ -193,3 +206,109 @@ func _show_machine_selection_popup() -> void:
 	)
 
 	popup.popup_centered()
+
+func _add_advertisement_controls(container: VBoxContainer, discovery_log: DiscoveryLog) -> void:
+	# Separator
+	var separator = HSeparator.new()
+	container.add_child(separator)
+
+	# Advertisement header
+	var ad_header = Label.new()
+	ad_header.text = "ADVERTISE PROPERTIES (what buyers see)"
+	ad_header.add_theme_color_override("font_color", Color(1.0, 0.8, 0.2))
+	container.add_child(ad_header)
+
+	# Get or create advertisement
+	var advertisement_manager = get_node("/root/Root/Gameplay/AdvertisementManager")
+	var ad = advertisement_manager.get_advertisement(soul_data.id)
+
+	# Indent container
+	var indent_hbox = HBoxContainer.new()
+	container.add_child(indent_hbox)
+
+	var indent = Control.new()
+	indent.custom_minimum_size = Vector2(40, 0)
+	indent_hbox.add_child(indent)
+
+	var controls_vbox = VBoxContainer.new()
+	indent_hbox.add_child(controls_vbox)
+
+	# Era checkbox (only if we know it)
+	if discovery_log.known_era:
+		var era_check = CheckBox.new()
+		era_check.text = "Era: %s" % SoulData.Era.keys()[soul_data.era]
+		era_check.button_pressed = ad.advertise_era
+		era_check.toggled.connect(func(pressed: bool):
+			ad.set_advertise_era(pressed)
+			advertisement_manager.advertisement_changed.emit(soul_data.id)
+		)
+		controls_vbox.add_child(era_check)
+
+	# Death checkbox (only if we know it)
+	if discovery_log.known_death:
+		var death_check = CheckBox.new()
+		death_check.text = "Cause of Death: %s" % SoulData.CauseOfDeath.keys()[soul_data.causeOfDeath]
+		death_check.button_pressed = ad.advertise_death
+		death_check.toggled.connect(func(pressed: bool):
+			ad.set_advertise_death(pressed)
+			advertisement_manager.advertisement_changed.emit(soul_data.id)
+		)
+		controls_vbox.add_child(death_check)
+
+	# Stats - show for both discovered (exact) and hinted (presence/range)
+	var stats_to_show = {}  # stat_key -> {type: "exact"/"hint", value/hints}
+
+	# Collect discovered stats (exact values)
+	for stat_key in discovery_log.get_discovered_stats():
+		stats_to_show[stat_key] = {
+			"type": "exact",
+			"value": soul_data.stats[stat_key]
+		}
+
+	# Collect stats with hints (presence or range)
+	for stat_key in soul_data.stats.keys():
+		if not stats_to_show.has(stat_key) and discovery_log.has_stat_hints(stat_key):
+			stats_to_show[stat_key] = {
+				"type": "hint",
+				"hints": discovery_log.get_stat_hints(stat_key)
+			}
+
+	if stats_to_show.size() > 0:
+		var stats_label = Label.new()
+		stats_label.text = "Stats:"
+		controls_vbox.add_child(stats_label)
+
+		for stat_key in stats_to_show.keys():
+			var stat_info = stats_to_show[stat_key]
+			var stat_name = SoulData.SoulAttribute.keys()[stat_key]
+
+			if stat_info["type"] == "exact":
+				# Exact value known - checkbox to advertise exact
+				var stat_value = stat_info["value"]
+				var stat_check = CheckBox.new()
+				stat_check.text = "  %s: %d (exact)" % [stat_name, int(stat_value)]
+				stat_check.button_pressed = ad.get_stat_advert_level(stat_key) == SoulAdvertisement.AdvertLevel.ADVERTISE_EXACT
+				stat_check.toggled.connect(func(pressed: bool):
+					if pressed:
+						ad.advertise_stat_exact(stat_key, stat_value)
+					else:
+						ad.unadvertise_stat(stat_key)
+					advertisement_manager.advertisement_changed.emit(soul_data.id)
+				)
+				controls_vbox.add_child(stat_check)
+
+			else:
+				# Only hints known - checkbox to advertise presence
+				var hints = stat_info["hints"]
+				var hint_text = ", ".join(hints)
+				var stat_check = CheckBox.new()
+				stat_check.text = "  %s (presence only)" % stat_name
+				stat_check.button_pressed = ad.get_stat_advert_level(stat_key) == SoulAdvertisement.AdvertLevel.ADVERTISE_PRESENCE
+				stat_check.toggled.connect(func(pressed: bool):
+					if pressed:
+						ad.advertise_stat_presence(stat_key)
+					else:
+						ad.unadvertise_stat(stat_key)
+					advertisement_manager.advertisement_changed.emit(soul_data.id)
+				)
+				controls_vbox.add_child(stat_check)
