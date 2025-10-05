@@ -52,10 +52,27 @@ static func show_machine_selection_popup(parent: Node, soul: SoulData, on_machin
 	parent.add_child(popup)
 
 	for machine_type in owned:
-		popup.add_item(MachineData.get_machine_name(machine_type), machine_type)
+		var machine_name = MachineData.get_machine_name(machine_type)
+		var is_in_use = machine_manager.is_machine_in_use(machine_type)
+
+		if is_in_use:
+			# Add disabled item with "In Use" suffix
+			popup.add_item("%s (In Use)" % machine_name, machine_type)
+			var idx = popup.get_item_count() - 1
+			popup.set_item_disabled(idx, true)
+		else:
+			# Add normal item
+			popup.add_item(machine_name, machine_type)
 
 	popup.index_pressed.connect(func(index):
 		var machine_type = popup.get_item_id(index)
+
+		# Double-check machine isn't in use (shouldn't be possible but safety check)
+		if machine_manager.is_machine_in_use(machine_type):
+			print("[MachineUIHelper] Machine is in use!")
+			popup.queue_free()
+			return
+
 		machine_manager.start_job(soul.id, soul, machine_type)
 
 		# Call optional callback

@@ -84,6 +84,13 @@ func is_soul_being_analyzed(soul_id: String) -> bool:
 			return true
 	return false
 
+## Check if a specific machine is currently in use
+func is_machine_in_use(machine_type: MachineData.MachineType) -> bool:
+	for job in active_jobs:
+		if job.machine_type == machine_type and not job.completed:
+			return true
+	return false
+
 ## Get active job for a soul (if any)
 func get_soul_job(soul_id: String) -> MachineJob:
 	for job in active_jobs:
