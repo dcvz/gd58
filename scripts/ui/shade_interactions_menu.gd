@@ -104,15 +104,16 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 		var plinth = interaction.get("selected_soul_plinth")
 		if plinth and plinth.displayed_soul:
 			var soul = plinth.displayed_soul
-			var soul_vbox = VBoxContainer.new()
-			vbox.add_child(soul_vbox)
 
 			var selling_label = Label.new()
 			selling_label.text = "Your Soul:"
 			selling_label.add_theme_color_override("font_color", Color(1.0, 0.8, 0.4))  # Gold
-			soul_vbox.add_child(selling_label)
+			vbox.add_child(selling_label)
 
-			SoulDisplayHelper.add_soul_details_to_container(soul_vbox, soul)
+			# Show discoveries with two-column layout (known vs clues)
+			var discovery_manager = get_node("/root/Root/Gameplay/DiscoveryManager")
+			var discovery_log = discovery_manager.get_discovery_log(soul.id)
+			SoulDisplayHelper.create_two_column_discovery_layout(vbox, soul, discovery_log)
 
 			# Add separator
 			var separator = HSeparator.new()
@@ -162,23 +163,7 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 			# Show discoveries with two-column layout (known vs clues)
 			var discovery_manager = get_node("/root/Root/Gameplay/DiscoveryManager")
 			var discovery_log = discovery_manager.get_discovery_log(soul_to_sell.id)
-
-			var columns_hbox = HBoxContainer.new()
-			vbox.add_child(columns_hbox)
-
-			var left_vbox = VBoxContainer.new()
-			left_vbox.custom_minimum_size = Vector2(230, 0)
-			columns_hbox.add_child(left_vbox)
-
-			var spacer = Control.new()
-			spacer.custom_minimum_size = Vector2(20, 0)
-			columns_hbox.add_child(spacer)
-
-			var right_vbox = VBoxContainer.new()
-			right_vbox.custom_minimum_size = Vector2(230, 0)
-			columns_hbox.add_child(right_vbox)
-
-			SoulDisplayHelper.add_soul_details_with_discoveries(left_vbox, right_vbox, soul_to_sell, discovery_log)
+			SoulDisplayHelper.create_two_column_discovery_layout(vbox, soul_to_sell, discovery_log)
 
 			# Show active job status if any (centralized)
 			MachineUIHelper.add_job_status_if_active(vbox, soul_to_sell.id)

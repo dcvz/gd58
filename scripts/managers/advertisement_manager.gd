@@ -94,3 +94,61 @@ func create_advertised_soul(soul: SoulData, ad: SoulAdvertisement) -> Dictionary
 				}
 
 	return advertised
+
+## Create a virtual soul from a discovery log (for buyer investigations)
+func create_advertised_soul_from_log(soul: SoulData, discovery_log: DiscoveryLog) -> Dictionary:
+	"""
+	Similar to create_advertised_soul but based on a discovery log instead of advertisement.
+	Used to simulate what a buyer knows after running their own tests.
+	"""
+	var advertised = {
+		"soul_id": soul.id,
+		"name": soul.name,
+		"has_era": discovery_log.known_era,
+		"has_death": discovery_log.known_death,
+		"stats": {}
+	}
+
+	if discovery_log.known_era:
+		advertised["era"] = soul.era
+
+	if discovery_log.known_death:
+		advertised["death"] = soul.causeOfDeath
+
+	# Include all discovered stats as exact values
+	for stat_key in discovery_log.get_discovered_stats():
+		if soul.stats.has(stat_key):
+			advertised["stats"][stat_key] = {
+				"level": SoulAdvertisement.AdvertLevel.ADVERTISE_EXACT,
+				"exact": soul.stats[stat_key]
+			}
+
+	# Include stat hints (ranges and presence)
+	for stat_key in soul.stats.keys():
+		if not discovery_log.knows_stat(stat_key) and discovery_log.has_stat_hints(stat_key):
+			var hints = discovery_log.get_stat_hints(stat_key)
+			var has_range = false
+
+			# Check if we have a range hint
+			for hint in hints:
+				if "-" in hint and hint != "Present":
+					var parts = hint.split("-")
+					if parts.size() == 2:
+						var min_val = parts[0].to_int()
+						var max_val = parts[1].to_int()
+						if min_val >= 0 and max_val <= 100 and min_val < max_val:
+							advertised["stats"][stat_key] = {
+								"level": SoulAdvertisement.AdvertLevel.ADVERTISE_RANGE,
+								"min": min_val,
+								"max": max_val
+							}
+							has_range = true
+							break
+
+			# If no range, but we have hints (presence only)
+			if not has_range and hints.size() > 0:
+				advertised["stats"][stat_key] = {
+					"level": SoulAdvertisement.AdvertLevel.ADVERTISE_PRESENCE
+				}
+
+	return advertised

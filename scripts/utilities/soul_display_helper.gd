@@ -163,3 +163,23 @@ static func get_soul_description(soul: SoulData) -> String:
 		desc += "Stats: None\n"
 
 	return desc
+
+## Create two-column layout container with discoveries (helper to reduce duplication)
+## Returns the parent HBoxContainer
+static func create_two_column_discovery_layout(parent_container: VBoxContainer, soul: SoulData, discovery_log: DiscoveryLog) -> void:
+	var columns_hbox = HBoxContainer.new()
+	parent_container.add_child(columns_hbox)
+
+	var left_vbox = VBoxContainer.new()
+	left_vbox.custom_minimum_size = Vector2(230, 0)
+	columns_hbox.add_child(left_vbox)
+
+	var spacer = Control.new()
+	spacer.custom_minimum_size = Vector2(20, 0)
+	columns_hbox.add_child(spacer)
+
+	var right_vbox = VBoxContainer.new()
+	right_vbox.custom_minimum_size = Vector2(230, 0)
+	columns_hbox.add_child(right_vbox)
+
+	add_soul_details_with_discoveries(left_vbox, right_vbox, soul, discovery_log)

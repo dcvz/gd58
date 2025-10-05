@@ -56,17 +56,26 @@ func add_interaction(shade_data: Dictionary) -> void:
 		interaction["interests"] = shade_data.get("interests", [])
 		interaction["selected_soul_plinth"] = shade_data.get("selected_soul_plinth", null)
 
-		# Calculate the price the buyer is willing to pay (based on advertised properties)
+		# Calculate the price the buyer is willing to pay
+		# Buyers can run their own tests and discover additional properties beyond what we advertise
 		var plinth = shade_data.get("selected_soul_plinth", null)
 		if plinth and plinth.displayed_soul:
 			var soul = plinth.displayed_soul
 			var advertisement_manager = get_node("/root/Root/Gameplay/AdvertisementManager")
+			var discovery_manager = get_node("/root/Root/Gameplay/DiscoveryManager")
+
 			var ad = advertisement_manager.get_advertisement(soul.id)
-			var advertised_soul = advertisement_manager.create_advertised_soul(soul, ad)
+			var our_discovery_log = discovery_manager.get_discovery_log(soul.id)
+
+			# Simulate buyer's own investigation - they discover 0-2 additional properties beyond what we advertise
+			var buyer_discovery_log = _simulate_buyer_investigation(soul, our_discovery_log)
+
+			# Create advertised soul based on what buyer knows (our ads + their investigation)
+			var advertised_soul = advertisement_manager.create_advertised_soul_from_log(soul, buyer_discovery_log)
 
 			var offer_price = SoulPricing.calculate_advertised_offer(advertised_soul, soul, shade_data.get("interests", []))
 			interaction["offer_price"] = offer_price
-			print("[InteractionManager] Buyer offering %d KP for %s (based on advertised properties)" % [offer_price, soul.name])
+			print("[InteractionManager] Buyer offering %d KP for %s (based on their own investigation)" % [offer_price, soul.name])
 		else:
 			# No valid soul - buyer arrived but soul was removed/sold before they could interact
 			# Don't add this buyer to the queue
@@ -126,3 +135,30 @@ func get_days_remaining(interaction: Dictionary) -> float:
 	var current_fractional_day = game_loop.get_current_fractional_day()
 	var expires_on = interaction.get("expires_on_day", current_fractional_day + 1)
 	return max(0.0, expires_on - current_fractional_day)
+
+func _simulate_buyer_investigation(soul: SoulData, our_log: DiscoveryLog) -> DiscoveryLog:
+	"""Simulate a buyer running their own tests to discover 0-2 additional properties"""
+	# Create a copy of our discovery log as the starting point
+	var buyer_log = DiscoveryLog.new()
+	buyer_log.known_era = our_log.known_era
+	buyer_log.known_death = our_log.known_death
+	buyer_log.era_hints = our_log.era_hints.duplicate()
+	buyer_log.death_hints = our_log.death_hints.duplicate()
+	buyer_log.known_stats = our_log.known_stats.duplicate()
+	buyer_log.stat_hints = our_log.stat_hints.duplicate(true)
+
+	# Buyer discovers 0-2 additional stats we don't know about
+	var num_discoveries = randi_range(0, 2)
+	var undiscovered_stats = []
+
+	for stat_key in soul.stats.keys():
+		if not our_log.knows_stat(stat_key):
+			undiscovered_stats.append(stat_key)
+
+	if undiscovered_stats.size() > 0:
+		undiscovered_stats.shuffle()
+		for i in range(min(num_discoveries, undiscovered_stats.size())):
+			var stat_key = undiscovered_stats[i]
+			buyer_log.known_stats[stat_key] = soul.stats[stat_key]
+
+	return buyer_log
