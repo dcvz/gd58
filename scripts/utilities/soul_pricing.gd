@@ -4,7 +4,6 @@ extends RefCounted
 ## Centralized soul pricing and valuation system
 ## Calculates prices based on stat rarity and customer interest matching
 
-const InterestMatcher = preload("res://scripts/utilities/interest_matcher.gd")
 
 # Rarity thresholds for stats (lower = rarer)
 const STAT_VERY_RARE_THRESHOLD = 20

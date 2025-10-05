@@ -2,9 +2,6 @@ extends Control
 
 ## Menu for handling shade interactions (buyers and sellers)
 
-# Load utilities
-const InterestMatcher = preload("res://scripts/utilities/interest_matcher.gd")
-const SoulDisplayHelper = preload("res://scripts/utilities/soul_display_helper.gd")
 
 var interaction_manager: Node
 var game_loop_manager: Node
