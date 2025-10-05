@@ -14,6 +14,11 @@ func _ready() -> void:
 	pass
 
 func _process(delta: float) -> void:
+	# Only process jobs when simulation is running
+	var game_loop_manager = get_node("/root/Root/Gameplay/GameLoopManager")
+	if game_loop_manager and game_loop_manager.is_simulation_paused:
+		return
+
 	_check_completed_jobs()
 
 ## Check if a machine is owned
