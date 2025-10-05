@@ -10,6 +10,20 @@ var game_loop_manager: Node
 var interaction_list: VBoxContainer
 var close_button: Button
 
+# Auto-refresh timer for countdown updates
+var refresh_timer: float = 0.0
+const REFRESH_INTERVAL: float = 0.5  # Update every half second
+
+func _process(delta: float) -> void:
+	if not visible:
+		return
+
+	# Periodically refresh to update countdown timers
+	refresh_timer += delta
+	if refresh_timer >= REFRESH_INTERVAL:
+		refresh_timer = 0.0
+		_refresh_list()
+
 func _ready() -> void:
 	await get_tree().process_frame
 
@@ -23,6 +37,7 @@ func _ready() -> void:
 	close_button.pressed.connect(_on_close_pressed)
 	interaction_manager.interaction_added.connect(_on_interaction_added)
 	interaction_manager.interaction_removed.connect(_on_interaction_removed)
+	interaction_manager.interaction_expired.connect(_on_interaction_expired)
 
 	# Initial population
 	_refresh_list()
@@ -62,7 +77,7 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 	var vbox = VBoxContainer.new()
 	panel.add_child(vbox)
 
-	# Header
+	# Header with countdown timer
 	var header_hbox = HBoxContainer.new()
 	vbox.add_child(header_hbox)
 
@@ -70,6 +85,20 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 	type_label.text = "%s #%d" % [interaction.type.capitalize(), index + 1]
 	type_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header_hbox.add_child(type_label)
+
+	# Countdown timer
+	var days_remaining = interaction_manager.get_days_remaining(interaction)
+	var timer_label = Label.new()
+	if days_remaining >= 1.0:
+		timer_label.text = "⏱ %.1f days" % days_remaining
+		timer_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
+	elif days_remaining >= 0.5:
+		timer_label.text = "⏱ %.1f days" % days_remaining
+		timer_label.add_theme_color_override("font_color", Color(1.0, 1.0, 0.3))  # Yellow warning
+	else:
+		timer_label.text = "⏱ %.1f days" % days_remaining
+		timer_label.add_theme_color_override("font_color", Color(1.0, 0.3, 0.3))  # Red urgent
+	header_hbox.add_child(timer_label)
 
 	# Details based on type
 	if interaction.type == "buyer":
@@ -223,6 +252,11 @@ func _on_interaction_added(_interaction: Dictionary) -> void:
 		_refresh_list()
 
 func _on_interaction_removed(_interaction: Dictionary) -> void:
+	if visible:
+		_refresh_list()
+
+func _on_interaction_expired(_interaction: Dictionary) -> void:
+	print("Interaction expired and removed from queue")
 	if visible:
 		_refresh_list()
 

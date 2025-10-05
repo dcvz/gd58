@@ -6,16 +6,51 @@ const SoulPricing = preload("res://scripts/soul_pricing.gd")
 
 signal interaction_added(interaction: Dictionary)
 signal interaction_removed(interaction: Dictionary)
+signal interaction_expired(interaction: Dictionary)
 
 # Queue of pending interactions
 var pending_interactions: Array[Dictionary] = []
+
+# Expiration durations (in days)
+const BUYER_EXPIRATION_DAYS_MIN = 1.0
+const BUYER_EXPIRATION_DAYS_MAX = 2.0
+const SELLER_EXPIRATION_DAYS_MIN = 2.0
+const SELLER_EXPIRATION_DAYS_MAX = 3.0
+
+# Reference to game loop for day duration
+@onready var game_loop: Node = get_node("/root/Root/Gameplay/GameLoopManager")
+
+# Check expiration every second
+var expiration_check_timer: float = 0.0
+const EXPIRATION_CHECK_INTERVAL: float = 1.0
+
+func _process(delta: float) -> void:
+	# Periodically check for expired interactions
+	expiration_check_timer += delta
+	if expiration_check_timer >= EXPIRATION_CHECK_INTERVAL:
+		expiration_check_timer = 0.0
+		check_and_remove_expired()
 
 func add_interaction(shade_data: Dictionary) -> void:
 	"""Add a shade interaction to the queue"""
 	var interaction = {
 		"type": shade_data.type,
-		"timestamp": Time.get_ticks_msec()
+		"timestamp": Time.get_ticks_msec(),
+		"added_on_day": game_loop.current_day
 	}
+
+	# Assign expiration time based on type
+	if shade_data.type == "buyer":
+		var expiration_days = randf_range(BUYER_EXPIRATION_DAYS_MIN, BUYER_EXPIRATION_DAYS_MAX)
+		interaction["expiration_days"] = expiration_days
+		interaction["expires_on_day"] = game_loop.current_day + expiration_days
+	elif shade_data.type == "seller":
+		var expiration_days = randf_range(SELLER_EXPIRATION_DAYS_MIN, SELLER_EXPIRATION_DAYS_MAX)
+		interaction["expiration_days"] = expiration_days
+		interaction["expires_on_day"] = game_loop.current_day + expiration_days
+	else:  # broker or other
+		interaction["expiration_days"] = 1.0
+		interaction["expires_on_day"] = game_loop.current_day + 1.0
 
 	# Add type-specific data
 	if shade_data.type == "buyer":
@@ -67,3 +102,22 @@ func clear_all_interactions() -> void:
 	"""Clear all pending interactions (e.g., at end of day)"""
 	pending_interactions.clear()
 	print("Cleared all pending interactions")
+
+func check_and_remove_expired() -> void:
+	"""Check for expired interactions and remove them"""
+	var current_fractional_day = game_loop.get_current_fractional_day()
+
+	# Iterate backwards to safely remove items
+	for i in range(pending_interactions.size() - 1, -1, -1):
+		var interaction = pending_interactions[i]
+		if current_fractional_day >= interaction.get("expires_on_day", 999999):
+			print("[InteractionManager] %s interaction expired (was waiting %.1f days)" % [interaction.type, interaction.expiration_days])
+			var expired = pending_interactions[i]
+			pending_interactions.remove_at(i)
+			interaction_expired.emit(expired)
+
+func get_days_remaining(interaction: Dictionary) -> float:
+	"""Get the number of days remaining before this interaction expires"""
+	var current_fractional_day = game_loop.get_current_fractional_day()
+	var expires_on = interaction.get("expires_on_day", current_fractional_day + 1)
+	return max(0.0, expires_on - current_fractional_day)

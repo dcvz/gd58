@@ -49,6 +49,11 @@ func _process(delta: float) -> void:
 	if day_time_elapsed >= day_duration:
 		end_day()
 
+## Get the current day as a fractional value (accounts for partial day progress)
+func get_current_fractional_day() -> float:
+	var progress = day_time_elapsed / day_duration if day_duration > 0 else 0.0
+	return current_day + progress
+
 func start_new_day() -> void:
 	current_day += 1
 	is_day_active = true
