@@ -267,17 +267,51 @@ func _add_advertisement_controls(container: VBoxContainer, discovery_log: Discov
 				controls_vbox.add_child(stat_check)
 
 			else:
-				# Only hints known - checkbox to advertise presence
+				# Only hints known - check if it's a range or just presence
 				var hints = stat_info["hints"]
 				var hint_text = ", ".join(hints)
-				var stat_check = CheckBox.new()
-				stat_check.text = "  %s (presence only)" % stat_name
-				stat_check.button_pressed = ad.get_stat_advert_level(stat_key) == SoulAdvertisement.AdvertLevel.ADVERTISE_PRESENCE
-				stat_check.toggled.connect(func(pressed: bool):
-					if pressed:
-						ad.advertise_stat_presence(stat_key)
-					else:
-						ad.unadvertise_stat(stat_key)
-					advertisement_manager.advertisement_changed.emit(soul_data.id)
-				)
-				controls_vbox.add_child(stat_check)
+
+				# Check if we have a range hint (format: "45-75")
+				var range_hint = _parse_range_hint(hints)
+
+				if range_hint:
+					# Range hint - checkbox to advertise range
+					var stat_check = CheckBox.new()
+					stat_check.text = "  %s: %d-%d (range)" % [stat_name, range_hint.min, range_hint.max]
+					stat_check.button_pressed = ad.get_stat_advert_level(stat_key) == SoulAdvertisement.AdvertLevel.ADVERTISE_RANGE
+					stat_check.toggled.connect(func(pressed: bool):
+						if pressed:
+							ad.advertise_stat_range(stat_key, range_hint.min, range_hint.max)
+						else:
+							ad.unadvertise_stat(stat_key)
+						advertisement_manager.advertisement_changed.emit(soul_data.id)
+					)
+					controls_vbox.add_child(stat_check)
+				else:
+					# Presence only - checkbox to advertise presence
+					var stat_check = CheckBox.new()
+					stat_check.text = "  %s (presence only)" % stat_name
+					stat_check.button_pressed = ad.get_stat_advert_level(stat_key) == SoulAdvertisement.AdvertLevel.ADVERTISE_PRESENCE
+					stat_check.toggled.connect(func(pressed: bool):
+						if pressed:
+							ad.advertise_stat_presence(stat_key)
+						else:
+							ad.unadvertise_stat(stat_key)
+						advertisement_manager.advertisement_changed.emit(soul_data.id)
+					)
+					controls_vbox.add_child(stat_check)
+
+
+## Parse range hints from hint array (e.g., ["45-75"])
+## Returns {min: int, max: int} or empty dict if no range found
+func _parse_range_hint(hints: Array) -> Dictionary:
+	for hint in hints:
+		# Check if hint is in "X-Y" format
+		if "-" in hint and hint != "Present":
+			var parts = hint.split("-")
+			if parts.size() == 2:
+				var min_val = parts[0].to_int()
+				var max_val = parts[1].to_int()
+				if min_val >= 0 and max_val <= 100 and min_val < max_val:
+					return {"min": min_val, "max": max_val}
+	return {}
