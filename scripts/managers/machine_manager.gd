@@ -19,6 +19,11 @@ func _process(delta: float) -> void:
 	if game_loop_manager and game_loop_manager.is_simulation_paused:
 		return
 
+	# Update elapsed time for all active jobs
+	for job in active_jobs:
+		if not job.completed:
+			job.update_elapsed(delta)
+
 	_check_completed_jobs()
 
 ## Check if a machine is owned
