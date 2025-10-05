@@ -53,9 +53,9 @@ func _on_close_pressed() -> void:
 	hide_menu()
 
 func _refresh_list() -> void:
-	# Clear existing items
+	# Clear existing items immediately to prevent duplicate clicks
 	for child in interaction_list.get_children():
-		child.queue_free()
+		child.free()
 
 	# Add all pending interactions
 	var interactions = interaction_manager.get_pending_interactions()
