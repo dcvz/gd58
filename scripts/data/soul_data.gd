@@ -30,9 +30,9 @@ static func generate_random_soul() -> SoulData:
 
 	var soul = SoulData.new()
 	soul.id = "soul_%d" % (randomId)
-	soul.era = Era.values().pick_random()
+	soul.era = RarityTables.generate_weighted_era()
 	soul.name = NameGenerator.generate_soul_name(soul.era)  # Pass era for appropriate title
-	soul.causeOfDeath = CauseOfDeath.values().pick_random()
+	soul.causeOfDeath = RarityTables.generate_weighted_death()
 	soul.stats = _get_random_properties_for_soul()
 	soul.visual_color = randomColor
 

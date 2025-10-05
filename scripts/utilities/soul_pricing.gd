@@ -3,40 +3,7 @@ extends RefCounted
 
 ## Centralized soul pricing and valuation system
 ## Calculates prices based on stat rarity and customer interest matching
-
-
-# Rarity thresholds for stats (lower = rarer)
-const STAT_VERY_RARE_THRESHOLD = 20
-const STAT_RARE_THRESHOLD = 40
-const STAT_UNCOMMON_THRESHOLD = 60
-const STAT_COMMON_THRESHOLD = 80
-
-# Base KP values for different rarities
-const VERY_RARE_VALUE = 50
-const RARE_VALUE = 30
-const UNCOMMON_VALUE = 15
-const COMMON_VALUE = 5
-
-# Era rarity (some eras are rarer than others)
-const ERA_RARITY = {
-	"CLASSICAL": RARE_VALUE,
-	"ANCIENT": VERY_RARE_VALUE,
-	"PREHISTORIC": VERY_RARE_VALUE,
-	"MODERN": COMMON_VALUE
-}
-
-# Cause of death rarity
-const DEATH_RARITY = {
-	"BATTLE": UNCOMMON_VALUE,
-	"ACCIDENT": UNCOMMON_VALUE,
-	"NATURAL": COMMON_VALUE,
-	"POISON": RARE_VALUE,
-	"ILLNESS": COMMON_VALUE,
-	"MURDERED": RARE_VALUE,
-	"DROWNED": UNCOMMON_VALUE,
-	"STARVED": UNCOMMON_VALUE,
-	"FROZEN": UNCOMMON_VALUE
-}
+## Uses RarityTables for consistent rarity definitions
 
 # Customer interest multipliers
 const PERFECT_MATCH_MULTIPLIER = 1.0  # Customer wants this specific attribute
@@ -48,23 +15,15 @@ static func calculate_base_value(soul: SoulData) -> int:
 	var total_value = 0
 
 	# Add value based on era rarity
-	var era_name = SoulData.Era.keys()[soul.era]
-	if ERA_RARITY.has(era_name):
-		total_value += ERA_RARITY[era_name]
-	else:
-		total_value += COMMON_VALUE
+	total_value += RarityTables.get_era_value(soul.era)
 
 	# Add value based on cause of death rarity
-	var death_name = SoulData.CauseOfDeath.keys()[soul.causeOfDeath]
-	if DEATH_RARITY.has(death_name):
-		total_value += DEATH_RARITY[death_name]
-	else:
-		total_value += COMMON_VALUE
+	total_value += RarityTables.get_death_value(soul.causeOfDeath)
 
 	# Add value for each stat in the stats dictionary
 	for stat_key in soul.stats.keys():
 		var stat_value = soul.stats[stat_key]
-		total_value += _get_stat_value(int(stat_value))
+		total_value += RarityTables.get_stat_value(int(stat_value))
 
 	return total_value
 
@@ -108,17 +67,3 @@ static func calculate_seller_asking_price(soul: SoulData, seller_interests: Arra
 	# Sellers are eager to sell (85-95% of base value)
 	var variation = randf_range(0.85, 0.95)
 	return maxi(int(base_price * variation), 15)  # Minimum 15 KP
-
-## Helper: Get value of a single stat based on its rarity
-static func _get_stat_value(stat_value: int) -> int:
-	# Low stats and high stats are both rare and valuable
-	var distance_from_middle = abs(stat_value - 50)
-
-	if stat_value <= STAT_VERY_RARE_THRESHOLD or stat_value >= (100 - STAT_VERY_RARE_THRESHOLD):
-		return VERY_RARE_VALUE
-	elif stat_value <= STAT_RARE_THRESHOLD or stat_value >= (100 - STAT_RARE_THRESHOLD):
-		return RARE_VALUE
-	elif stat_value <= STAT_UNCOMMON_THRESHOLD or stat_value >= (100 - STAT_UNCOMMON_THRESHOLD):
-		return UNCOMMON_VALUE
-	else:
-		return COMMON_VALUE
