@@ -66,7 +66,7 @@ static func generate_weighted_era() -> SoulData.Era:
 	for weight in ERA_WEIGHTS.values():
 		total_weight += weight
 
-	var roll = randi() % total_weight
+	var roll = randi_range(0, total_weight - 1)
 	var current_weight = 0
 
 	for era in ERA_WEIGHTS.keys():
@@ -82,7 +82,7 @@ static func generate_weighted_death() -> SoulData.CauseOfDeath:
 	for weight in DEATH_WEIGHTS.values():
 		total_weight += weight
 
-	var roll = randi() % total_weight
+	var roll = randi_range(0, total_weight - 1)
 	var current_weight = 0
 
 	for death in DEATH_WEIGHTS.keys():

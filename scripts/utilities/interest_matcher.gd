@@ -87,30 +87,30 @@ static func _generate_single_interest() -> Dictionary:
 		InterestType.STAT_BETWEEN
 	]
 
-	var type = interest_types[randi() % interest_types.size()]
+	var type = interest_types.pick_random()
 
 	match type:
 		InterestType.ERA:
 			return {
 				"type": type,
-				"value": randi() % SoulData.Era.size()
+				"value": randi_range(0, SoulData.Era.size() - 1)
 			}
 
 		InterestType.CAUSE_OF_DEATH:
 			return {
 				"type": type,
-				"value": randi() % SoulData.CauseOfDeath.size()
+				"value": randi_range(0, SoulData.CauseOfDeath.size() - 1)
 			}
 
 		InterestType.HAS_STAT:
-			var stat = randi() % SoulData.SoulAttribute.size()
+			var stat = randi_range(0, SoulData.SoulAttribute.size() - 1)
 			return {
 				"type": type,
 				"stat": stat
 			}
 
 		InterestType.STAT_ABOVE:
-			var stat = randi() % SoulData.SoulAttribute.size()
+			var stat = randi_range(0, SoulData.SoulAttribute.size() - 1)
 			return {
 				"type": type,
 				"stat": stat,
@@ -118,7 +118,7 @@ static func _generate_single_interest() -> Dictionary:
 			}
 
 		InterestType.STAT_BELOW:
-			var stat = randi() % SoulData.SoulAttribute.size()
+			var stat = randi_range(0, SoulData.SoulAttribute.size() - 1)
 			return {
 				"type": type,
 				"stat": stat,
@@ -126,7 +126,7 @@ static func _generate_single_interest() -> Dictionary:
 			}
 
 		InterestType.STAT_BETWEEN:
-			var stat = randi() % SoulData.SoulAttribute.size()
+			var stat = randi_range(0, SoulData.SoulAttribute.size() - 1)
 			return {
 				"type": type,
 				"stat": stat,

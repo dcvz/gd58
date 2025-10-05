@@ -214,19 +214,19 @@ static func generate_soul_name(era: int = -1) -> String:
 
 	# Modern era allows mixed names (globalization)
 	if era == 3:  # MODERN
-		first = MODERN_FIRST_NAMES[randi() % MODERN_FIRST_NAMES.size()]
-		last = MODERN_LAST_NAMES[randi() % MODERN_LAST_NAMES.size()]
+		first = MODERN_FIRST_NAMES.pick_random()
+		last = MODERN_LAST_NAMES.pick_random()
 	else:
 		# Historical eras: pick a civilization and keep names from same culture
 		var civ_data = _get_random_civilization_names(era)
-		first = civ_data.first_names[randi() % civ_data.first_names.size()]
-		last = civ_data.last_names[randi() % civ_data.last_names.size()]
+		first = civ_data.first_names.pick_random()
+		last = civ_data.last_names.pick_random()
 
 	# Get era-appropriate title
 	var title = ""
 	if era >= 0:
 		var title_list = _get_era_titles(era)
-		title = title_list[randi() % title_list.size()]
+		title = title_list.pick_random()
 
 	if title != "":
 		return "%s %s %s" % [title, first, last]
@@ -237,11 +237,11 @@ static func generate_soul_name(era: int = -1) -> String:
 static func _get_random_civilization_names(era: int) -> Dictionary:
 	match era:
 		0:  # CLASSICAL
-			return CLASSICAL_CIVILIZATIONS[randi() % CLASSICAL_CIVILIZATIONS.size()]
+			return CLASSICAL_CIVILIZATIONS.pick_random()
 		1:  # ANCIENT
-			return ANCIENT_CIVILIZATIONS[randi() % ANCIENT_CIVILIZATIONS.size()]
+			return ANCIENT_CIVILIZATIONS.pick_random()
 		2:  # PREHISTORIC
-			return PREHISTORIC_CIVILIZATIONS[randi() % PREHISTORIC_CIVILIZATIONS.size()]
+			return PREHISTORIC_CIVILIZATIONS.pick_random()
 		_:
 			# Fallback: use modern (but allow mixing)
 			return {"first_names": MODERN_FIRST_NAMES, "last_names": MODERN_LAST_NAMES}

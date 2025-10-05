@@ -25,7 +25,7 @@ func _to_string() -> String:
 	return "Soul: %s (ID: %s, Era: %s)" % [name, id, era]
 	
 static func generate_random_soul() -> SoulData:
-	var randomId = randi();
+	var randomId = randi()  # OK for unique ID generation
 	var randomColor = _generate_random_hsv_color()
 
 	var soul = SoulData.new()
@@ -42,7 +42,7 @@ static func _get_random_properties_for_soul() -> Dictionary:
 	var properties = {}
 	var available_attributes = SoulAttribute.values().duplicate()
 
-	var numProperties = (randi() % 3) + 1
+	var numProperties = randi_range(1, 3)  # 1-3 properties
 	for x in numProperties:
 		if available_attributes.is_empty():
 			break
