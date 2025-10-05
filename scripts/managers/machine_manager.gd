@@ -185,7 +185,7 @@ func _discover_random_stat_wide_range(soul_id: String, soul: SoulData, discovery
 	var undiscovered_stats = []
 
 	for stat_key in soul.stats.keys():
-		if not disc_log.knows_stat(stat_key):
+		if not disc_log.knows_stat(stat_key) and disc_log.has_stat_hints(stat_key):
 			undiscovered_stats.append(stat_key)
 
 	if undiscovered_stats.size() > 0:
@@ -213,7 +213,7 @@ func _discover_random_stat_narrow_range(soul_id: String, soul: SoulData, discove
 	var undiscovered_stats = []
 
 	for stat_key in soul.stats.keys():
-		if not disc_log.knows_stat(stat_key):
+		if not disc_log.knows_stat(stat_key) and disc_log.has_stat_hints(stat_key):
 			undiscovered_stats.append(stat_key)
 
 	if undiscovered_stats.size() > 0:
