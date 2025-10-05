@@ -593,6 +593,36 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -1, 4)
 [node name="floor53" parent="FloorGeometry/BackRoomFloor" instance=ExtResource("1_rwgxs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, -1, 4)
 
+[node name="floor54" parent="FloorGeometry/BackRoomFloor" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, -1, -4)
+
+[node name="floor55" parent="FloorGeometry/BackRoomFloor" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, -1, -4)
+
+[node name="floor56" parent="FloorGeometry/BackRoomFloor" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, -1, -4)
+
+[node name="floor57" parent="FloorGeometry/BackRoomFloor" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -1, -4)
+
+[node name="floor58" parent="FloorGeometry/BackRoomFloor" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, -1, -4)
+
+[node name="floor60" parent="FloorGeometry/BackRoomFloor" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, -1, 5)
+
+[node name="floor61" parent="FloorGeometry/BackRoomFloor" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, -1, 5)
+
+[node name="floor62" parent="FloorGeometry/BackRoomFloor" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, -1, 5)
+
+[node name="floor63" parent="FloorGeometry/BackRoomFloor" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -1, 5)
+
+[node name="floor64" parent="FloorGeometry/BackRoomFloor" instance=ExtResource("1_rwgxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, -1, 5)
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.65410745, -0.5348567, 0.5348569, 0, 0.70710695, 0.7071067, -0.7564018, 0.46252373, -0.46252385, 4.730927, 10, -0.28843212)
 light_energy = 0.3

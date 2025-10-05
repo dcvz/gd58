@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bngnxt0a3g6tj"]
+
+[ext_resource type="Script" path="res://scripts/components/machine_unit.gd" id="1_machine"]
+
+[node name="MachineUnit" type="Node3D" groups=["machine"]]
+script = ExtResource("1_machine")

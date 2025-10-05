@@ -14,8 +14,25 @@ var active_jobs: Array[MachineJob] = []
 # machine_type -> Array of stat keys (SoulAttribute enum values)
 var multi_property_stats: Dictionary = {}
 
+# Physical machine instances in the world
+var machine_units: Dictionary = {}  # machine_type -> Node3D instance
+var machine_scene: PackedScene = preload("res://scenes/machine_unit.tscn")
+var objects_node: Node
+
+# Machine placement positions (left and right side of back room)
+var placement_positions: Array[Vector3] = [
+	Vector3(7.5, 0, -5),   # Left wall
+	Vector3(9, 0, -5),
+	Vector3(10.5, 0, -5),
+	Vector3(7.5, 0, 5),    # Right wall
+	Vector3(9, 0, 5),
+	Vector3(10.5, 0, 5),
+]
+var next_placement_index: int = 0
+
 func _ready() -> void:
-	pass
+	await get_tree().process_frame
+	objects_node = get_node("/root/Root/World/Objects")
 
 func _process(delta: float) -> void:
 	# Only process jobs when simulation is running
@@ -60,6 +77,9 @@ func purchase_machine(type: MachineData.MachineType) -> bool:
 			for stat in selected_stats:
 				stat_names.append(SoulData.SoulAttribute.keys()[stat])
 			print("Multi-Property Scanner can detect: %s" % ", ".join(stat_names))
+
+		# Spawn physical machine in the world
+		_spawn_machine(type)
 
 		machine_purchased.emit(type)
 		machines_changed.emit()
@@ -341,3 +361,35 @@ func _check_if_death_discovered(soul_id: String, soul: SoulData, discovery_manag
 	if eliminated.size() >= total_deaths - 1:
 		discovery_manager.discover_death(soul_id)
 		print("[Machine] Cause of Death discovered by elimination!")
+
+## Spawn a physical machine in the world
+func _spawn_machine(machine_type: MachineData.MachineType) -> void:
+	if next_placement_index >= placement_positions.size():
+		print("[MachineManager] No more placement positions available!")
+		return
+
+	var machine_instance = machine_scene.instantiate()
+	machine_instance.position = placement_positions[next_placement_index]
+	machine_instance.set_machine_type(machine_type)
+
+	objects_node.add_child(machine_instance)
+	machine_units[machine_type] = machine_instance
+
+	next_placement_index += 1
+	print("[MachineManager] Spawned %s at position %s" % [MachineData.get_machine_name(machine_type), placement_positions[next_placement_index - 1]])
+
+	# Connect job signals to update visual state
+	if not job_started.is_connected(_on_job_started):
+		job_started.connect(_on_job_started)
+	if not job_completed.is_connected(_on_job_completed):
+		job_completed.connect(_on_job_completed)
+
+## Update machine visual when job starts
+func _on_job_started(job: MachineJob) -> void:
+	if machine_units.has(job.machine_type):
+		machine_units[job.machine_type].set_in_use(true)
+
+## Update machine visual when job completes
+func _on_job_completed(job: MachineJob) -> void:
+	if machine_units.has(job.machine_type):
+		machine_units[job.machine_type].set_in_use(false)
