@@ -46,6 +46,10 @@ func remove_soul(soul_id: String) -> bool:
 func get_soul(soul_id: String) -> SoulData:
 	return souls.get(soul_id, null)
 
+## Alias for get_soul (for compatibility)
+func get_soul_by_id(soul_id: String) -> SoulData:
+	return get_soul(soul_id)
+
 ## Get all souls
 func get_all_souls() -> Array[SoulData]:
 	var soul_list: Array[SoulData] = []
