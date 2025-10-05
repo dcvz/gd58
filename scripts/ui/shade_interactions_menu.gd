@@ -180,6 +180,9 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 
 			SoulDisplayHelper.add_soul_details_with_discoveries(left_vbox, right_vbox, soul_to_sell, discovery_log)
 
+			# Show active job status if any (centralized)
+			MachineUIHelper.add_job_status_if_active(vbox, soul_to_sell.id)
+
 			# Add separator
 			var separator = HSeparator.new()
 			vbox.add_child(separator)
@@ -311,32 +314,8 @@ func _remove_interactions_for_soul(soul_id: String, exclude_index: int) -> void:
 		interaction_manager.remove_interaction(idx)
 
 func _show_seller_machine_menu(soul: SoulData) -> void:
-	var machine_manager = get_node("/root/Root/Gameplay/MachineManager")
-
-	# Check if already being analyzed
-	if machine_manager.is_soul_being_analyzed(soul.id):
-		print("Soul is already being analyzed!")
-		return
-
-	# Get owned machines
-	var owned = machine_manager.get_owned_machines()
-	if owned.size() == 0:
-		print("No machines owned!")
-		return
-
-	# Create popup menu
-	var popup = PopupMenu.new()
-	add_child(popup)
-
-	for machine_type in owned:
-		popup.add_item(MachineData.get_machine_name(machine_type), machine_type)
-
-	popup.index_pressed.connect(func(index):
-		var machine_type = popup.get_item_id(index)
-		machine_manager.start_job(soul.id, soul, machine_type)
-		popup.queue_free()
+	# Use centralized helper
+	MachineUIHelper.show_machine_selection_popup(self, soul, func(_machine_type):
 		# Refresh to show job status
 		_refresh_list()
 	)
-
-	popup.popup_centered()

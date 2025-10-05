@@ -161,51 +161,20 @@ func _populate_details() -> void:
 	# Populate with discovery-aware display
 	SoulDisplayHelper.add_soul_details_with_discoveries(left_vbox, right_vbox, soul_data, discovery_log)
 
-	# Show active job status if any
-	var machine_manager = get_node("/root/Root/Gameplay/MachineManager")
-	var active_job = machine_manager.get_soul_job(soul_data.id)
-	if active_job:
-		var job_status = HBoxContainer.new()
-		columns_hbox.add_child(job_status)
-
-		var status_label = Label.new()
-		var remaining = active_job.get_remaining_time(Time.get_ticks_msec() / 1000.0)
-		status_label.text = "⏱ %s: %.1fs remaining" % [MachineData.get_machine_name(active_job.machine_type), remaining]
-		status_label.add_theme_color_override("font_color", Color(0.3, 0.8, 1.0))
-		job_status.add_child(status_label)
+	# Show active job status if any (centralized)
+	MachineUIHelper.add_job_status_if_active(details_container, soul_data.id)
 
 	# Add advertisement controls (only show if soul is on display)
 	if is_on_display:
 		_add_advertisement_controls(details_container, discovery_log)
 
 func _show_machine_selection_popup() -> void:
-	var machine_manager = get_node("/root/Root/Gameplay/MachineManager")
-
-	# Check if already being analyzed
-	if machine_manager.is_soul_being_analyzed(soul_data.id):
-		print("Soul is already being analyzed!")
-		return
-
-	# Get owned machines
-	var owned = machine_manager.get_owned_machines()
-	if owned.size() == 0:
-		print("No machines owned!")
-		return
-
-	# Create popup menu
-	var popup = PopupMenu.new()
-	add_child(popup)
-
-	for machine_type in owned:
-		popup.add_item(MachineData.get_machine_name(machine_type), machine_type)
-
-	popup.index_pressed.connect(func(index):
-		var machine_type = popup.get_item_id(index)
-		machine_manager.start_job(soul_data.id, soul_data, machine_type)
-		popup.queue_free()
+	# Use centralized helper
+	MachineUIHelper.show_machine_selection_popup(self, soul_data, func(_machine_type):
+		# Refresh after machine starts
+		if is_expanded:
+			_populate_details()
 	)
-
-	popup.popup_centered()
 
 func _add_advertisement_controls(container: VBoxContainer, discovery_log: DiscoveryLog) -> void:
 	# Separator
