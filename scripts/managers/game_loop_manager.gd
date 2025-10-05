@@ -1,7 +1,7 @@
 extends Node
 
 # Load InterestMatcher for generating buyer interests
-const InterestMatcher = preload("res://scripts/interest_matcher.gd")
+const InterestMatcher = preload("res://scripts/utilities/interest_matcher.gd")
 
 # Signals for day cycle and simulation
 signal day_started(day_number: int)

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://b2k3m4n5p6q7r"]
 
 [ext_resource type="PackedScene" uid="uid://cthjhe3vr1n3c" path="res://assets/models/cube.blend" id="1_cube"]
-[ext_resource type="Script" path="res://scripts/shade_spawn_area.gd" id="2_spawn"]
+[ext_resource type="Script" path="res://scripts/components/shade_spawn_area.gd" id="2_spawn"]
 
 [node name="ShadeSpawnArea" type="Node3D" groups=["shade_spawn_area"]]
 script = ExtResource("2_spawn")

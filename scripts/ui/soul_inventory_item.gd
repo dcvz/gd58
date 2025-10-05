@@ -2,7 +2,7 @@ extends VBoxContainer
 
 ## Individual soul item in the inventory list with expandable details
 
-const SoulDisplayHelper = preload("res://scripts/soul_display_helper.gd")
+const SoulDisplayHelper = preload("res://scripts/utilities/soul_display_helper.gd")
 
 signal toggle_display_requested(soul_id: String, is_currently_displayed: bool)
 

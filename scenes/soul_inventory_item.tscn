@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cxk3yj4r5m8pq"]
 
-[ext_resource type="Script" path="res://scripts/soul_inventory_item.gd" id="1_item"]
+[ext_resource type="Script" path="res://scripts/ui/soul_inventory_item.gd" id="1_item"]
 
 [node name="SoulInventoryItem" type="VBoxContainer"]
 script = ExtResource("1_item")

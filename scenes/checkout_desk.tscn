@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cak2m3n4p5q6r"]
 
 [ext_resource type="PackedScene" uid="uid://cthjhe3vr1n3c" path="res://assets/models/cube.blend" id="1_cube"]
-[ext_resource type="Script" path="res://scripts/checkout_desk.gd" id="2_desk"]
+[ext_resource type="Script" path="res://scripts/components/checkout_desk.gd" id="2_desk"]
 
 [node name="CheckoutDesk" type="Node3D" groups=["checkout_desk"]]
 script = ExtResource("2_desk")

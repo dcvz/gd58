@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://d6e10qt5wve0"]
 
-[ext_resource type="Script" path="res://scripts/attention_icon.gd" id="1_icon"]
+[ext_resource type="Script" path="res://scripts/components/attention_icon.gd" id="1_icon"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_icon"]
 size = Vector2(0.5, 0.5)

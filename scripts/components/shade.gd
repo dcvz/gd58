@@ -3,7 +3,7 @@ extends CharacterBody3D
 ## Represents a customer in the shop
 
 # Load InterestMatcher for checking soul interests
-const InterestMatcher = preload("res://scripts/interest_matcher.gd")
+const InterestMatcher = preload("res://scripts/utilities/interest_matcher.gd")
 
 enum State {
 	BROWSING,           # Walking to plinths

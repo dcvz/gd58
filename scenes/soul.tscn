@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://c8xj4y5kqr3pq"]
 
-[ext_resource type="Script" path="res://scripts/soul.gd" id="1_soul"]
+[ext_resource type="Script" path="res://scripts/components/soul.gd" id="1_soul"]
 [ext_resource type="Shader" uid="uid://5i4itgqlkoey" path="res://assets/shaders/stylized_fire.gdshader" id="2_shader"]
 [ext_resource type="Texture2D" uid="uid://flldwuhtdvhp" path="res://assets/textures/HoleNoise.png" id="3_noise"]
 [ext_resource type="Texture2D" uid="uid://bko6oayqcslrd" path="res://assets/textures/FireMask.png" id="4_mask"]

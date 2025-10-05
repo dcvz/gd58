@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dpk5m8x3xar1q"]
 
 [ext_resource type="PackedScene" uid="uid://p5gnykn2lv0g" path="res://assets/models/plinth.blend" id="2_hhjjd"]
-[ext_resource type="Script" uid="uid://bdx0o4njfjxni" path="res://scripts/display_plinth.gd" id="2_plinth"]
+[ext_resource type="Script" uid="uid://3thim75mdyvt" path="res://scripts/components/display_plinth.gd" id="2_plinth"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_hhjjd"]
 

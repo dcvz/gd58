@@ -2,7 +2,7 @@ extends Node
 
 ## Manages pending shade interactions (buyers and sellers at checkout)
 
-const SoulPricing = preload("res://scripts/soul_pricing.gd")
+const SoulPricing = preload("res://scripts/utilities/soul_pricing.gd")
 
 signal interaction_added(interaction: Dictionary)
 signal interaction_removed(interaction: Dictionary)

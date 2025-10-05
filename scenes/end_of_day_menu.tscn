@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c7n8k3nap2q1r"]
 
-[ext_resource type="Script" path="res://scripts/end_of_day_menu.gd" id="1_eod"]
+[ext_resource type="Script" path="res://scripts/ui/end_of_day_menu.gd" id="1_eod"]
 
 [node name="EndOfDayMenu" type="Control"]
 visible = false
