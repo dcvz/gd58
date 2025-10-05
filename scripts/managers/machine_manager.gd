@@ -132,8 +132,7 @@ func _process_completed_job(job: MachineJob) -> void:
 		MachineData.MachineType.RANDOM_PROPERTY:
 			_discover_random_property(job.soul_id, soul, discovery_manager)
 		MachineData.MachineType.SPECIFIC_RANGE_WIDE:
-			# TODO: This needs user input for which stat
-			pass
+			_discover_random_stat_wide_range(job.soul_id, soul, discovery_manager)
 		MachineData.MachineType.RANDOM_RANGE_NARROW:
 			_discover_random_stat_narrow_range(job.soul_id, soul, discovery_manager)
 		MachineData.MachineType.MULTI_PROPERTY:
@@ -158,7 +157,35 @@ func _discover_random_property(soul_id: String, soul: SoulData, discovery_manage
 		# Add hint showing only that this stat exists (value unknown)
 		discovery_manager.add_stat_hint(soul_id, stat_key, "Present")
 
-## Machine 3: Discover random property within 20 points
+## Machine 2: Discover random property with wide range (15-40 points)
+func _discover_random_stat_wide_range(soul_id: String, soul: SoulData, discovery_manager: Node) -> void:
+	var disc_log = discovery_manager.get_discovery_log(soul_id)
+	var undiscovered_stats = []
+
+	for stat_key in soul.stats.keys():
+		if not disc_log.knows_stat(stat_key):
+			undiscovered_stats.append(stat_key)
+
+	if undiscovered_stats.size() > 0:
+		var stat_key = undiscovered_stats.pick_random()
+		var actual_value = soul.stats[stat_key]
+
+		# Random range width between 15-40
+		var range_width = randi_range(15, 40)
+
+		# Random position within range (0.0 = at min, 1.0 = at max, 0.5 = centered)
+		var position_in_range = randf()
+
+		# Calculate offset from actual value
+		var offset_below = range_width * position_in_range
+		var offset_above = range_width * (1.0 - position_in_range)
+
+		var min_range = max(0, actual_value - offset_below)
+		var max_range = min(100, actual_value + offset_above)
+		var hint = "%d-%d" % [int(min_range), int(max_range)]
+		discovery_manager.add_stat_hint(soul_id, stat_key, hint)
+
+## Machine 3: Discover random property within 20 points (narrow range)
 func _discover_random_stat_narrow_range(soul_id: String, soul: SoulData, discovery_manager: Node) -> void:
 	var disc_log = discovery_manager.get_discovery_log(soul_id)
 	var undiscovered_stats = []
@@ -170,8 +197,19 @@ func _discover_random_stat_narrow_range(soul_id: String, soul: SoulData, discove
 	if undiscovered_stats.size() > 0:
 		var stat_key = undiscovered_stats.pick_random()
 		var actual_value = soul.stats[stat_key]
-		var min_range = max(0, actual_value - 10)
-		var max_range = min(100, actual_value + 10)
+
+		# Fixed range width of 20 points
+		var range_width = 20
+
+		# Random position within range (0.0 = at min, 1.0 = at max, 0.5 = centered)
+		var position_in_range = randf()
+
+		# Calculate offset from actual value
+		var offset_below = range_width * position_in_range
+		var offset_above = range_width * (1.0 - position_in_range)
+
+		var min_range = max(0, actual_value - offset_below)
+		var max_range = min(100, actual_value + offset_above)
 		var hint = "%d-%d" % [int(min_range), int(max_range)]
 		discovery_manager.add_stat_hint(soul_id, stat_key, hint)
 
