@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c5k6m7n8qaq0r"]
+[gd_scene load_steps=16 format=3 uid="uid://c5k6m7n8qaq0r"]
 
 [ext_resource type="Texture2D" uid="uid://j7aa8tu8dvdk" path="res://assets/textures/shade01.png" id="1_shade"]
 [ext_resource type="Script" uid="uid://dp56lx2b588nx" path="res://scripts/components/shade.gd" id="2_shade"]
@@ -8,29 +8,52 @@
 height = 1.5
 radius = 0.3
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_pwra0"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_pqa6p"]
 atlas = ExtResource("3_pqa6p")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ob0sx"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_pwra0"]
 atlas = ExtResource("3_pqa6p")
 region = Rect2(32, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_2iio3"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ob0sx"]
 atlas = ExtResource("3_pqa6p")
 region = Rect2(64, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_gpnml"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_2iio3"]
 atlas = ExtResource("3_pqa6p")
 region = Rect2(96, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_6k4e1"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_gpnml"]
 atlas = ExtResource("3_pqa6p")
 region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6k4e1"]
+atlas = ExtResource("3_pqa6p")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eta1p"]
+atlas = ExtResource("3_pqa6p")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nmg2l"]
+atlas = ExtResource("3_pqa6p")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oi2wj"]
+atlas = ExtResource("3_pqa6p")
+region = Rect2(256, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mst65"]
+atlas = ExtResource("3_pqa6p")
+region = Rect2(288, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_eta1p"]
 animations = [{
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pqa6p")
+}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_pwra0")
 }, {
@@ -42,12 +65,29 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_gpnml")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_6k4e1")
 }],
 "loop": true,
 "name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6k4e1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eta1p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nmg2l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oi2wj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mst65")
+}],
+"loop": true,
+"name": &"fade",
 "speed": 5.0
 }]
 
@@ -71,5 +111,6 @@ transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, 0, 0.9, 0)
 billboard = 1
 texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_eta1p")
+animation = &"fade"
 autoplay = "default"
-frame_progress = 0.10162021
+frame_progress = 0.42670235
