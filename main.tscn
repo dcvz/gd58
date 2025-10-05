@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bwdxmyedjgcag"]
+[gd_scene load_steps=5 format=3 uid="uid://bwdxmyedjgcag"]
 
 [ext_resource type="PackedScene" uid="uid://dckx22oayfmvt" path="res://scenes/gameplay.tscn" id="1_h2yge"]
 [ext_resource type="PackedScene" uid="uid://nqkjgntp5ulj" path="res://scenes/world.tscn" id="3_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://xs3cr8c04y46" path="res://scenes/ui.tscn" id="3_lquwl"]
+[ext_resource type="AudioStream" path="res://assets/audio/soul-museum.mp3" id="4_music"]
 
 [node name="Root" type="Node"]
 
@@ -11,3 +12,8 @@
 [node name="World" parent="." instance=ExtResource("3_1bvp3")]
 
 [node name="UI" parent="." instance=ExtResource("3_lquwl")]
+
+[node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_music")
+autoplay = true
+bus = &"Music"
