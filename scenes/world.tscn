@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://nqkjgntp5ulj"]
+[gd_scene load_steps=11 format=3 uid="uid://nqkjgntp5ulj"]
 
 [ext_resource type="PackedScene" uid="uid://cthjhe3vr1n3c" path="res://assets/models/cube.blend" id="1_rwgxs"]
 [ext_resource type="PackedScene" uid="uid://dpk5m8x3xar1q" path="res://scenes/display_plinth.tscn" id="3_plinth"]
@@ -11,6 +11,8 @@ background_color = Color(0.15, 0.15, 0.2, 1)
 ambient_light_source = 2
 ambient_light_color = Color(0.5, 0.5, 0.6, 1)
 ambient_light_energy = 0.3
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_k0juu"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_71j4m"]
 
@@ -510,6 +512,24 @@ omni_range = 10.0
 omni_attenuation = 2.0
 
 [node name="WallGeometry" type="Node" parent="."]
+
+[node name="StaticBody3D3" type="StaticBody3D" parent="WallGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 2)
+
+[node name="cube55" parent="WallGeometry/StaticBody3D3" instance=ExtResource("1_rwgxs")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallGeometry/StaticBody3D3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, -0.5)
+shape = SubResource("BoxShape3D_k0juu")
+
+[node name="StaticBody3D4" type="StaticBody3D" parent="WallGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -1)
+
+[node name="cube55" parent="WallGeometry/StaticBody3D4" instance=ExtResource("1_rwgxs")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallGeometry/StaticBody3D4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, -0.5)
+shape = SubResource("BoxShape3D_k0juu")
 
 [node name="StaticBody3D2" type="StaticBody3D" parent="WallGeometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -1)
