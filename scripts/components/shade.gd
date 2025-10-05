@@ -105,7 +105,7 @@ func _browse_behavior(delta: float) -> void:
 	# Move toward current target (plinth)
 	var distance_to_target = global_position.distance_to(current_target)
 
-	if distance_to_target < 0.3:
+	if distance_to_target < 1.0:
 		# Reached plinth, start inspecting
 		current_state = State.INSPECTING
 		inspection_timer = randf_range(1.5, 3.0)
@@ -179,7 +179,7 @@ func _inspect_behavior(delta: float) -> void:
 func _go_to_next_plinth() -> void:
 	if current_plinth_index < plinths_to_visit.size():
 		var plinth = plinths_to_visit[current_plinth_index]
-		current_target = plinth.global_position + Vector3(0.5, 0, -1.0)  # Stand in front
+		current_target = plinth.global_position  # center of plinth
 		current_state = State.BROWSING
 
 func _go_to_checkout() -> void:
