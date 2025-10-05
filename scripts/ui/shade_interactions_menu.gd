@@ -229,7 +229,15 @@ func _handle_seller_transaction(index: int, interaction: Dictionary) -> void:
 				# Add soul to inventory
 				var inventory_manager = get_node("/root/Root/Gameplay/InventoryManager")
 				inventory_manager.add_soul(soul_to_sell)
-				print("Bought soul: %s for %d KP" % [soul_to_sell.name, asking_price])
+
+				# Seller might know some things about the soul
+				var discovery_manager = get_node("/root/Root/Gameplay/DiscoveryManager")
+				var num_discoveries = discovery_manager.initialize_from_seller(soul_to_sell.id, soul_to_sell)
+
+				if num_discoveries > 0:
+					print("Bought soul: %s for %d KP (seller knew %d thing(s))" % [soul_to_sell.name, asking_price, num_discoveries])
+				else:
+					print("Bought soul: %s for %d KP (seller knew nothing)" % [soul_to_sell.name, asking_price])
 			else:
 				print("Failed to spend KP!")
 				return

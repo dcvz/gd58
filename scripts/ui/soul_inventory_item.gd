@@ -88,17 +88,36 @@ func _on_expand_pressed() -> void:
 func _populate_details() -> void:
 	# Clear existing details
 	for child in details_container.get_children():
-		child.queue_free()
+		child.free()
 
-	# Add indentation
+	# Get discovery log
+	var discovery_manager = get_node("/root/Root/Gameplay/DiscoveryManager")
+	var discovery_log = discovery_manager.get_discovery_log(soul_data.id)
+
+	# Create two-column layout: Known (left) | Clues (right)
+	var columns_hbox = HBoxContainer.new()
+	columns_hbox.custom_minimum_size = Vector2(500, 0)
+	details_container.add_child(columns_hbox)
+
+	# Left indent
 	var indent = Control.new()
 	indent.custom_minimum_size = Vector2(40, 0)
-	var detail_hbox = HBoxContainer.new()
-	detail_hbox.add_child(indent)
+	columns_hbox.add_child(indent)
 
-	var detail_vbox = VBoxContainer.new()
-	detail_hbox.add_child(detail_vbox)
-	details_container.add_child(detail_hbox)
+	# Left column: Known/Discovered
+	var left_vbox = VBoxContainer.new()
+	left_vbox.custom_minimum_size = Vector2(230, 0)
+	columns_hbox.add_child(left_vbox)
 
-	# Add soul details using centralized helper
-	SoulDisplayHelper.add_soul_details_to_container(detail_vbox, soul_data)
+	# Spacer between columns
+	var spacer = Control.new()
+	spacer.custom_minimum_size = Vector2(20, 0)
+	columns_hbox.add_child(spacer)
+
+	# Right column: Hints/Unknowns
+	var right_vbox = VBoxContainer.new()
+	right_vbox.custom_minimum_size = Vector2(230, 0)
+	columns_hbox.add_child(right_vbox)
+
+	# Populate with discovery-aware display
+	SoulDisplayHelper.add_soul_details_with_discoveries(left_vbox, right_vbox, soul_data, discovery_log)
