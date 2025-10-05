@@ -268,6 +268,10 @@ func _eliminate_era_or_death_options(soul_id: String, soul: SoulData, discovery_
 		for i in range(min(2, all_eras.size())):
 			var hint = "Not %s" % SoulData.Era.keys()[all_eras[i]]
 			discovery_manager.add_era_hint(soul_id, hint)
+
+		# Check if we've eliminated all but one option
+		_check_if_era_discovered(soul_id, soul, discovery_manager)
+
 	elif not disc_log.known_death:
 		# Eliminate 2 death options
 		var all_deaths = SoulData.CauseOfDeath.values()
@@ -276,6 +280,9 @@ func _eliminate_era_or_death_options(soul_id: String, soul: SoulData, discovery_
 		for i in range(min(2, all_deaths.size())):
 			var hint = "Not %s" % SoulData.CauseOfDeath.keys()[all_deaths[i]]
 			discovery_manager.add_death_hint(soul_id, hint)
+
+		# Check if we've eliminated all but one option
+		_check_if_death_discovered(soul_id, soul, discovery_manager)
 
 ## Machine 6: Discover Era or Cause of Death
 func _reveal_era_or_death(soul_id: String, soul: SoulData, discovery_manager: Node) -> void:
@@ -289,3 +296,48 @@ func _reveal_era_or_death(soul_id: String, soul: SoulData, discovery_manager: No
 		discovery_manager.discover_era(soul_id)
 	else:
 		discovery_manager.discover_death(soul_id)
+
+
+## Check if we've eliminated enough era options to know the answer
+func _check_if_era_discovered(soul_id: String, soul: SoulData, discovery_manager: Node) -> void:
+	var disc_log = discovery_manager.get_discovery_log(soul_id)
+	if disc_log.known_era:
+		return
+
+	# Count how many eras we've eliminated
+	var eliminated = []
+	for hint in disc_log.era_hints:
+		if hint.begins_with("Not "):
+			var era_name = hint.substr(4)  # Remove "Not "
+			for era in SoulData.Era.values():
+				if SoulData.Era.keys()[era] == era_name:
+					eliminated.append(era)
+					break
+
+	# If we've eliminated all but one, we know the answer
+	var total_eras = SoulData.Era.size()
+	if eliminated.size() >= total_eras - 1:
+		discovery_manager.discover_era(soul_id)
+		print("[Machine] Era discovered by elimination!")
+
+## Check if we've eliminated enough death options to know the answer
+func _check_if_death_discovered(soul_id: String, soul: SoulData, discovery_manager: Node) -> void:
+	var disc_log = discovery_manager.get_discovery_log(soul_id)
+	if disc_log.known_death:
+		return
+
+	# Count how many deaths we've eliminated
+	var eliminated = []
+	for hint in disc_log.death_hints:
+		if hint.begins_with("Not "):
+			var death_name = hint.substr(4)  # Remove "Not "
+			for death in SoulData.CauseOfDeath.values():
+				if SoulData.CauseOfDeath.keys()[death] == death_name:
+					eliminated.append(death)
+					break
+
+	# If we've eliminated all but one, we know the answer
+	var total_deaths = SoulData.CauseOfDeath.size()
+	if eliminated.size() >= total_deaths - 1:
+		discovery_manager.discover_death(soul_id)
+		print("[Machine] Cause of Death discovered by elimination!")
