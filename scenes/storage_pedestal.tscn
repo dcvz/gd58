@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=3 uid="uid://c18imxwdh6gms"]
+
+[ext_resource type="Script" path="res://scripts/components/storage_pedestal.gd" id="1_storage_script"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_platform"]
+size = Vector3(0.8, 0.1, 0.8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_platform"]
+albedo_color = Color(0.3, 0.3, 0.35, 1)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_storage"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_storage"]
+size = Vector3(0.8, 0.1, 0.8)
+
+[node name="StoragePedestal" type="Node3D" groups=["storage_pedestal"]]
+script = ExtResource("1_storage_script")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+physics_material_override = SubResource("PhysicsMaterial_storage")
+
+[node name="Platform" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+mesh = SubResource("BoxMesh_platform")
+surface_material_override/0 = SubResource("StandardMaterial3D_platform")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+shape = SubResource("BoxShape3D_storage")

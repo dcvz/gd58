@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dckx22oayfmvt"]
+[gd_scene load_steps=10 format=3 uid="uid://dckx22oayfmvt"]
 
 [ext_resource type="Script" uid="uid://cev13avtl6rju" path="res://scripts/managers/game_loop_manager.gd" id="1_l1v76"]
 [ext_resource type="Script" uid="uid://b10ca5gdijr6n" path="res://scripts/managers/inventory_manager.gd" id="2_ct7aa"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/managers/machine_manager.gd" id="7_machine"]
 [ext_resource type="Script" path="res://scripts/managers/discovery_manager.gd" id="8_discovery"]
 [ext_resource type="Script" path="res://scripts/managers/advertisement_manager.gd" id="9_advertisement"]
+[ext_resource type="Script" path="res://scripts/managers/storage_manager.gd" id="10_storage"]
 
 [node name="Gameplay" type="Node"]
 
@@ -38,5 +39,8 @@ script = ExtResource("8_discovery")
 
 [node name="AdvertisementManager" type="Node" parent="."]
 script = ExtResource("9_advertisement")
+
+[node name="StorageManager" type="Node" parent="."]
+script = ExtResource("10_storage")
 
 [node name="AudioManager" type="Node" parent="."]
