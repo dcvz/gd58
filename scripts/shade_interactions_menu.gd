@@ -2,8 +2,9 @@ extends Control
 
 ## Menu for handling shade interactions (buyers and sellers)
 
-# Load InterestMatcher for formatting interests
+# Load utilities
 const InterestMatcher = preload("res://scripts/interest_matcher.gd")
+const SoulDisplayHelper = preload("res://scripts/soul_display_helper.gd")
 
 var interaction_manager: Node
 var game_loop_manager: Node
@@ -102,11 +103,29 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 
 	# Details based on type
 	if interaction.type == "buyer":
-		# Display all interests using centralized formatter
+		# Show soul being sold using centralized helper
+		var plinth = interaction.get("selected_soul_plinth")
+		if plinth and plinth.displayed_soul:
+			var soul = plinth.displayed_soul
+			var soul_vbox = VBoxContainer.new()
+			vbox.add_child(soul_vbox)
+
+			var selling_label = Label.new()
+			selling_label.text = "Your Soul:"
+			selling_label.add_theme_color_override("font_color", Color(1.0, 0.8, 0.4))  # Gold
+			soul_vbox.add_child(selling_label)
+
+			SoulDisplayHelper.add_soul_details_to_container(soul_vbox, soul)
+
+			# Add separator
+			var separator = HSeparator.new()
+			vbox.add_child(separator)
+
+		# Display buyer interests
 		var interests = interaction.get("interests", [])
 		if interests.size() > 0:
 			var wants_label = Label.new()
-			wants_label.text = "Wants:"
+			wants_label.text = "Buyer wants:"
 			vbox.add_child(wants_label)
 
 			for interest in interests:
@@ -138,36 +157,17 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 	elif interaction.type == "seller":
 		var soul_to_sell = interaction.get("soul_to_sell")
 		if soul_to_sell:
-			# Soul name
-			var name_label = Label.new()
-			name_label.text = "Selling: %s" % soul_to_sell.name
-			vbox.add_child(name_label)
+			var selling_label = Label.new()
+			selling_label.text = "Seller's Soul:"
+			selling_label.add_theme_color_override("font_color", Color(0.4, 0.8, 1.0))  # Blue
+			vbox.add_child(selling_label)
 
-			# Era
-			var era_label = Label.new()
-			era_label.text = "Era: %s" % SoulData.Era.keys()[soul_to_sell.era]
-			vbox.add_child(era_label)
+			# Use centralized soul display helper
+			SoulDisplayHelper.add_soul_details_to_container(vbox, soul_to_sell)
 
-			# Cause of Death
-			var death_label = Label.new()
-			death_label.text = "Cause of Death: %s" % SoulData.CauseOfDeath.keys()[soul_to_sell.causeOfDeath]
-			vbox.add_child(death_label)
-
-			# Stats
-			if soul_to_sell.stats.size() > 0:
-				var stats_label = Label.new()
-				stats_label.text = "Stats:"
-				vbox.add_child(stats_label)
-
-				for stat_key in soul_to_sell.stats.keys():
-					var stat_value = soul_to_sell.stats[stat_key]
-					var stat_item = Label.new()
-					stat_item.text = "  - %s: %d%%" % [SoulData.SoulAttribute.keys()[stat_key], int(stat_value)]
-					vbox.add_child(stat_item)
-			else:
-				var no_stats_label = Label.new()
-				no_stats_label.text = "Stats: None"
-				vbox.add_child(no_stats_label)
+			# Add separator
+			var separator = HSeparator.new()
+			vbox.add_child(separator)
 
 		# Display asking price
 		var asking_price = interaction.get("asking_price", 0)
