@@ -68,8 +68,8 @@ func initialize_from_seller(soul_id: String, soul: SoulData) -> int:
 	var discoveries = 0
 	var disc_log = get_discovery_log(soul_id)
 
-	# Sellers might know 0-3 things about the soul they're selling
-	var num_known = randi() % 4  # 0, 1, 2, or 3
+	# Sellers always know 1-3 things about the soul they're selling
+	var num_known = randi_range(1, 3)  # 1, 2, or 3 (using randi_range for proper distribution)
 
 	for i in range(num_known):
 		var roll = randf()
