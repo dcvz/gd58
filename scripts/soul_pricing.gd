@@ -1,5 +1,5 @@
-extends Node
 class_name SoulPricing
+extends RefCounted
 
 ## Centralized soul pricing and valuation system
 ## Calculates prices based on stat rarity and customer interest matching

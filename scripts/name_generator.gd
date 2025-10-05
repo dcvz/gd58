@@ -1,5 +1,5 @@
-extends Node
 class_name NameGenerator
+extends RefCounted
 
 ## Generates era-appropriate names for souls with authentic historical accuracy
 

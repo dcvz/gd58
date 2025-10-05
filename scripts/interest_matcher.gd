@@ -1,4 +1,5 @@
-extends Node
+class_name InterestMatcher
+extends RefCounted
 
 ## Centralized system for matching shade interests to souls
 ## This is the SINGLE SOURCE OF TRUTH for interest matching logic
