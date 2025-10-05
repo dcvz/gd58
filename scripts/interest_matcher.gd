@@ -26,6 +26,12 @@ static func soul_matches_interests(soul: SoulData, interests: Array) -> bool:
 static func _matches_single_interest(soul: SoulData, interest: Dictionary) -> bool:
 	var type = interest.get("type", InterestType.ERA)
 
+	# For stat-based interests, soul must actually have the stat
+	if type in [InterestType.STAT_ABOVE, InterestType.STAT_BELOW, InterestType.STAT_BETWEEN]:
+		var stat = interest.get("stat")
+		if not soul.stats.has(stat):
+			return false
+
 	match type:
 		InterestType.ERA:
 			return soul.era == interest.get("value")
@@ -36,18 +42,18 @@ static func _matches_single_interest(soul: SoulData, interest: Dictionary) -> bo
 		InterestType.STAT_ABOVE:
 			var stat = interest.get("stat")
 			var threshold = interest.get("threshold", 85)
-			return soul.stats.get(stat, 0) >= threshold
+			return soul.stats[stat] >= threshold
 
 		InterestType.STAT_BELOW:
 			var stat = interest.get("stat")
 			var threshold = interest.get("threshold", 25)
-			return soul.stats.get(stat, 0) <= threshold
+			return soul.stats[stat] <= threshold
 
 		InterestType.STAT_BETWEEN:
 			var stat = interest.get("stat")
 			var min_val = interest.get("min", 25)
 			var max_val = interest.get("max", 85)
-			var soul_value = soul.stats.get(stat, 0)
+			var soul_value = soul.stats[stat]
 			return soul_value >= min_val and soul_value <= max_val
 
 	return false
