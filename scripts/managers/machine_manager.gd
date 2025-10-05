@@ -370,6 +370,14 @@ func _spawn_machine(machine_type: MachineData.MachineType) -> void:
 
 	var machine_instance = machine_scene.instantiate()
 	machine_instance.position = placement_positions[next_placement_index]
+
+	# Rotate to face the correct direction based on which wall
+	# Left wall (Z: -5) should face south (into room), right wall (Z: 5) should face north
+	if placement_positions[next_placement_index].z < 0:
+		machine_instance.rotation_degrees = Vector3(0, 180, 0)  # Face south (into room)
+	else:
+		machine_instance.rotation_degrees = Vector3(0, 0, 0)    # Face north (into room)
+
 	machine_instance.set_machine_type(machine_type)
 
 	objects_node.add_child(machine_instance)
@@ -387,7 +395,12 @@ func _spawn_machine(machine_type: MachineData.MachineType) -> void:
 ## Update machine visual when job starts
 func _on_job_started(job: MachineJob) -> void:
 	if machine_units.has(job.machine_type):
-		machine_units[job.machine_type].set_in_use(true)
+		# Get the soul's color
+		var inventory_manager = get_node("/root/Root/Gameplay/InventoryManager")
+		var soul = inventory_manager.get_soul(job.soul_id)
+		var soul_color = soul.visual_color if soul else Color.WHITE
+
+		machine_units[job.machine_type].set_in_use(true, soul_color)
 
 ## Update machine visual when job completes
 func _on_job_completed(job: MachineJob) -> void:

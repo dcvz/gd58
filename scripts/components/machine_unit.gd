@@ -83,16 +83,16 @@ func set_machine_type(type: int) -> void:
 	machine_type = type
 	# Could customize appearance based on type
 
-func set_in_use(in_use: bool) -> void:
+func set_in_use(in_use: bool, soul_color: Color = Color.WHITE) -> void:
 	is_in_use = in_use
 
 	if in_use:
-		# Machine is working - blue glow
-		body_material.albedo_color = COLOR_WORKING
+		# Machine is working - use soul's color
+		body_material.albedo_color = soul_color
 		light_material.emission_enabled = true
-		light_material.emission = Color(0.3, 0.8, 1.0)
+		light_material.emission = soul_color
 		light_material.emission_energy_multiplier = 2.0
-		light_material.albedo_color = Color(0.5, 0.9, 1.0)
+		light_material.albedo_color = soul_color
 
 		# Start spinning animation
 		if spin_tween == null or not spin_tween.is_valid():

@@ -68,11 +68,11 @@ func _create_soul_visual() -> void:
 	sphere.height = 0.6
 	mesh_instance.mesh = sphere
 
-	# Glowing material
+	# Glowing material - use the soul's color
 	var material = StandardMaterial3D.new()
-	material.albedo_color = Color(0.6, 0.8, 1.0)  # Light blue glow
+	material.albedo_color = stored_soul_data.visual_color
 	material.emission_enabled = true
-	material.emission = Color(0.4, 0.6, 0.9)
+	material.emission = stored_soul_data.visual_color
 	material.emission_energy_multiplier = 2.0
 	mesh_instance.material_override = material
 
