@@ -99,15 +99,15 @@ static func calculate_customer_offer(soul: SoulData, customer_interests: Array) 
 
 ## Calculate how much you should pay a seller for their soul
 static func calculate_seller_asking_price(soul: SoulData, seller_interests: Array) -> int:
-	# Sellers ask fair market price (base value)
-	# This allows players to profit when they find matching buyers (120-150%)
+	# Sellers ask below market price to move inventory quickly
+	# This creates profit opportunities: buy at 85-95%, sell at 120-150%
 	var base_price = calculate_base_value(soul)
 
 	# Safety: ensure base price is at least 10 KP
 	base_price = maxi(base_price, 10)
 
-	# Add slight variation (95-105% of base value)
-	var variation = randf_range(0.95, 1.05)
+	# Sellers are eager to sell (85-95% of base value)
+	var variation = randf_range(0.85, 0.95)
 	return maxi(int(base_price * variation), 15)  # Minimum 15 KP
 
 ## Helper: Get value of a single stat based on its rarity

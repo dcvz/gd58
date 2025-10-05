@@ -71,13 +71,17 @@ func _roll_daily_encounters() -> void:
 	encounter_queue.clear()
 	var num_encounters = randi_range(9, 15)
 
+	# Encounter distribution weights (tuned for game balance)
+	const BUYER_THRESHOLD = 0.60    # 60% buyers
+	const SELLER_THRESHOLD = 0.85   # 25% sellers (0.60 + 0.25 = 0.85)
+	# Remaining 15% are brokers
+
 	for i in range(num_encounters):
-		# Weighted encounter types: 50% buyers, 30% sellers, 20% brokers
 		var roll = randf()
 		var encounter_type: String
-		if roll < 0.5:
+		if roll < BUYER_THRESHOLD:
 			encounter_type = "buyer"
-		elif roll < 0.8:
+		elif roll < SELLER_THRESHOLD:
 			encounter_type = "seller"
 		else:
 			encounter_type = "broker"
