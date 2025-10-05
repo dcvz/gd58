@@ -40,14 +40,19 @@ static func generate_random_soul() -> SoulData:
 	
 static func _get_random_properties_for_soul() -> Dictionary:
 	var properties = {}
+	var available_attributes = SoulAttribute.values().duplicate()
 
 	var numProperties = (randi() % 3) + 1
 	for x in numProperties:
-		var attribute = SoulAttribute.values().pick_random()
-		# check that its not already in properties
+		if available_attributes.is_empty():
+			break
+
+		var attribute = available_attributes.pick_random()
+		available_attributes.erase(attribute)  # Remove to prevent duplicates
+
 		var proficiency = clamp(randfn(0.5, 0.18), 0.0, 1.0) * 100
 		properties[attribute] = proficiency
-		
+
 	return properties
 
 static func _generate_random_hsv_color() -> Color:
