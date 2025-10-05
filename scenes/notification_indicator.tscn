@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dady7pq5tvb0"]
+
+[ext_resource type="Script" path="res://scripts/components/notification_indicator.gd" id="1_indicator"]
+
+[node name="NotificationIndicator" type="Node3D" groups=["notification_bell"]]
+script = ExtResource("1_indicator")

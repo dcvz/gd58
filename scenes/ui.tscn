@@ -64,10 +64,6 @@ grow_horizontal = 0
 layout_mode = 2
 text = "Menu"
 
-[node name="InteractionsButton" type="Button" parent="HUD/TopRight"]
-layout_mode = 2
-text = "Interactions (0)"
-
 [node name="InteractionMenu" parent="." instance=ExtResource("2_yev5y")]
 
 [node name="ShadeInteractionsMenu" parent="." instance=ExtResource("4_shade_interactions")]

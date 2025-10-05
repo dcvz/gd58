@@ -36,9 +36,15 @@ func _handle_click(screen_position: Vector2) -> void:
 func _process_hit(result: Dictionary) -> void:
 	var collider = result.collider
 
-	# Walk up the tree to find a storage pedestal or display plinth
+	# Walk up the tree to find clickable objects
 	var node = collider
 	while node:
+		# Check if this node is a notification indicator
+		if node.is_in_group("notification_bell"):
+			node.on_click()
+			print("[ClickManager] Clicked notification indicator")
+			return
+
 		# Check if this node is a storage pedestal
 		if node.is_in_group("storage_pedestal"):
 			var soul = node.get_soul()
