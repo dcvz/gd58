@@ -87,22 +87,17 @@ static func add_soul_details_with_discoveries(left_container: VBoxContainer, rig
 			unknown_death.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
 			right_container.add_child(unknown_death)
 
-	# Stat hints
+	# Stat hints (only show if we have hints, otherwise don't reveal the stat exists)
 	for stat_key in soul.stats.keys():
 		if not discovery_log.knows_stat(stat_key):
-			var stat_name = SoulData.SoulAttribute.keys()[stat_key]
 			if discovery_log.has_stat_hints(stat_key):
+				var stat_name = SoulData.SoulAttribute.keys()[stat_key]
 				var hints = discovery_log.get_stat_hints(stat_key)
 				for hint in hints:
 					var hint_item = Label.new()
 					hint_item.text = "  • %s: %s" % [stat_name, hint]
 					hint_item.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8))
 					right_container.add_child(hint_item)
-			else:
-				var unknown_stat = Label.new()
-				unknown_stat.text = "  • %s: Unknown" % stat_name
-				unknown_stat.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
-				right_container.add_child(unknown_stat)
 
 ## Add soul details (fully revealed - for buyers/sellers who know everything)
 static func add_soul_details_to_container(container: VBoxContainer, soul: SoulData) -> void:

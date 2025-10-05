@@ -127,18 +127,19 @@ func _process_completed_job(job: MachineJob) -> void:
 		MachineData.MachineType.REVEAL_INFO:
 			_reveal_era_or_death(job.soul_id, soul, discovery_manager)
 
-## Machine 1: Discover 1 random undiscovered property
+## Machine 1: Discover 1 random undiscovered property (name only, not value)
 func _discover_random_property(soul_id: String, soul: SoulData, discovery_manager: Node) -> void:
 	var disc_log = discovery_manager.get_discovery_log(soul_id)
 	var undiscovered_stats = []
 
 	for stat_key in soul.stats.keys():
-		if not disc_log.knows_stat(stat_key):
+		if not disc_log.knows_stat(stat_key) and not disc_log.has_stat_hints(stat_key):
 			undiscovered_stats.append(stat_key)
 
 	if undiscovered_stats.size() > 0:
 		var stat_key = undiscovered_stats.pick_random()
-		discovery_manager.discover_stat(soul_id, stat_key, soul.stats[stat_key])
+		# Add hint showing only that this stat exists (value unknown)
+		discovery_manager.add_stat_hint(soul_id, stat_key, "Present")
 
 ## Machine 3: Discover random property within 20 points
 func _discover_random_stat_narrow_range(soul_id: String, soul: SoulData, discovery_manager: Node) -> void:

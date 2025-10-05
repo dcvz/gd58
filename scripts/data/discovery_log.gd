@@ -57,5 +57,7 @@ func has_stat_hints(stat_key: int) -> bool:
 ## Get hints for a stat
 func get_stat_hints(stat_key: int) -> Array[String]:
 	if stat_hints.has(stat_key):
-		return stat_hints[stat_key].duplicate()
+		var hints: Array[String] = []
+		hints.assign(stat_hints[stat_key])
+		return hints
 	return []
