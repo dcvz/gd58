@@ -183,3 +183,35 @@ static func create_two_column_discovery_layout(parent_container: VBoxContainer, 
 	columns_hbox.add_child(right_vbox)
 
 	add_soul_details_with_discoveries(left_vbox, right_vbox, soul, discovery_log)
+
+## Generate a "seller's knowledge" discovery log for a soul
+## Sellers have imperfect knowledge - they know ranges, not exact values
+## This creates a temporary DiscoveryLog with range hints for a few random stats
+static func create_seller_knowledge(soul: SoulData, range_width: int = 25) -> DiscoveryLog:
+	var seller_log = DiscoveryLog.new()
+
+	# Sellers might know Era and Death (30% chance for each)
+	if randf() < 0.3:
+		seller_log.discover_era()
+
+	if randf() < 0.3:
+		seller_log.discover_death()
+
+	# Sellers know a few random stats (1-3) as ranges
+	var all_stat_keys = soul.stats.keys()
+	if all_stat_keys.size() > 0:
+		all_stat_keys.shuffle()
+		var num_stats_known = randi_range(1, min(3, all_stat_keys.size()))
+
+		for i in range(num_stats_known):
+			var stat_key = all_stat_keys[i]
+			var actual_value = soul.stats[stat_key]
+
+			# Generate a range centered on the actual value
+			var min_val = max(0, actual_value - range_width / 2)
+			var max_val = min(100, actual_value + range_width / 2)
+
+			var hint = "%d-%d" % [int(min_val), int(max_val)]
+			seller_log.add_stat_hint(stat_key, hint)
+
+	return seller_log

@@ -62,39 +62,6 @@ func add_stat_hint(soul_id: String, stat_key: int, hint: String) -> void:
 	discovery_made.emit(soul_id)
 	print("[Discovery] Added stat hint '%s' for soul %s" % [hint, soul_id])
 
-## Initialize discoveries from a seller (they might know some things)
-## Returns number of things the seller knew
-func initialize_from_seller(soul_id: String, soul: SoulData) -> int:
-	var discoveries = 0
-	var disc_log = get_discovery_log(soul_id)
-
-	# Sellers always know 1-3 things about the soul they're selling
-	var num_known = randi_range(1, 3)  # 1, 2, or 3 (using randi_range for proper distribution)
-
-	for i in range(num_known):
-		var roll = randf()
-
-		if roll < 0.3 and not disc_log.known_era:
-			# They know the era
-			disc_log.discover_era()
-			discoveries += 1
-		elif roll < 0.6 and not disc_log.known_death:
-			# They know cause of death
-			disc_log.discover_death()
-			discoveries += 1
-		elif soul.stats.size() > 0:
-			# They know one stat
-			var stat_key = soul.stats.keys().pick_random()
-			if not disc_log.knows_stat(stat_key):
-				disc_log.discover_stat(stat_key, soul.stats[stat_key])
-				discoveries += 1
-
-	if discoveries > 0:
-		discovery_made.emit(soul_id)
-		print("[Discovery] Seller knew %d thing(s) about soul %s" % [discoveries, soul_id])
-
-	return discoveries
-
 ## Remove all discoveries for a soul (when sold)
 func clear_discoveries(soul_id: String) -> void:
 	if soul_discoveries.has(soul_id):
