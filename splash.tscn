@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://c8vh5n2qw3pxb"]
+[gd_scene load_steps=4 format=3 uid="uid://c8vh5n2qw3pxb"]
 
-[ext_resource type="Script" path="res://scripts/ui/splash_screen.gd" id="1_splash"]
+[ext_resource type="Script" uid="uid://maeod5dvqikb" path="res://scripts/ui/splash_screen.gd" id="1_splash"]
+[ext_resource type="PackedScene" uid="uid://c8xj4y5kqr3pq" path="res://scenes/soul.tscn" id="2_50j67"]
+
+[sub_resource type="Environment" id="Environment_13jq6"]
 
 [node name="SplashScreen" type="Control"]
 layout_mode = 3
@@ -34,8 +37,28 @@ layout_mode = 2
 [node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 72
-text = "Soul Collector"
+text = "Soul Emporium"
 horizontal_alignment = 1
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="CenterContainer/VBoxContainer/TitleLabel"]
+layout_mode = 0
+offset_left = 382.99994
+offset_top = -63.0
+offset_right = 675.0
+offset_bottom = 449.0
+scale = Vector2(0.225, 0.225)
+
+[node name="SubViewport" type="SubViewport" parent="CenterContainer/VBoxContainer/TitleLabel/SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(292, 512)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="CenterContainer/VBoxContainer/TitleLabel/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6358781, 1.253733)
+environment = SubResource("Environment_13jq6")
+
+[node name="Soul" parent="CenterContainer/VBoxContainer/TitleLabel/SubViewportContainer/SubViewport" instance=ExtResource("2_50j67")]
 
 [node name="Spacer" type="Control" parent="CenterContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 60)
