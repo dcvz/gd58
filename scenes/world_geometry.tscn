@@ -862,7 +862,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, -4.5)
 visible = false
 
 [node name="CheckoutDesk" parent="Objects" instance=ExtResource("3_deyxb")]
-transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 6, -0.5, 1)
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 6, 0, 1)
 
 [node name="NotificationIndicator" parent="Objects" instance=ExtResource("4_uyqkr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.4863224, 1.2761613, -0.03586662)
