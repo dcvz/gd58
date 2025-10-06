@@ -295,16 +295,16 @@ func _reject_interaction(index: int) -> void:
 
 func _on_interaction_added(_interaction: Dictionary) -> void:
 	if visible:
-		_refresh_list()
+		_refresh_list.call_deferred()
 
 func _on_interaction_removed(_interaction: Dictionary) -> void:
 	if visible:
-		_refresh_list()
+		_refresh_list.call_deferred()
 
 func _on_interaction_expired(_interaction: Dictionary) -> void:
 	print("Interaction expired and removed from queue")
 	if visible:
-		_refresh_list()
+		_refresh_list.call_deferred()
 
 func _remove_interactions_for_soul(soul_id: String, exclude_index: int) -> void:
 	"""Remove all interactions that reference a specific soul (except the one at exclude_index)"""
