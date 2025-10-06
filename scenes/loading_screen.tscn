@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://loading_screen_001"]
+[gd_scene load_steps=2 format=3 uid="uid://c2ffhdbm0wuvn"]
 
 [ext_resource type="Script" path="res://scripts/ui/loading_screen.gd" id="1"]
 
@@ -34,7 +34,7 @@ layout_mode = 2
 [node name="Title" type="Label" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
-text = "Soul Collector"
+text = "Soul Emporium"
 horizontal_alignment = 1
 
 [node name="Spacer" type="Control" parent="CenterContainer/VBoxContainer"]
@@ -50,5 +50,4 @@ horizontal_alignment = 1
 [node name="ProgressBar" type="ProgressBar" parent="CenterContainer/VBoxContainer"]
 custom_minimum_size = Vector2(400, 30)
 layout_mode = 2
-value = 0.0
 show_percentage = false
