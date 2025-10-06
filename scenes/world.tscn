@@ -13,9 +13,9 @@ ambient_light_energy = 0.3
 [node name="World" type="Node"]
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.7071068, -0.40824795, 0.5773505, 0, 0.8164969, 0.5773498, -0.7071068, -0.40824795, 0.5773505, 9, 6.7059317, 7)
+transform = Transform3D(0.7071068, -0.40824795, 0.5773505, 0, 0.8164969, 0.5773498, -0.7071068, -0.40824795, 0.5773505, 9, 6.6, 7)
 projection = 1
-size = 15.0
+size = 18.0
 near = 0.1
 far = 60.0
 script = ExtResource("2_camera")

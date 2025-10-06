@@ -3,7 +3,7 @@ extends Camera3D
 ## Orbital camera controller for shop view
 ## Click-drag to rotate, scroll to zoom
 
-@export var orbit_center: Vector3 = Vector3(0, 0, 0)  # Point to orbit around
+@export var orbit_center: Vector3 = Vector3(1, 0, 1)  # Point to orbit around
 @export var min_distance: float = 8.0
 @export var max_distance: float = 20.0
 @export var rotation_speed: float = 0.005
