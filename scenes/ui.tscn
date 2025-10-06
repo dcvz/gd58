@@ -62,7 +62,7 @@ grow_horizontal = 0
 
 [node name="MenuButton" type="Button" parent="HUD/TopRight"]
 layout_mode = 2
-text = "Menu"
+text = "Shop"
 
 [node name="InteractionMenu" parent="." instance=ExtResource("2_yev5y")]
 
