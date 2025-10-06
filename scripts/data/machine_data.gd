@@ -4,6 +4,7 @@ extends Resource
 ## Defines research machines for soul analysis
 
 enum MachineType {
+	BASIC_ANALYZER,       # Starter: Slow but free - Discover 1 random property (60s)
 	RANDOM_PROPERTY,      # Machine 1: Discover 1 random undiscovered property
 	SPECIFIC_RANGE_WIDE,  # Machine 2: Discover specific property within 20-40 points
 	RANDOM_RANGE_NARROW,  # Machine 3: Discover random property within 20 points
@@ -14,6 +15,8 @@ enum MachineType {
 
 static func get_machine_name(type: MachineType) -> String:
 	match type:
+		MachineType.BASIC_ANALYZER:
+			return "Basic Analyzer"
 		MachineType.RANDOM_PROPERTY:
 			return "Property Finder"
 		MachineType.SPECIFIC_RANGE_WIDE:
@@ -30,6 +33,8 @@ static func get_machine_name(type: MachineType) -> String:
 
 static func get_machine_description(type: MachineType) -> String:
 	match type:
+		MachineType.BASIC_ANALYZER:
+			return "Slow but reliable - Discover 1 random undiscovered property\n(Starter machine - already owned)"
 		MachineType.RANDOM_PROPERTY:
 			return "Discover 1 random undiscovered property"
 		MachineType.SPECIFIC_RANGE_WIDE:
@@ -46,6 +51,8 @@ static func get_machine_description(type: MachineType) -> String:
 
 static func get_machine_cost(type: MachineType) -> int:
 	match type:
+		MachineType.BASIC_ANALYZER:
+			return 0  # Starter machine - free
 		MachineType.RANDOM_PROPERTY:
 			return 150
 		MachineType.SPECIFIC_RANGE_WIDE:
@@ -62,6 +69,8 @@ static func get_machine_cost(type: MachineType) -> int:
 
 static func get_machine_duration(type: MachineType) -> int:
 	match type:
+		MachineType.BASIC_ANALYZER:
+			return 60  # 2x slower than Property Finder
 		MachineType.RANDOM_PROPERTY:
 			return 30
 		MachineType.SPECIFIC_RANGE_WIDE:

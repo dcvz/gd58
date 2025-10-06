@@ -31,10 +31,99 @@ var day_time_elapsed: float = 0.0
 var encounter_queue: Array = []
 var has_special_opportunity: bool = false
 
+var is_game_initialized: bool = false
+
 func _ready() -> void:
 	print("GameLoopManager initialized")
+
+	# Wait for all managers to be ready
+	await get_tree().process_frame
+	await get_tree().process_frame  # Extra frame to ensure all managers initialized
+
+	# Initialize game on first run (starter package)
+	if not is_game_initialized:
+		_initialize_starter_package()
+		is_game_initialized = true
+
 	# Start the first day automatically
 	start_new_day()
+
+func _initialize_starter_package() -> void:
+	print("[GameLoop] Setting up starter package...")
+
+	var machine_manager = get_node("/root/Root/Gameplay/MachineManager")
+	var inventory_manager = get_node("/root/Root/Gameplay/InventoryManager")
+	var currency_manager = get_node("/root/Root/Gameplay/CurrencyManager")
+	var discovery_manager = get_node("/root/Root/Gameplay/DiscoveryManager")
+
+	# 1. Grant starter machine (Basic Analyzer)
+	machine_manager.grant_machine(MachineData.MachineType.BASIC_ANALYZER)
+	print("[GameLoop] Granted Basic Analyzer (starter machine)")
+
+	# 2. Set starting currency (300 KP)
+	currency_manager.add_kp(300)
+	print("[GameLoop] Starting currency: 300 KP")
+
+	# 3. Create 3 starter souls with partial knowledge
+	_create_starter_souls(inventory_manager, discovery_manager)
+
+	print("[GameLoop] Starter package complete!")
+
+func _create_starter_souls(inventory_manager: Node, discovery_manager: Node) -> void:
+	# Soul 1: Well-known - Era + 2 stats (ON DISPLAY)
+	var soul1 = SoulData.generate_random_soul()
+	inventory_manager.add_soul(soul1)
+
+	var disc_log1 = discovery_manager.get_discovery_log(soul1.id)
+	disc_log1.discover_era()
+
+	var stat_keys1 = soul1.stats.keys()
+	stat_keys1.shuffle()
+	for i in range(min(2, stat_keys1.size())):
+		disc_log1.discover_stat(stat_keys1[i], soul1.stats[stat_keys1[i]])
+
+	inventory_manager.add_to_display(soul1.id)
+	print("[GameLoop] Created starter soul 1: %s (Era + 2 stats, ON DISPLAY)" % soul1.name)
+
+	# Soul 2: Partially known - 1 stat + hints (ON DISPLAY)
+	var soul2 = SoulData.generate_random_soul()
+	inventory_manager.add_soul(soul2)
+
+	var disc_log2 = discovery_manager.get_discovery_log(soul2.id)
+
+	var stat_keys2 = soul2.stats.keys()
+	if stat_keys2.size() > 0:
+		stat_keys2.shuffle()
+		disc_log2.discover_stat(stat_keys2[0], soul2.stats[stat_keys2[0]])
+
+		# Add 1-2 stat hints (ranges) for other stats
+		var num_hints = randi_range(1, min(2, stat_keys2.size() - 1))
+		for i in range(1, 1 + num_hints):
+			if i < stat_keys2.size():
+				var stat_key = stat_keys2[i]
+				var actual_value = soul2.stats[stat_key]
+				var range_width = 25
+				var min_val = max(0, actual_value - range_width / 2)
+				var max_val = min(100, actual_value + range_width / 2)
+				var hint = "%d-%d" % [int(min_val), int(max_val)]
+				disc_log2.add_stat_hint(stat_key, hint)
+
+	inventory_manager.add_to_display(soul2.id)
+	print("[GameLoop] Created starter soul 2: %s (1 stat + hints, ON DISPLAY)" % soul2.name)
+
+	# Soul 3: Mystery soul - only 1 stat known (IN STORAGE - needs research!)
+	var soul3 = SoulData.generate_random_soul()
+	inventory_manager.add_soul(soul3)
+
+	var disc_log3 = discovery_manager.get_discovery_log(soul3.id)
+
+	var stat_keys3 = soul3.stats.keys()
+	if stat_keys3.size() > 0:
+		stat_keys3.shuffle()
+		disc_log3.discover_stat(stat_keys3[0], soul3.stats[stat_keys3[0]])
+
+	# Soul 3 stays in storage - player needs to research it!
+	print("[GameLoop] Created starter soul 3: %s (1 stat only, IN STORAGE)" % soul3.name)
 
 func _process(delta: float) -> void:
 	if not is_day_active or is_simulation_paused:
@@ -69,17 +158,32 @@ func _roll_daily_encounters() -> void:
 	encounter_queue.clear()
 	var num_encounters = randi_range(9, 15)
 
-	# Encounter distribution weights (tuned for game balance)
-	const BUYER_THRESHOLD = 0.60    # 60% buyers
-	const SELLER_THRESHOLD = 0.85   # 25% sellers (0.60 + 0.25 = 0.85)
-	# Remaining 15% are brokers
+	# Day-based encounter distribution (easier early game)
+	var buyer_threshold: float
+	var seller_threshold: float
+
+	if current_day <= 3:
+		# Days 1-3: Tutorial phase - lots of sellers, simple buyers
+		buyer_threshold = 0.25     # 25% buyers
+		seller_threshold = 0.95    # 70% sellers (0.25 + 0.70 = 0.95)
+		# Remaining 5% are brokers
+	elif current_day <= 7:
+		# Days 4-7: Ramp up
+		buyer_threshold = 0.50     # 50% buyers
+		seller_threshold = 0.90    # 40% sellers (0.50 + 0.40 = 0.90)
+		# Remaining 10% are brokers
+	else:
+		# Day 8+: Normal difficulty
+		buyer_threshold = 0.60     # 60% buyers
+		seller_threshold = 0.85    # 25% sellers (0.60 + 0.25 = 0.85)
+		# Remaining 15% are brokers
 
 	for i in range(num_encounters):
 		var roll = randf()
 		var encounter_type: String
-		if roll < BUYER_THRESHOLD:
+		if roll < buyer_threshold:
 			encounter_type = "buyer"
-		elif roll < SELLER_THRESHOLD:
+		elif roll < seller_threshold:
 			encounter_type = "seller"
 		else:
 			encounter_type = "broker"
@@ -90,8 +194,13 @@ func _roll_daily_encounters() -> void:
 
 		# Add type-specific interests using centralized InterestMatcher
 		if encounter_type == "buyer":
-			# Generate random interests (80% single, 20% multiple)
+			# Generate interests (complexity varies by day)
 			encounter["interests"] = InterestMatcher.generate_random_interests()
+
+			# Early days: force single interest only (remove multi-interests)
+			if current_day <= 3 and encounter["interests"].size() > 1:
+				# Keep only first interest for days 1-3 (simpler matching)
+				encounter["interests"] = [encounter["interests"][0]]
 
 		elif encounter_type == "seller":
 			# Sellers bring a soul to sell

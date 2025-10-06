@@ -51,6 +51,33 @@ func _process(delta: float) -> void:
 func has_machine(type: MachineData.MachineType) -> bool:
 	return owned_machines.has(type)
 
+## Grant a machine for free (for starter machine or rewards)
+func grant_machine(type: MachineData.MachineType) -> bool:
+	if has_machine(type):
+		print("Machine already owned!")
+		return false
+
+	owned_machines.append(type)
+
+	# For MULTI_PROPERTY, randomly select 6 stats this machine can detect
+	if type == MachineData.MachineType.MULTI_PROPERTY:
+		var all_stats = SoulData.SoulAttribute.values()
+		all_stats.shuffle()
+		var selected_stats = all_stats.slice(0, 6)
+		multi_property_stats[type] = selected_stats
+		var stat_names = []
+		for stat in selected_stats:
+			stat_names.append(SoulData.SoulAttribute.keys()[stat])
+		print("Multi-Property Scanner can detect: %s" % ", ".join(stat_names))
+
+	# Spawn physical machine in the world
+	_spawn_machine(type)
+
+	machine_purchased.emit(type)
+	machines_changed.emit()
+	print("Granted %s" % MachineData.get_machine_name(type))
+	return true
+
 ## Purchase a machine
 func purchase_machine(type: MachineData.MachineType) -> bool:
 	if has_machine(type):
@@ -172,6 +199,8 @@ func _process_completed_job(job: MachineJob) -> void:
 
 	# Apply machine-specific discovery logic
 	match job.machine_type:
+		MachineData.MachineType.BASIC_ANALYZER:
+			_discover_random_property(job.soul_id, soul, discovery_manager)
 		MachineData.MachineType.RANDOM_PROPERTY:
 			_discover_random_property(job.soul_id, soul, discovery_manager)
 		MachineData.MachineType.SPECIFIC_RANGE_WIDE:

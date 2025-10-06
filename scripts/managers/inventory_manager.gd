@@ -15,7 +15,6 @@ var display_slots: Array[String] = []  # Array of soul IDs currently on display
 
 func _ready() -> void:
 	print("InventoryManager initialized")
-	_create_starting_souls()
 
 ## Add a soul to inventory
 func add_soul(soul: SoulData) -> void:
