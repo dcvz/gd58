@@ -55,24 +55,4 @@ func _on_close_pressed() -> void:
 
 func _finish_tutorial() -> void:
 	tutorial_popup.visible = false
-	# Save that tutorial has been completed
-	var save_data = {
-		"tutorial_completed": true
-	}
-	var save_file = FileAccess.open("user://tutorial_save.dat", FileAccess.WRITE)
-	if save_file:
-		save_file.store_var(save_data)
-		save_file.close()
-	print("[Tutorial] Tutorial completed and saved")
-
-func has_completed_tutorial() -> bool:
-	if not FileAccess.file_exists("user://tutorial_save.dat"):
-		return false
-
-	var save_file = FileAccess.open("user://tutorial_save.dat", FileAccess.READ)
-	if save_file:
-		var save_data = save_file.get_var()
-		save_file.close()
-		return save_data.get("tutorial_completed", false)
-
-	return false
+	print("[Tutorial] Tutorial completed")
