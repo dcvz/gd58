@@ -42,7 +42,7 @@ func _ready() -> void:
 
 	# Initialize game on first run (starter package)
 	if not is_game_initialized:
-		_initialize_starter_package()
+		await _initialize_starter_package()
 		is_game_initialized = true
 
 	# Start the first day automatically
