@@ -8,6 +8,7 @@ signal inventory_changed()
 
 # Storage for all souls
 var souls: Dictionary = {}  # Key: soul_id, Value: SoulData
+@export var max_souls: int = 12  # Total storage capacity (12 pedestals in storage room)
 
 # Display slots (limited number of souls that can be shown in shop)
 @export var max_display_slots: int = 10
@@ -17,14 +18,20 @@ func _ready() -> void:
 	print("InventoryManager initialized")
 
 ## Add a soul to inventory
-func add_soul(soul: SoulData) -> void:
+func add_soul(soul: SoulData) -> bool:
 	if soul.id.is_empty():
 		soul.id = _generate_soul_id()
+
+	# Check if inventory is full
+	if souls.size() >= max_souls:
+		print("Cannot add soul - inventory full (%d/%d)" % [souls.size(), max_souls])
+		return false
 
 	souls[soul.id] = soul
 	soul_added.emit(soul)
 	inventory_changed.emit()
 	print("Added soul to inventory: ", soul)
+	return true
 
 ## Remove a soul from inventory
 func remove_soul(soul_id: String) -> bool:

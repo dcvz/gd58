@@ -244,12 +244,21 @@ func _handle_seller_transaction(index: int, interaction: Dictionary) -> void:
 	if soul_to_sell:
 		# Check if we can afford it
 		if currency_manager.can_afford(asking_price):
+			# Check if inventory has space
+			var inventory_manager = get_node("/root/Root/Gameplay/InventoryManager")
+			if inventory_manager.souls.size() >= inventory_manager.max_souls:
+				print("Cannot buy soul - inventory full!")
+				_show_message("Storage full! You can only hold %d souls." % inventory_manager.max_souls)
+				return
+
 			# Spend currency and track the purchase
 			if currency_manager.spend_kp(asking_price):
 				currency_manager.record_soul_purchase()
 				# Add soul to inventory
-				var inventory_manager = get_node("/root/Root/Gameplay/InventoryManager")
-				inventory_manager.add_soul(soul_to_sell)
+				if not inventory_manager.add_soul(soul_to_sell):
+					# Failed to add (shouldn't happen since we checked above)
+					print("Failed to add soul to inventory!")
+					return
 
 				# Transfer seller's knowledge to player's discovery log
 				var discovery_manager = get_node("/root/Root/Gameplay/DiscoveryManager")
@@ -329,3 +338,8 @@ func _show_seller_machine_menu(soul: SoulData) -> void:
 		# Refresh to show job status
 		_refresh_list()
 	)
+
+func _show_message(message: String) -> void:
+	"""Show a temporary message to the user"""
+	print("[InteractionsMenu] %s" % message)
+	# TODO: Could show a nicer popup or notification in the future
