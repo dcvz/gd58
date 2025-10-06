@@ -3,7 +3,7 @@ extends Node3D
 ## Defines an area where shades can spawn
 
 ## Size of the spawn area
-@export var area_size: Vector2 = Vector2(2.0, 2.0)
+@export var area_size: Vector2 = Vector2(1.0, 1.0)
 
 ## Get a random position within the spawn area
 func get_random_spawn_position() -> Vector3:
