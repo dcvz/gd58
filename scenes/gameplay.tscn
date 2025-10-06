@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dckx22oayfmvt"]
+[gd_scene load_steps=13 format=3 uid="uid://dckx22oayfmvt"]
 
 [ext_resource type="Script" uid="uid://cev13avtl6rju" path="res://scripts/managers/game_loop_manager.gd" id="1_l1v76"]
 [ext_resource type="Script" uid="uid://b10ca5gdijr6n" path="res://scripts/managers/inventory_manager.gd" id="2_ct7aa"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://scripts/managers/storage_manager.gd" id="10_storage"]
 [ext_resource type="Script" path="res://scripts/managers/click_manager.gd" id="11_click"]
 [ext_resource type="Script" path="res://scripts/managers/notification_manager.gd" id="12_notification"]
+[ext_resource type="Script" path="res://scripts/managers/tutorial_manager.gd" id="13_tutorial"]
 
 [node name="Gameplay" type="Node"]
 
@@ -50,5 +51,8 @@ script = ExtResource("11_click")
 
 [node name="NotificationManager" type="Node" parent="."]
 script = ExtResource("12_notification")
+
+[node name="TutorialManager" type="Node" parent="."]
+script = ExtResource("13_tutorial")
 
 [node name="AudioManager" type="Node" parent="."]

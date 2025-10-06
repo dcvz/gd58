@@ -116,9 +116,9 @@ func _rebuild_menu() -> void:
 		display_btn.pressed.connect(_on_display_pressed)
 		buttons_hbox.add_child(display_btn)
 
-	# Use Machine button
+	# Analyze button
 	var machine_btn = Button.new()
-	machine_btn.text = "Use Machine"
+	machine_btn.text = "Analyze"
 	machine_btn.pressed.connect(_on_machine_pressed)
 	buttons_hbox.add_child(machine_btn)
 

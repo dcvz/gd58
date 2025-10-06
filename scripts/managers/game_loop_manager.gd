@@ -45,6 +45,14 @@ func _ready() -> void:
 		await _initialize_starter_package()
 		is_game_initialized = true
 
+	# Start tutorial if never completed
+	var tutorial_manager = get_node("/root/Root/Gameplay/TutorialManager")
+	if not tutorial_manager.has_completed_tutorial():
+		var tutorial_popup = get_node("/root/Root/UI/TutorialPopup")
+		tutorial_manager.start_tutorial(tutorial_popup)
+		# Wait for tutorial to finish before starting day
+		await tutorial_popup.close_pressed
+
 	# Start the first day automatically
 	start_new_day()
 
