@@ -280,10 +280,42 @@ func _discover_multiple_properties(soul_id: String, soul: SoulData, discovery_ma
 func _eliminate_era_or_death_options(soul_id: String, soul: SoulData, discovery_manager: Node) -> void:
 	var disc_log = discovery_manager.get_discovery_log(soul_id)
 
-	if randf() < 0.5 and not disc_log.known_era:
+	# Determine what we can still eliminate from
+	var can_eliminate_era = not disc_log.known_era
+	var can_eliminate_death = not disc_log.known_death
+
+	# If both are already known, nothing to do
+	if not can_eliminate_era and not can_eliminate_death:
+		print("[Machine] Era and Death already known - nothing to eliminate!")
+		return
+
+	# Pick randomly which one to eliminate from (if both available)
+	var eliminate_era = false
+	if can_eliminate_era and can_eliminate_death:
+		eliminate_era = randf() < 0.5
+	elif can_eliminate_era:
+		eliminate_era = true
+	# else: eliminate_era stays false, we'll eliminate death
+
+	if eliminate_era:
 		# Eliminate 2 era options
 		var all_eras = SoulData.Era.values()
 		all_eras.erase(soul.era)  # Don't eliminate the correct one
+
+		# Filter out already eliminated eras
+		var already_eliminated = []
+		for hint in disc_log.era_hints:
+			if hint.begins_with("Not "):
+				var era_name = hint.substr(4)
+				for era in SoulData.Era.values():
+					if SoulData.Era.keys()[era] == era_name:
+						already_eliminated.append(era)
+						break
+
+		for era in already_eliminated:
+			all_eras.erase(era)
+
+		# Eliminate 2 new options
 		all_eras.shuffle()
 		for i in range(min(2, all_eras.size())):
 			var hint = "Not %s" % SoulData.Era.keys()[all_eras[i]]
@@ -291,11 +323,25 @@ func _eliminate_era_or_death_options(soul_id: String, soul: SoulData, discovery_
 
 		# Check if we've eliminated all but one option
 		_check_if_era_discovered(soul_id, soul, discovery_manager)
-
-	elif not disc_log.known_death:
+	else:
 		# Eliminate 2 death options
 		var all_deaths = SoulData.CauseOfDeath.values()
 		all_deaths.erase(soul.causeOfDeath)  # Don't eliminate the correct one
+
+		# Filter out already eliminated deaths
+		var already_eliminated = []
+		for hint in disc_log.death_hints:
+			if hint.begins_with("Not "):
+				var death_name = hint.substr(4)
+				for death in SoulData.CauseOfDeath.values():
+					if SoulData.CauseOfDeath.keys()[death] == death_name:
+						already_eliminated.append(death)
+						break
+
+		for death in already_eliminated:
+			all_deaths.erase(death)
+
+		# Eliminate 2 new options
 		all_deaths.shuffle()
 		for i in range(min(2, all_deaths.size())):
 			var hint = "Not %s" % SoulData.CauseOfDeath.keys()[all_deaths[i]]
