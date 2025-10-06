@@ -34,8 +34,7 @@ func _ready() -> void:
 	inventory_manager = get_node("/root/Root/Gameplay/InventoryManager")
 	game_loop_manager = get_node("/root/Root/Gameplay/GameLoopManager")
 	currency_manager = get_node("/root/Root/Gameplay/CurrencyManager")
-	var world = get_node("/root/Root/World")
-	objects_node = world.get_node("Objects")
+	objects_node = get_node("/root/Root/World/WorldGeometry/Objects")
 
 	# Get all existing display plinths in the scene and randomize their order
 	var existing_plinths = get_tree().get_nodes_in_group("display_plinth")

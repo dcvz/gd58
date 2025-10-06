@@ -32,7 +32,7 @@ var next_placement_index: int = 0
 
 func _ready() -> void:
 	await get_tree().process_frame
-	objects_node = get_node("/root/Root/World/Objects")
+	objects_node = get_node("/root/Root/World/WorldGeometry/Objects")
 
 func _process(delta: float) -> void:
 	# Only process jobs when simulation is running

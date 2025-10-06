@@ -10,7 +10,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 
 	# Get references
-	notification_indicator = get_node("/root/Root/World/Objects/NotificationIndicator")
+	notification_indicator = get_node("/root/Root/World/WorldGeometry/Objects/NotificationIndicator")
 	interaction_manager = get_node("/root/Root/Gameplay/InteractionManager")
 	shade_interactions_menu = get_node("/root/Root/UI/ShadeInteractionsMenu")
 
