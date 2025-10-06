@@ -8,5 +8,5 @@ func _ready() -> void:
 	start_button.pressed.connect(_on_start_pressed)
 
 func _on_start_pressed() -> void:
-	# Load the main game scene
-	get_tree().change_scene_to_file("res://main.tscn")
+	# Go to loading screen which will load the main game
+	get_tree().change_scene_to_file("res://scenes/loading_screen.tscn")
