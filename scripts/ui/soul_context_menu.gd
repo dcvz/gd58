@@ -186,7 +186,7 @@ func _add_advertisement_controls(container: VBoxContainer, discovery_log: Discov
 	container.add_child(separator)
 
 	var ad_header = Label.new()
-	ad_header.text = "ADVERTISE PROPERTIES (what buyers see)"
+	ad_header.text = "ADVERTISE PROPERTIES (what collectors see)"
 	ad_header.add_theme_color_override("font_color", Color(1.0, 0.8, 0.2))
 	container.add_child(ad_header)
 

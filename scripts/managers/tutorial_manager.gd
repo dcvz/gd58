@@ -9,11 +9,11 @@ func _ready() -> void:
 	tutorial_steps = [
 		{
 			"title": "Welcome to Soul Emporium!",
-			"message": "You run a shop that buys, analyzes, and sells souls to mysterious buyers.\n\nYour goal: Discover what makes each soul unique and match them with the right buyers to earn Karmic Points (KP)!"
+			"message": "You run a shop that buys, analyzes, and sells souls to mysterious collectors.\n\nYour goal: Discover what makes each soul unique and match them with the right collectors to earn Karmic Points (KP)!"
 		},
 		{
 			"title": "How to Play",
-			"message": "1. ANALYZE souls using machines to discover their traits\n2. DISPLAY souls on plinths in your showroom\n3. SELL to buyers who want specific traits\n4. EARN KP to buy better machines and more souls!"
+			"message": "1. ANALYZE souls using machines to discover their traits\n2. DISPLAY souls on plinths in your showroom\n3. SELL to collectors who want specific traits\n4. EARN KP to buy better machines and more souls!"
 		},
 		{
 			"title": "Getting Started",

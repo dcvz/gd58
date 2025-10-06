@@ -41,10 +41,10 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 
 func _on_day_started(day_number: int) -> void:
-	day_counter.text = "Day %d" % day_number
+	day_counter.text = "Cycle %d" % day_number
 
 func _on_day_ended(day_number: int) -> void:
-	time_label.text = "Day Complete"
+	time_label.text = "Cycle Complete"
 	end_of_day_menu.show_menu(day_number)
 
 func _on_menu_button_pressed() -> void:

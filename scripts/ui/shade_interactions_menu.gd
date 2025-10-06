@@ -1,6 +1,6 @@
 extends Control
 
-## Menu for handling shade interactions (buyers and sellers)
+## Menu for handling shade interactions (collectors and sellers)
 
 
 var interaction_manager: Node
@@ -88,13 +88,13 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 	var days_remaining = interaction_manager.get_days_remaining(interaction)
 	var timer_label = Label.new()
 	if days_remaining >= 1.0:
-		timer_label.text = "⏱ %.1f days" % days_remaining
+		timer_label.text = "⏱ %.1f cycles" % days_remaining
 		timer_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
 	elif days_remaining >= 0.5:
-		timer_label.text = "⏱ %.1f days" % days_remaining
+		timer_label.text = "⏱ %.1f cycles" % days_remaining
 		timer_label.add_theme_color_override("font_color", Color(1.0, 1.0, 0.3))  # Yellow warning
 	else:
-		timer_label.text = "⏱ %.1f days" % days_remaining
+		timer_label.text = "⏱ %.1f cycles" % days_remaining
 		timer_label.add_theme_color_override("font_color", Color(1.0, 0.3, 0.3))  # Red urgent
 	header_hbox.add_child(timer_label)
 
@@ -119,7 +119,7 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 			var separator = HSeparator.new()
 			vbox.add_child(separator)
 
-		# Display buyer interests
+		# Display collector interests
 		var interests = interaction.get("interests", [])
 		if interests.size() > 0:
 			var matching_mode = interaction.get("matching_mode", InterestMatcher.MatchingMode.ALL)
@@ -127,7 +127,7 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 			var mode_color = Color(0.3, 1.0, 0.5) if matching_mode == InterestMatcher.MatchingMode.ANY else Color(1.0, 0.6, 0.2)
 
 			var wants_label = Label.new()
-			wants_label.text = "Buyer wants [%s]:" % mode_text
+			wants_label.text = "Collector wants [%s]:" % mode_text
 			wants_label.add_theme_color_override("font_color", mode_color)
 			vbox.add_child(wants_label)
 
@@ -211,9 +211,9 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 	interaction_list.add_child(panel)
 
 func _handle_buyer_transaction(index: int, interaction: Dictionary) -> void:
-	print("Handling buyer transaction for interaction %d" % index)
+	print("Handling collector transaction for interaction %d" % index)
 
-	# Get the plinth the buyer selected
+	# Get the plinth the collector selected
 	var selected_plinth = interaction.get("selected_soul_plinth")
 	if selected_plinth and selected_plinth.displayed_soul:
 		var soul_to_sell = selected_plinth.displayed_soul
@@ -329,7 +329,7 @@ func _remove_interactions_for_soul(soul_id: String, exclude_index: int) -> void:
 	# Remove in reverse order to maintain correct indices
 	indices_to_remove.reverse()
 	for idx in indices_to_remove:
-		print("Removing duplicate buyer request for sold soul")
+		print("Removing duplicate collector request for sold soul")
 		interaction_manager.remove_interaction(idx)
 
 func _show_seller_machine_menu(soul: SoulData) -> void:

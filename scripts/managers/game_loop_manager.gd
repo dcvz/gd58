@@ -166,29 +166,29 @@ func _roll_daily_encounters() -> void:
 	var num_encounters = randi_range(9, 15)
 
 	# Day-based encounter distribution (easier early game)
-	var buyer_threshold: float
+	var collector_threshold: float
 	var seller_threshold: float
 
 	if current_day <= 3:
-		# Days 1-3: Tutorial phase - lots of sellers, simple buyers
-		buyer_threshold = 0.25     # 25% buyers
+		# Days 1-3: Tutorial phase - lots of sellers, simple collectors
+		collector_threshold = 0.25     # 25% collectors
 		seller_threshold = 0.95    # 70% sellers (0.25 + 0.70 = 0.95)
 		# Remaining 5% are brokers
 	elif current_day <= 7:
 		# Days 4-7: Ramp up
-		buyer_threshold = 0.50     # 50% buyers
+		collector_threshold = 0.50     # 50% collectors
 		seller_threshold = 0.90    # 40% sellers (0.50 + 0.40 = 0.90)
 		# Remaining 10% are brokers
 	else:
 		# Day 8+: Normal difficulty
-		buyer_threshold = 0.60     # 60% buyers
+		collector_threshold = 0.60     # 60% collectors
 		seller_threshold = 0.85    # 25% sellers (0.60 + 0.25 = 0.85)
 		# Remaining 15% are brokers
 
 	for i in range(num_encounters):
 		var roll = randf()
 		var encounter_type: String
-		if roll < buyer_threshold:
+		if roll < collector_threshold:
 			encounter_type = "buyer"
 		elif roll < seller_threshold:
 			encounter_type = "seller"
@@ -201,20 +201,20 @@ func _roll_daily_encounters() -> void:
 
 		# Add type-specific interests using centralized InterestMatcher
 		if encounter_type == "buyer":
-			# Assign matching mode based on day (early game = more flexible buyers)
+			# Assign matching mode based on day (early game = more flexible collectors)
 			var flexible_chance = 0.8 if current_day <= 3 else 0.2  # 80% flexible early, 20% later
 			var is_flexible = randf() < flexible_chance
 			encounter["matching_mode"] = InterestMatcher.MatchingMode.ANY if is_flexible else InterestMatcher.MatchingMode.ALL
 
-			# Generate interests based on buyer type
+			# Generate interests based on collector type
 			if is_flexible:
-				# Flexible buyers (ANY): 2-3 interests for variety
+				# Flexible collectors (ANY): 2-3 interests for variety
 				var num_interests = randi_range(2, 3)
 				encounter["interests"] = []
 				for j in range(num_interests):
 					encounter["interests"].append(InterestMatcher.generate_single_interest())
 			else:
-				# Picky buyers (ALL): Use natural distribution (80% single, 20% double)
+				# Picky collectors (ALL): Use natural distribution (80% single, 20% double)
 				encounter["interests"] = InterestMatcher.generate_random_interests()
 
 		elif encounter_type == "seller":

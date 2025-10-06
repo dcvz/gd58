@@ -1,6 +1,6 @@
 extends Control
 
-## End of day summary menu
+## End of cycle summary menu
 
 signal next_day_requested()
 
@@ -20,7 +20,7 @@ func show_menu(day_number: int) -> void:
 	var summary = currency_manager.get_daily_summary()
 
 	# Build summary text
-	var summary_text = "Day %d Results:\n\n" % day_number
+	var summary_text = "Cycle %d Results:\n\n" % day_number
 	summary_text += "Souls Sold: %d\n" % summary.souls_sold
 	summary_text += "Souls Bought: %d\n\n" % summary.souls_bought
 	summary_text += "KP Earned: +%d\n" % summary.kp_earned
@@ -37,7 +37,7 @@ func show_menu(day_number: int) -> void:
 		summary_text += "Net: 0 KP"
 
 	summary_label.text = summary_text
-	print("Day %d complete! Net: %+d KP" % [day_number, net_kp])
+	print("Cycle %d complete! Net: %+d KP" % [day_number, net_kp])
 
 func _on_next_day_pressed() -> void:
 	visible = false
