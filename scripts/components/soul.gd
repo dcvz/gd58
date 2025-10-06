@@ -55,8 +55,26 @@ func _ready() -> void:
 		var process_mat = particles.process_material as ParticleProcessMaterial
 		particles.process_material = process_mat.duplicate()
 
+	# Add a clickable collision area for easier interaction
+	_create_click_area()
+
+	# Add to clickable_soul group for click detection
+	add_to_group("clickable_soul")
+
 	# Force update everything
 	call_deferred("_update_all")
+
+func _create_click_area() -> void:
+	# Create a StaticBody3D with a collision shape for clicking
+	var body = StaticBody3D.new()
+	add_child(body)
+
+	var collision = CollisionShape3D.new()
+	collision.position = Vector3(0, 0.3, 0)  # Offset upward to cover flame area
+	var shape = SphereShape3D.new()
+	shape.radius = 0.6  # Larger click area around the soul
+	collision.shape = shape
+	body.add_child(collision)
 
 func _update_all() -> void:
 	update_shader_parameters()

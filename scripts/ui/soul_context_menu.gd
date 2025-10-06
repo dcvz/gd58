@@ -100,11 +100,21 @@ func _rebuild_menu() -> void:
 	var buttons_hbox = HBoxContainer.new()
 	vbox.add_child(buttons_hbox)
 
-	# Display on Plinth button
-	var display_btn = Button.new()
-	display_btn.text = "Display on Plinth"
-	display_btn.pressed.connect(_on_display_pressed)
-	buttons_hbox.add_child(display_btn)
+	# Check if soul is on display or in storage
+	var is_on_display = inventory_manager.display_slots.has(current_soul.id)
+
+	if is_on_display:
+		# Soul is on display - show "Send to Storage" button
+		var storage_btn = Button.new()
+		storage_btn.text = "Send to Storage"
+		storage_btn.pressed.connect(_on_send_to_storage_pressed)
+		buttons_hbox.add_child(storage_btn)
+	else:
+		# Soul is in storage - show "Display on Plinth" button
+		var display_btn = Button.new()
+		display_btn.text = "Display on Plinth"
+		display_btn.pressed.connect(_on_display_pressed)
+		buttons_hbox.add_child(display_btn)
 
 	# Use Machine button
 	var machine_btn = Button.new()
@@ -133,8 +143,23 @@ func _on_display_pressed() -> void:
 			print("[ContextMenu] Failed to add to display (slots full or already displayed)")
 		hide_menu()
 
+func _on_send_to_storage_pressed() -> void:
+	if current_soul and inventory_manager:
+		# Remove from display (will automatically go to storage)
+		inventory_manager.remove_from_display(current_soul.id)
+		print("[ContextMenu] Sent '%s' to storage" % current_soul.name)
+		hide_menu()
+
 func _on_machine_pressed() -> void:
 	if current_soul:
+		# Check if soul is on display
+		var is_on_display = inventory_manager.display_slots.has(current_soul.id)
+
+		# If on display, send to storage first (machines work on storage souls)
+		if is_on_display:
+			inventory_manager.remove_from_display(current_soul.id)
+			print("[ContextMenu] Moved '%s' to storage for analysis" % current_soul.name)
+
 		# Show machine selection popup
 		MachineUIHelper.show_machine_selection_popup(self, current_soul)
 		hide_menu()

@@ -45,18 +45,26 @@ func _process_hit(result: Dictionary) -> void:
 			print("[ClickManager] Clicked notification indicator")
 			return
 
+		# Check if this is a clickable soul visual (on display)
+		if node.is_in_group("clickable_soul"):
+			# Walk up to find the plinth parent
+			var parent = node.get_parent()
+			while parent:
+				if parent.is_in_group("display_plinth"):
+					var soul = parent.get_soul_data()
+					if soul:
+						soul_clicked.emit(soul, result.position)
+						print("[ClickManager] Clicked displayed soul visual: %s" % soul.name)
+					return
+				parent = parent.get_parent()
+			return
+
 		# Check if this node is a storage pedestal
 		if node.is_in_group("storage_pedestal"):
 			var soul = node.get_soul()
 			if soul:
 				soul_clicked.emit(soul, result.position)
 				print("[ClickManager] Clicked soul: %s" % soul.name)
-			return
-
-		# Check if this node is a display plinth
-		if node.is_in_group("display_plinth"):
-			plinth_clicked.emit(node)
-			print("[ClickManager] Clicked plinth")
 			return
 
 		# Move up to parent

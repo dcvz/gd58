@@ -173,11 +173,11 @@ func _update_display() -> void:
 
 		var soul_instance = soul_scene.instantiate()
 
-		# Add to scene first
-		objects_node.add_child(soul_instance)
+		# Add soul as child of plinth (so clicking soul can find plinth parent)
+		plinth.add_child(soul_instance)
 
-		# Set position and properties using plinth's position
-		soul_instance.global_position = plinth.get_soul_position()
+		# Set position relative to plinth
+		soul_instance.position = plinth.soul_offset
 		soul_instance.soul_color = soul_data.visual_color
 
 		# Store soul data on plinth so customers can check it

@@ -11,3 +11,7 @@ var displayed_soul: SoulData = null
 ## Get the world position where a soul should be placed
 func get_soul_position() -> Vector3:
 	return global_position + soul_offset
+
+## Get the soul data displayed on this plinth
+func get_soul_data() -> SoulData:
+	return displayed_soul
