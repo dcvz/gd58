@@ -160,10 +160,15 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 			selling_label.add_theme_color_override("font_color", Color(0.4, 0.8, 1.0))  # Blue
 			vbox.add_child(selling_label)
 
-			# Show discoveries with two-column layout (known vs clues)
-			var discovery_manager = get_node("/root/Root/Gameplay/DiscoveryManager")
-			var discovery_log = discovery_manager.get_discovery_log(soul_to_sell.id)
-			SoulDisplayHelper.create_two_column_discovery_layout(vbox, soul_to_sell, discovery_log)
+			# Show seller's limited knowledge (ranges, not exact values)
+			# Seller knowledge is generated when the interaction is created
+			var seller_log = interaction.get("seller_knowledge")
+			if seller_log:
+				SoulDisplayHelper.create_two_column_discovery_layout(vbox, soul_to_sell, seller_log)
+			else:
+				# Fallback if seller_knowledge not set (shouldn't happen)
+				var empty_log = DiscoveryLog.new()
+				SoulDisplayHelper.create_two_column_discovery_layout(vbox, soul_to_sell, empty_log)
 
 			# Show active job status if any (centralized)
 			MachineUIHelper.add_job_status_if_active(vbox, soul_to_sell.id)
@@ -241,14 +246,29 @@ func _handle_seller_transaction(index: int, interaction: Dictionary) -> void:
 				var inventory_manager = get_node("/root/Root/Gameplay/InventoryManager")
 				inventory_manager.add_soul(soul_to_sell)
 
-				# Seller might know some things about the soul
+				# Transfer seller's knowledge to player's discovery log
 				var discovery_manager = get_node("/root/Root/Gameplay/DiscoveryManager")
-				var num_discoveries = discovery_manager.initialize_from_seller(soul_to_sell.id, soul_to_sell)
+				var seller_knowledge = interaction.get("seller_knowledge")
+				if seller_knowledge:
+					# Transfer what the seller knew to the player
+					var player_log = discovery_manager.get_discovery_log(soul_to_sell.id)
 
-				if num_discoveries > 0:
-					print("Bought soul: %s for %d KP (seller knew %d thing(s))" % [soul_to_sell.name, asking_price, num_discoveries])
+					# Transfer era/death knowledge
+					if seller_knowledge.known_era:
+						player_log.discover_era()
+
+					if seller_knowledge.known_death:
+						player_log.discover_death()
+
+					# Transfer stat hints
+					for stat_key in seller_knowledge.stat_hints.keys():
+						var hints = seller_knowledge.get_stat_hints(stat_key)
+						for hint in hints:
+							player_log.add_stat_hint(stat_key, hint)
+
+					print("Bought soul: %s for %d KP (inherited seller's knowledge)" % [soul_to_sell.name, asking_price])
 				else:
-					print("Bought soul: %s for %d KP (seller knew nothing)" % [soul_to_sell.name, asking_price])
+					print("Bought soul: %s for %d KP (seller had no knowledge cached)" % [soul_to_sell.name, asking_price])
 			else:
 				print("Failed to spend KP!")
 				return

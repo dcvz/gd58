@@ -85,12 +85,15 @@ func add_interaction(shade_data: Dictionary) -> void:
 	elif shade_data.type == "seller":
 		interaction["soul_to_sell"] = shade_data.get("soul_to_sell", null)
 
-		# Calculate the price the seller is asking (based on what they know)
+		# Generate seller's knowledge (what they know about the soul they're selling)
 		var soul = shade_data.get("soul_to_sell", null)
 		if soul:
-			var discovery_manager = get_node("/root/Root/Gameplay/DiscoveryManager")
-			var discovery_log = discovery_manager.get_discovery_log(soul.id)
-			var asking_price = SoulPricing.calculate_seller_price_from_discoveries(soul, discovery_log)
+			# Create seller's limited knowledge (ranges, not exact values)
+			var seller_knowledge = SoulDisplayHelper.create_seller_knowledge(soul, 25)
+			interaction["seller_knowledge"] = seller_knowledge
+
+			# Calculate the price based on what the seller knows
+			var asking_price = SoulPricing.calculate_seller_price_from_discoveries(soul, seller_knowledge)
 			interaction["asking_price"] = asking_price
 			print("[InteractionManager] Seller asking %d KP for %s (based on what they know)" % [asking_price, soul.name])
 		else:
