@@ -53,11 +53,10 @@ func add_interaction(shade_data: Dictionary) -> void:
 
 	# Add type-specific data
 	if shade_data.type == "buyer":
-		interaction["interests"] = shade_data.get("interests", [])
+		interaction["wishes"] = shade_data.get("wishes", [])
 		interaction["selected_soul_plinth"] = shade_data.get("selected_soul_plinth", null)
 
-		# Calculate the price the buyer is willing to pay
-		# Buyers can run their own tests and discover additional properties beyond what we advertise
+		# Calculate the price the collector is willing to pay using new pricing system
 		var plinth = shade_data.get("selected_soul_plinth", null)
 		if plinth and plinth.displayed_soul:
 			var soul = plinth.displayed_soul
@@ -67,19 +66,16 @@ func add_interaction(shade_data: Dictionary) -> void:
 			var ad = advertisement_manager.get_advertisement(soul.id)
 			var our_discovery_log = discovery_manager.get_discovery_log(soul.id)
 
-			# Simulate buyer's own investigation - they discover 0-2 additional properties beyond what we advertise
-			var buyer_discovery_log = _simulate_buyer_investigation(soul, our_discovery_log)
+			# Simulate collector's own investigation - they discover 0-2 additional properties beyond what we advertise
+			var collector_discovery_log = _simulate_collector_investigation(soul, our_discovery_log)
 
-			# Create advertised soul based on what buyer knows (our ads + their investigation)
-			var advertised_soul = advertisement_manager.create_advertised_soul_from_log(soul, buyer_discovery_log)
-
-			var offer_price = SoulPricing.calculate_advertised_offer(advertised_soul, soul, shade_data.get("interests", []))
+			# Use new CollectorPricing system with the collector's discovery log
+			var offer_price = CollectorPricing.calculate_offer(soul, collector_discovery_log, shade_data.get("wishes", []))
 			interaction["offer_price"] = offer_price
-			print("[InteractionManager] Buyer offering %d KP for %s (based on their own investigation)" % [offer_price, soul.name])
+			print("[InteractionManager] Collector offering %d KP for %s (based on wishes and investigation)" % [offer_price, soul.name])
 		else:
-			# No valid soul - buyer arrived but soul was removed/sold before they could interact
-			# Don't add this buyer to the queue
-			print("[InteractionManager] WARNING: Buyer arrived but soul is no longer available, skipping interaction")
+			# No valid soul - collector arrived but soul was removed/sold before they could interact
+			print("[InteractionManager] WARNING: Collector arrived but soul is no longer available, skipping interaction")
 			return
 
 	elif shade_data.type == "seller":
@@ -92,8 +88,8 @@ func add_interaction(shade_data: Dictionary) -> void:
 			var seller_knowledge = SoulDisplayHelper.create_seller_knowledge(soul, 25)
 			interaction["seller_knowledge"] = seller_knowledge
 
-			# Calculate the price based on what the seller knows
-			var asking_price = SoulPricing.calculate_seller_price_from_discoveries(soul, seller_knowledge)
+			# Use new SellerPricing system
+			var asking_price = SellerPricing.calculate_asking_price(soul, seller_knowledge)
 			interaction["asking_price"] = asking_price
 			print("[InteractionManager] Seller asking %d KP for %s (based on what they know)" % [asking_price, soul.name])
 		else:
@@ -139,18 +135,18 @@ func get_days_remaining(interaction: Dictionary) -> float:
 	var expires_on = interaction.get("expires_on_day", current_fractional_day + 1)
 	return max(0.0, expires_on - current_fractional_day)
 
-func _simulate_buyer_investigation(soul: SoulData, our_log: DiscoveryLog) -> DiscoveryLog:
-	"""Simulate a buyer running their own tests to discover 0-2 additional properties"""
+func _simulate_collector_investigation(soul: SoulData, our_log: DiscoveryLog) -> DiscoveryLog:
+	"""Simulate a collector running their own tests to discover 0-2 additional properties"""
 	# Create a copy of our discovery log as the starting point
-	var buyer_log = DiscoveryLog.new()
-	buyer_log.known_era = our_log.known_era
-	buyer_log.known_death = our_log.known_death
-	buyer_log.era_hints = our_log.era_hints.duplicate()
-	buyer_log.death_hints = our_log.death_hints.duplicate()
-	buyer_log.known_stats = our_log.known_stats.duplicate()
-	buyer_log.stat_hints = our_log.stat_hints.duplicate(true)
+	var collector_log = DiscoveryLog.new()
+	collector_log.known_era = our_log.known_era
+	collector_log.known_death = our_log.known_death
+	collector_log.era_hints = our_log.era_hints.duplicate()
+	collector_log.death_hints = our_log.death_hints.duplicate()
+	collector_log.known_stats = our_log.known_stats.duplicate()
+	collector_log.stat_hints = our_log.stat_hints.duplicate(true)
 
-	# Buyer discovers 0-2 additional stats we don't know about
+	# Collector discovers 0-2 additional stats we don't know about
 	var num_discoveries = randi_range(0, 2)
 	var undiscovered_stats = []
 
@@ -162,6 +158,6 @@ func _simulate_buyer_investigation(soul: SoulData, our_log: DiscoveryLog) -> Dis
 		undiscovered_stats.shuffle()
 		for i in range(min(num_discoveries, undiscovered_stats.size())):
 			var stat_key = undiscovered_stats[i]
-			buyer_log.known_stats[stat_key] = soul.stats[stat_key]
+			collector_log.known_stats[stat_key] = soul.stats[stat_key]
 
-	return buyer_log
+	return collector_log

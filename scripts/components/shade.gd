@@ -67,12 +67,13 @@ func start_browsing(available_plinths: Array) -> void:
 		plinths_to_visit = shuffled.slice(0, num_to_visit)
 
 		if encounter_data.type == "buyer":
-			var interests_str = ""
-			for interest in encounter_data.get("interests", []):
-				if interests_str != "":
-					interests_str += " AND "
-				interests_str += InterestMatcher.format_interest_for_display(interest)
-			print("[Shade] Buyer browsing %d plinths, looking for: %s" % [num_to_visit, interests_str])
+			var wishes = encounter_data.get("wishes", [])
+			var wishes_str = ""
+			for wish in wishes:
+				if wishes_str != "":
+					wishes_str += ", "
+				wishes_str += wish.get_description()
+			print("[Shade] Collector browsing %d plinths, wishes: %s" % [num_to_visit, wishes_str])
 		else:
 			print("[Shade] Broker browsing %d plinths" % num_to_visit)
 
@@ -156,8 +157,8 @@ func _inspect_behavior(delta: float) -> void:
 			leave_shop()
 			return
 
-		# Check if this plinth has what the buyer wants (using centralized matcher)
-		if encounter_data.type == "buyer" and encounter_data.has("interests"):
+		# Check if this plinth has what the collector wants (using new WishSystem)
+		if encounter_data.type == "buyer" and encounter_data.has("wishes"):
 			var current_plinth = plinths_to_visit[current_plinth_index]
 			var soul = current_plinth.displayed_soul
 
@@ -165,15 +166,34 @@ func _inspect_behavior(delta: float) -> void:
 				# Get what we're advertising about this soul
 				var advertisement_manager = get_node("/root/Root/Gameplay/AdvertisementManager")
 				var ad = advertisement_manager.get_advertisement(soul.id)
-				var advertised_soul = advertisement_manager.create_advertised_soul(soul, ad)
+				var discovery_manager = get_node("/root/Root/Gameplay/DiscoveryManager")
+				var ad_log = discovery_manager.get_discovery_log(soul.id)
 
-				# Buyer only sees advertised properties
-				var matching_mode = encounter_data.get("matching_mode", InterestMatcher.MatchingMode.ALL)
-				if InterestMatcher.advertised_soul_matches_interests(advertised_soul, soul, encounter_data.interests, matching_mode):
-					# Found a soul matching their interests! Go to checkout
-					will_buy = true
-					selected_soul_plinth = current_plinth
-					print("[Shade] Buyer found matching soul (%s) - heading to checkout!" % soul.name)
+				# Check wish matching based on collector's requirements
+				var wishes = encounter_data.get("wishes", [])
+				var require_all = encounter_data.get("require_all_wishes", false)
+
+				if require_all:
+					# Strict collector: ALL wishes must be met
+					var all_met = true
+					for wish in wishes:
+						var match_result = WishSystem.check_wish_match(wish, soul, ad_log)
+						if not match_result.met:
+							all_met = false
+							break
+					if all_met and wishes.size() > 0:
+						will_buy = true
+						selected_soul_plinth = current_plinth
+						print("[Shade] Collector found soul matching ALL wishes (%s) - heading to checkout!" % soul.name)
+				else:
+					# Flexible collector: ANY wish met is enough
+					for wish in wishes:
+						var match_result = WishSystem.check_wish_match(wish, soul, ad_log)
+						if match_result.met:
+							will_buy = true
+							selected_soul_plinth = current_plinth
+							print("[Shade] Collector found soul matching a wish (%s) - heading to checkout!" % soul.name)
+							break
 
 		current_plinth_index += 1
 
@@ -187,12 +207,13 @@ func _inspect_behavior(delta: float) -> void:
 			else:
 				# Didn't find what they wanted, leave
 				if encounter_data.type == "buyer":
-					var interests_str = ""
-					for interest in encounter_data.get("interests", []):
-						if interests_str != "":
-							interests_str += " AND "
-						interests_str += InterestMatcher.format_interest_for_display(interest)
-					print("[Shade] Buyer didn't find matching soul - leaving disappointed (wanted: %s)" % interests_str)
+					var wishes = encounter_data.get("wishes", [])
+					var wishes_str = ""
+					for wish in wishes:
+						if wishes_str != "":
+							wishes_str += ", "
+						wishes_str += wish.get_description()
+					print("[Shade] Collector didn't find matching soul - leaving disappointed (wanted: %s)" % wishes_str)
 				else:
 					print("[Shade] Broker finished browsing - leaving")
 				leave_shop()

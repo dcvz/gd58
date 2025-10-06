@@ -119,22 +119,18 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 			var separator = HSeparator.new()
 			vbox.add_child(separator)
 
-		# Display collector interests
-		var interests = interaction.get("interests", [])
-		if interests.size() > 0:
-			var matching_mode = interaction.get("matching_mode", InterestMatcher.MatchingMode.ALL)
-			var mode_text = "ANY" if matching_mode == InterestMatcher.MatchingMode.ANY else "ALL"
-			var mode_color = Color(0.3, 1.0, 0.5) if matching_mode == InterestMatcher.MatchingMode.ANY else Color(1.0, 0.6, 0.2)
-
+		# Display collector wishes
+		var wishes = interaction.get("wishes", [])
+		if wishes.size() > 0:
 			var wants_label = Label.new()
-			wants_label.text = "Collector wants [%s]:" % mode_text
-			wants_label.add_theme_color_override("font_color", mode_color)
+			wants_label.text = "Collector wishes:"
+			wants_label.add_theme_color_override("font_color", Color(0.3, 1.0, 0.5))
 			vbox.add_child(wants_label)
 
-			for interest in interests:
-				var interest_label = Label.new()
-				interest_label.text = "  • %s" % InterestMatcher.format_interest_for_display(interest)
-				vbox.add_child(interest_label)
+			for wish in wishes:
+				var wish_label = Label.new()
+				wish_label.text = "  • %s" % wish.get_description()
+				vbox.add_child(wish_label)
 
 		# Display offer price
 		var offer_price = interaction.get("offer_price", 0)
@@ -299,16 +295,16 @@ func _reject_interaction(index: int) -> void:
 
 func _on_interaction_added(_interaction: Dictionary) -> void:
 	if visible:
-		_refresh_list()
+		_refresh_list.call_deferred()
 
 func _on_interaction_removed(_interaction: Dictionary) -> void:
 	if visible:
-		_refresh_list()
+		_refresh_list.call_deferred()
 
 func _on_interaction_expired(_interaction: Dictionary) -> void:
 	print("Interaction expired and removed from queue")
 	if visible:
-		_refresh_list()
+		_refresh_list.call_deferred()
 
 func _remove_interactions_for_soul(soul_id: String, exclude_index: int) -> void:
 	"""Remove all interactions that reference a specific soul (except the one at exclude_index)"""
