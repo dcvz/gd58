@@ -53,7 +53,7 @@ static func add_soul_details_with_discoveries(left_container: VBoxContainer, rig
 	hints_label.add_theme_color_override("font_color", Color(1.0, 1.0, 0.3))
 	right_container.add_child(hints_label)
 
-	# Era hints
+	# Era hints or ???
 	if not discovery_log.known_era:
 		if discovery_log.era_hints.size() > 0:
 			var era_hint_label = Label.new()
@@ -66,11 +66,11 @@ static func add_soul_details_with_discoveries(left_container: VBoxContainer, rig
 				right_container.add_child(hint_item)
 		else:
 			var unknown_era = Label.new()
-			unknown_era.text = "Era: Unknown"
+			unknown_era.text = "Era: ???"
 			unknown_era.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
 			right_container.add_child(unknown_era)
 
-	# Death hints
+	# Death hints or ???
 	if not discovery_log.known_death:
 		if discovery_log.death_hints.size() > 0:
 			var death_hint_label = Label.new()
@@ -83,21 +83,42 @@ static func add_soul_details_with_discoveries(left_container: VBoxContainer, rig
 				right_container.add_child(hint_item)
 		else:
 			var unknown_death = Label.new()
-			unknown_death.text = "Death: Unknown"
+			unknown_death.text = "Death: ???"
 			unknown_death.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
 			right_container.add_child(unknown_death)
 
-	# Stat hints (only show if we have hints, otherwise don't reveal the stat exists)
-	for stat_key in soul.stats.keys():
-		if not discovery_log.knows_stat(stat_key):
-			if discovery_log.has_stat_hints(stat_key):
-				var stat_name = SoulData.SoulAttribute.keys()[stat_key]
-				var hints = discovery_log.get_stat_hints(stat_key)
-				for hint in hints:
-					var hint_item = Label.new()
-					hint_item.text = "  • %s: %s" % [stat_name, hint]
-					hint_item.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8))
-					right_container.add_child(hint_item)
+	# Stats - show ALL stats (known count), with hints or ??? for undiscovered ones
+	if soul.stats.size() > 0:
+		var has_unknown_stats = false
+		for stat_key in soul.stats.keys():
+			if not discovery_log.knows_stat(stat_key):
+				# Show hints if we have them
+				if discovery_log.has_stat_hints(stat_key):
+					var stat_name = SoulData.SoulAttribute.keys()[stat_key]
+					var hints = discovery_log.get_stat_hints(stat_key)
+					for hint in hints:
+						var hint_item = Label.new()
+						hint_item.text = "  • %s: %s" % [stat_name, hint]
+						hint_item.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8))
+						right_container.add_child(hint_item)
+				else:
+					# Show as ??? (stat exists but totally unknown)
+					has_unknown_stats = true
+
+		# Show count of completely unknown stats
+		if has_unknown_stats:
+			var unknown_count = 0
+			for stat_key in soul.stats.keys():
+				if not discovery_log.knows_stat(stat_key) and not discovery_log.has_stat_hints(stat_key):
+					unknown_count += 1
+
+			var unknown_stats_label = Label.new()
+			if unknown_count == 1:
+				unknown_stats_label.text = "  • 1 stat: ???"
+			else:
+				unknown_stats_label.text = "  • %d stats: ???" % unknown_count
+			unknown_stats_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
+			right_container.add_child(unknown_stats_label)
 
 ## Add soul details (fully revealed - for buyers/sellers who know everything)
 static func add_soul_details_to_container(container: VBoxContainer, soul: SoulData) -> void:
