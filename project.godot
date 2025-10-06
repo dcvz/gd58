@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="gd58"
-run/main_scene="uid://bwdxmyedjgcag"
+config/name="Soul Collector"
+run/main_scene="res://splash.tscn"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
 
