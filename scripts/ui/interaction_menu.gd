@@ -12,12 +12,14 @@ signal menu_closed()
 
 @onready var inventory_manager: Node = get_node("/root/Root/Gameplay/InventoryManager")
 @onready var machine_manager: Node = get_node("/root/Root/Gameplay/MachineManager")
+@onready var display_manager: Node = get_node("/root/Root/Gameplay/DisplayManager")
 @onready var currency_manager: Node = get_node("/root/Root/Gameplay/CurrencyManager")
 @onready var game_loop_manager: Node = get_node("/root/Root/Gameplay/GameLoopManager")
 
 @onready var tab_container: TabContainer = $Panel/TabContainer
 @onready var inventory_list: VBoxContainer = $Panel/TabContainer/Inventory/ScrollContainer/SoulList
 @onready var machines_list: VBoxContainer = $Panel/TabContainer/Machines/ScrollContainer/MachineList
+@onready var special_list: VBoxContainer = $Panel/TabContainer/Special/ScrollContainer/SpecialList
 @onready var close_button: Button = $Panel/CloseButton
 
 var soul_item_scene: PackedScene = preload("res://scenes/soul_inventory_item.tscn")
@@ -26,15 +28,21 @@ func _ready() -> void:
 	close_button.pressed.connect(_on_close_pressed)
 	inventory_manager.inventory_changed.connect(_refresh_inventory)
 	machine_manager.machines_changed.connect(_refresh_machines)
-	currency_manager.currency_changed.connect(func(_amount): _refresh_machines())
+	display_manager.plinths_changed.connect(_refresh_special)
+	currency_manager.currency_changed.connect(func(_amount):
+		_refresh_machines()
+		_refresh_special()
+	)
 	_refresh_inventory()
 	_refresh_machines()
+	_refresh_special()
 
 func open_menu() -> void:
 	visible = true
 	game_loop_manager.open_menu(game_loop_manager.Menu.DISPLAY)
 	_refresh_inventory()
 	_refresh_machines()
+	_refresh_special()
 
 func close_menu() -> void:
 	visible = false
@@ -142,3 +150,58 @@ func _create_machine_item(machine_type: MachineData.MachineType, owned: bool) ->
 
 func _on_purchase_machine(machine_type: MachineData.MachineType) -> void:
 	machine_manager.purchase_machine(machine_type)
+
+func _refresh_special() -> void:
+	# Clear existing items
+	for child in special_list.get_children():
+		child.queue_free()
+
+	# Add plinth purchase option
+	_create_plinth_purchase_item()
+
+func _create_plinth_purchase_item() -> void:
+	var panel = PanelContainer.new()
+	var vbox = VBoxContainer.new()
+	panel.add_child(vbox)
+
+	# Title
+	var title_label = Label.new()
+	title_label.text = "Display Plinths"
+	title_label.add_theme_font_size_override("font_size", 16)
+	vbox.add_child(title_label)
+
+	# Description
+	var desc_label = Label.new()
+	desc_label.text = "Expand your display room to show more souls to customers"
+	desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	desc_label.custom_minimum_size = Vector2(500, 0)
+	vbox.add_child(desc_label)
+
+	# Info line
+	var info_label = Label.new()
+	info_label.text = "Owned: %d / %d" % [display_manager.owned_plinth_count, display_manager.get_max_plinths()]
+	vbox.add_child(info_label)
+
+	# Purchase button or max reached
+	if display_manager.can_purchase_plinth():
+		var cost = display_manager.get_next_plinth_cost()
+		var buy_button = Button.new()
+		buy_button.text = "Purchase Plinth (%d KP)" % cost
+		buy_button.pressed.connect(_on_purchase_plinth)
+
+		# Disable if can't afford
+		if not currency_manager.can_afford(cost):
+			buy_button.disabled = true
+			buy_button.text = "Cannot Afford (%d KP)" % cost
+
+		vbox.add_child(buy_button)
+	else:
+		var max_label = Label.new()
+		max_label.text = "✓ MAX CAPACITY"
+		max_label.add_theme_color_override("font_color", Color(0.3, 1.0, 0.3))
+		vbox.add_child(max_label)
+
+	special_list.add_child(panel)
+
+func _on_purchase_plinth() -> void:
+	display_manager.purchase_plinth()
