@@ -204,7 +204,7 @@ func _roll_daily_encounters() -> void:
 				# Flexible buyers (ANY): 2-3 interests for variety
 				var num_interests = randi_range(2, 3)
 				encounter["interests"] = []
-				for i in range(num_interests):
+				for j in range(num_interests):
 					encounter["interests"].append(InterestMatcher.generate_single_interest())
 			else:
 				# Picky buyers (ALL): Use natural distribution (80% single, 20% double)
