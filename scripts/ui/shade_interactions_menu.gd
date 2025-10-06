@@ -122,8 +122,13 @@ func _create_interaction_item(interaction: Dictionary, index: int) -> void:
 		# Display buyer interests
 		var interests = interaction.get("interests", [])
 		if interests.size() > 0:
+			var matching_mode = interaction.get("matching_mode", InterestMatcher.MatchingMode.ALL)
+			var mode_text = "ANY" if matching_mode == InterestMatcher.MatchingMode.ANY else "ALL"
+			var mode_color = Color(0.3, 1.0, 0.5) if matching_mode == InterestMatcher.MatchingMode.ANY else Color(1.0, 0.6, 0.2)
+
 			var wants_label = Label.new()
-			wants_label.text = "Buyer wants:"
+			wants_label.text = "Buyer wants [%s]:" % mode_text
+			wants_label.add_theme_color_override("font_color", mode_color)
 			vbox.add_child(wants_label)
 
 			for interest in interests:

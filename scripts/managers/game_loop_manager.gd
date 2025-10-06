@@ -194,13 +194,21 @@ func _roll_daily_encounters() -> void:
 
 		# Add type-specific interests using centralized InterestMatcher
 		if encounter_type == "buyer":
-			# Generate interests (complexity varies by day)
-			encounter["interests"] = InterestMatcher.generate_random_interests()
+			# Assign matching mode based on day (early game = more flexible buyers)
+			var flexible_chance = 0.8 if current_day <= 3 else 0.2  # 80% flexible early, 20% later
+			var is_flexible = randf() < flexible_chance
+			encounter["matching_mode"] = InterestMatcher.MatchingMode.ANY if is_flexible else InterestMatcher.MatchingMode.ALL
 
-			# Early days: force single interest only (remove multi-interests)
-			if current_day <= 3 and encounter["interests"].size() > 1:
-				# Keep only first interest for days 1-3 (simpler matching)
-				encounter["interests"] = [encounter["interests"][0]]
+			# Generate interests based on buyer type
+			if is_flexible:
+				# Flexible buyers (ANY): 2-3 interests for variety
+				var num_interests = randi_range(2, 3)
+				encounter["interests"] = []
+				for i in range(num_interests):
+					encounter["interests"].append(InterestMatcher.generate_single_interest())
+			else:
+				# Picky buyers (ALL): Use natural distribution (80% single, 20% double)
+				encounter["interests"] = InterestMatcher.generate_random_interests()
 
 		elif encounter_type == "seller":
 			# Sellers bring a soul to sell
@@ -214,12 +222,16 @@ func _roll_daily_encounters() -> void:
 	print("Rolled %d encounters for today:" % num_encounters)
 	for encounter in encounter_queue:
 		if encounter.type == "buyer":
+			var matching_mode = encounter.get("matching_mode", InterestMatcher.MatchingMode.ALL)
+			var mode_text = "[ANY]" if matching_mode == InterestMatcher.MatchingMode.ANY else "[ALL]"
+			var connector = " OR " if matching_mode == InterestMatcher.MatchingMode.ANY else " AND "
+
 			var interests_str = ""
 			for interest in encounter.get("interests", []):
 				if interests_str != "":
-					interests_str += " AND "
+					interests_str += connector
 				interests_str += InterestMatcher.format_interest_for_display(interest)
-			print("  - %s arriving at %.1f seconds (wants: %s)" % [encounter.type, encounter.arrival_time, interests_str])
+			print("  - %s arriving at %.1f seconds %s (wants: %s)" % [encounter.type, encounter.arrival_time, mode_text, interests_str])
 		elif encounter.type == "seller":
 			print("  - %s arriving at %.1f seconds (selling %s)" % [encounter.type, encounter.arrival_time, encounter.soul_to_sell.name])
 		else:

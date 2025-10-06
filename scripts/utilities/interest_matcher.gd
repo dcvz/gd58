@@ -13,16 +13,28 @@ enum InterestType {
 	STAT_BETWEEN      # Stat value between min and max
 }
 
-## Check if a soul matches ALL criteria in an interest list
-static func soul_matches_interests(soul: SoulData, interests: Array) -> bool:
+enum MatchingMode {
+	ALL,    # Picky buyer - must match ALL interests (harder, pays more)
+	ANY     # Flexible buyer - must match ANY interest (easier, pays less)
+}
+
+## Check if a soul matches criteria (respects matching mode)
+static func soul_matches_interests(soul: SoulData, interests: Array, matching_mode: MatchingMode = MatchingMode.ALL) -> bool:
 	if interests.size() == 0:
 		return false
 
-	for interest in interests:
-		if not _matches_single_interest(soul, interest):
-			return false
-
-	return true
+	if matching_mode == MatchingMode.ANY:
+		# Flexible buyer - match ANY interest
+		for interest in interests:
+			if _matches_single_interest(soul, interest):
+				return true  # Found one match, that's enough!
+		return false  # No matches found
+	else:
+		# Picky buyer - match ALL interests
+		for interest in interests:
+			if not _matches_single_interest(soul, interest):
+				return false  # One failed, reject
+		return true  # All matched
 
 ## Check if a soul matches a single interest criterion
 static func _matches_single_interest(soul: SoulData, interest: Dictionary) -> bool:
@@ -72,12 +84,12 @@ static func generate_random_interests() -> Array:
 	var num_interests = 1 if randf() < 0.8 else 2
 
 	for i in range(num_interests):
-		interests.append(_generate_single_interest())
+		interests.append(generate_single_interest())
 
 	return interests
 
-## Generate a single random interest
-static func _generate_single_interest() -> Dictionary:
+## Generate a single random interest (public for use in encounter generation)
+static func generate_single_interest() -> Dictionary:
 	var interest_types = [
 		InterestType.ERA,
 		InterestType.CAUSE_OF_DEATH,
@@ -175,12 +187,20 @@ static func format_interest_for_display(interest: Dictionary) -> String:
 ## advertised_soul: Dictionary from AdvertisementManager.create_advertised_soul()
 ## actual_soul: SoulData (for stat values when advertised)
 ## interests: Array of interest dictionaries
-static func advertised_soul_matches_interests(advertised_soul: Dictionary, actual_soul: SoulData, interests: Array) -> bool:
-	# All interests must match for buyer to be interested
-	for interest in interests:
-		if not _advertised_matches_single_interest(advertised_soul, actual_soul, interest):
-			return false
-	return true
+## matching_mode: ALL (picky) or ANY (flexible)
+static func advertised_soul_matches_interests(advertised_soul: Dictionary, actual_soul: SoulData, interests: Array, matching_mode: MatchingMode = MatchingMode.ALL) -> bool:
+	if matching_mode == MatchingMode.ANY:
+		# Flexible buyer - match ANY interest
+		for interest in interests:
+			if _advertised_matches_single_interest(advertised_soul, actual_soul, interest):
+				return true  # Found one match!
+		return false  # No matches
+	else:
+		# Picky buyer - match ALL interests
+		for interest in interests:
+			if not _advertised_matches_single_interest(advertised_soul, actual_soul, interest):
+				return false
+		return true
 
 ## Check if a single interest matches advertised properties
 static func _advertised_matches_single_interest(advertised_soul: Dictionary, actual_soul: SoulData, interest: Dictionary) -> bool:

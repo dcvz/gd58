@@ -168,8 +168,9 @@ func _inspect_behavior(delta: float) -> void:
 				var advertised_soul = advertisement_manager.create_advertised_soul(soul, ad)
 
 				# Buyer only sees advertised properties
-				if InterestMatcher.advertised_soul_matches_interests(advertised_soul, soul, encounter_data.interests):
-					# Found a soul matching ALL their interests! Go to checkout
+				var matching_mode = encounter_data.get("matching_mode", InterestMatcher.MatchingMode.ALL)
+				if InterestMatcher.advertised_soul_matches_interests(advertised_soul, soul, encounter_data.interests, matching_mode):
+					# Found a soul matching their interests! Go to checkout
 					will_buy = true
 					selected_soul_plinth = current_plinth
 					print("[Shade] Buyer found matching soul (%s) - heading to checkout!" % soul.name)
