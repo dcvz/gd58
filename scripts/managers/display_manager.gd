@@ -2,19 +2,29 @@ extends Node
 
 ## Manages the visual display of souls on plinths
 ##
-## Display slots are unlocked based on progression (shop upgrades/fame level).
-## Place plinths in the scene - they'll be locked until unlocked_slot_count increases.
+## Display slots can be purchased to expand the display room
+
+signal plinths_changed()
 
 var inventory_manager: Node
 var game_loop_manager: Node
+var currency_manager: Node
 var soul_scene: PackedScene = preload("res://scenes/soul.tscn")
+var plinth_scene: PackedScene = preload("res://scenes/display_plinth.tscn")
 var soul_visuals: Array[Node3D] = []
 var objects_node: Node
 var display_plinths: Array = []
 var soul_plinth_assignments: Dictionary = {}  # Maps soul_id -> plinth
 
-## Number of display slots currently unlocked (can be increased via progression)
-@export var unlocked_slot_count: int = 10
+## Number of display plinths owned
+var owned_plinth_count: int = 3
+
+## Cost to purchase next plinth
+const BASE_PLINTH_COST: int = 200
+const PLINTH_COST_INCREMENT: int = 100
+
+## Plinth positions (captured from scene at startup)
+var plinth_positions: Array[Vector3] = []
 
 func _ready() -> void:
 	# Wait for scene to be fully loaded
@@ -23,35 +33,70 @@ func _ready() -> void:
 	# Get references
 	inventory_manager = get_node("/root/Root/Gameplay/InventoryManager")
 	game_loop_manager = get_node("/root/Root/Gameplay/GameLoopManager")
+	currency_manager = get_node("/root/Root/Gameplay/CurrencyManager")
 	var world = get_node("/root/Root/World")
 	objects_node = world.get_node("Objects")
 
-	# Find all display plinths in the scene
-	display_plinths = get_tree().get_nodes_in_group("display_plinth")
-	print("Found %d display plinths, %d unlocked" % [display_plinths.size(), unlocked_slot_count])
+	# Get all existing display plinths in the scene and randomize their order
+	var existing_plinths = get_tree().get_nodes_in_group("display_plinth")
+	existing_plinths.shuffle()
 
-	# Sync max display slots with unlocked count
-	inventory_manager.max_display_slots = unlocked_slot_count
+	# Use the randomized plinths as our display_plinths array
+	display_plinths = existing_plinths
 
-	# Connect to inventory and game loop changes
+	# Show only the first 'owned_plinth_count' plinths, hide the rest
+	for i in range(display_plinths.size()):
+		if i < owned_plinth_count:
+			display_plinths[i].visible = true
+		else:
+			display_plinths[i].visible = false
+
+	print("[DisplayManager] Initialized with %d plinths (%d visible, %d hidden)" % [display_plinths.size(), owned_plinth_count, display_plinths.size() - owned_plinth_count])
+
+	# Sync max display slots with owned count
+	inventory_manager.max_display_slots = owned_plinth_count
+
+	# Connect to inventory changes
 	inventory_manager.inventory_changed.connect(_update_display)
-	game_loop_manager.day_ended.connect(_on_day_ended)
 
 	# Initial update
 	_update_display()
 
-## Called at end of day - can unlock more slots based on progression
-func _on_day_ended(_day_number: int) -> void:
-	# TODO: Check progression/fame and increase unlocked_slot_count
-	# Example: if fame_level >= 5: unlocked_slot_count = 4
-	pass
+## Get cost to purchase next plinth
+func get_next_plinth_cost() -> int:
+	return BASE_PLINTH_COST + (owned_plinth_count * PLINTH_COST_INCREMENT)
 
-## Manually set the number of unlocked slots (for testing or progression systems)
-func set_unlocked_slots(count: int) -> void:
-	unlocked_slot_count = mini(count, display_plinths.size())
-	inventory_manager.max_display_slots = unlocked_slot_count
-	print("Unlocked %d display slots" % unlocked_slot_count)
-	_update_display()
+## Get maximum possible plinths
+func get_max_plinths() -> int:
+	return display_plinths.size()
+
+## Check if can purchase more plinths
+func can_purchase_plinth() -> bool:
+	return owned_plinth_count < get_max_plinths()
+
+## Purchase a new display plinth
+func purchase_plinth() -> bool:
+	if not can_purchase_plinth():
+		print("[DisplayManager] Already at max plinths!")
+		return false
+
+	var cost = get_next_plinth_cost()
+	if not currency_manager.can_afford(cost):
+		print("[DisplayManager] Cannot afford plinth! Need %d KP" % cost)
+		return false
+
+	if currency_manager.spend_kp(cost):
+		# Reveal the next hidden plinth
+		if owned_plinth_count < display_plinths.size():
+			display_plinths[owned_plinth_count].visible = true
+
+		owned_plinth_count += 1
+		inventory_manager.max_display_slots = owned_plinth_count
+		plinths_changed.emit()
+		print("[DisplayManager] Purchased plinth #%d for %d KP" % [owned_plinth_count, cost])
+		return true
+
+	return false
 
 func _update_display() -> void:
 	var displayed_souls = inventory_manager.get_display_souls()
@@ -66,9 +111,10 @@ func _update_display() -> void:
 	for plinth in display_plinths:
 		plinth.displayed_soul = null
 
-	# Get available plinths
-	var available_slots = mini(unlocked_slot_count, display_plinths.size())
-	var available_plinths = display_plinths.slice(0, available_slots).duplicate()
+	# Only the visible/owned plinths are available for display
+	var available_plinths = []
+	for i in range(min(owned_plinth_count, display_plinths.size())):
+		available_plinths.append(display_plinths[i])
 
 	# Remove souls that are no longer displayed from assignments
 	var current_soul_ids = displayed_souls.map(func(soul): return soul.id)
@@ -82,13 +128,17 @@ func _update_display() -> void:
 	var used_plinths: Array = []
 	for soul_id in soul_plinth_assignments.keys():
 		var assigned_plinth = soul_plinth_assignments[soul_id]
-		# Validate: plinth must exist and be in available plinths
+		# Validate: plinth must exist, be visible, and be in available plinths
 		if assigned_plinth == null:
 			print("[DisplayManager] WARNING: Null plinth for soul %s, removing assignment" % soul_id)
 			soul_plinth_assignments.erase(soul_id)
 			continue
+		if not assigned_plinth.visible:
+			print("[DisplayManager] WARNING: Plinth for soul %s is hidden, removing assignment" % soul_id)
+			soul_plinth_assignments.erase(soul_id)
+			continue
 		if assigned_plinth not in available_plinths:
-			print("[DisplayManager] WARNING: Plinth for soul %s is not available, removing assignment" % soul_id)
+			print("[DisplayManager] WARNING: Plinth for soul %s is not in available list, removing assignment" % soul_id)
 			soul_plinth_assignments.erase(soul_id)
 			continue
 		used_plinths.append(assigned_plinth)
@@ -136,13 +186,11 @@ func _update_display() -> void:
 
 		soul_visuals.append(soul_instance)
 
-## Get plinths that are unlocked and have souls displayed (for customers to browse)
+## Get plinths that have souls displayed (for customers to browse)
 func get_browsable_plinths() -> Array:
 	var browsable: Array = []
-	var available_slots = mini(unlocked_slot_count, display_plinths.size())
 
-	for i in range(available_slots):
-		var plinth = display_plinths[i]
+	for plinth in display_plinths:
 		if plinth.displayed_soul != null:
 			browsable.append(plinth)
 
