@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://bt3i3khpsgbqq"]
+
+[ext_resource type="Script" uid="uid://dvw04mglx0j7u" path="res://scripts/components/floating_icon.gd" id="1_74uq4"]
+[ext_resource type="Texture2D" uid="uid://dl73mnkcykn5f" path="res://assets/textures/contract.png" id="2_74uq4"]
+
+[node name="ContractIcon" type="Node3D"]
+script = ExtResource("1_74uq4")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+billboard = 1
+texture_filter = 0
+texture = ExtResource("2_74uq4")

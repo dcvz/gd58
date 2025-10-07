@@ -5,6 +5,7 @@ extends Node3D
 
 signal clicked()
 
+var icon: Node3D
 var sprite: Sprite3D
 var count_texture: ImageTexture
 var pending_count: int = 0
@@ -15,18 +16,20 @@ const COLOR_BADGE_NORMAL = Color(0.2, 0.5, 1.0)    # Blue
 const COLOR_BADGE_WARNING = Color(1.0, 0.6, 0.0)   # Orange
 const COLOR_BADGE_URGENT = Color(1.0, 0.2, 0.3)    # Red
 
+@onready var icon_scene: PackedScene = preload("res://scenes/contract_icon.tscn")
+
 func _ready() -> void:
 	_create_badge()
 	update_display(0, 0)
 
 func _create_badge() -> void:
 	# Create sprite for badge
-	sprite = Sprite3D.new()
-	sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	sprite.no_depth_test = true
-	sprite.pixel_size = 0.002  # Smaller size
-	sprite.modulate = COLOR_BADGE_NORMAL
-	add_child(sprite)
+	icon = icon_scene.instantiate()
+	
+	sprite = icon.get_sprite()
+
+
+	add_child(icon)
 
 	# Create label overlay for the number
 	var label = Label3D.new()
@@ -80,7 +83,7 @@ func _update_badge_texture(count: int) -> void:
 				image.set_pixel(x, y, Color(1, 1, 1, alpha))
 
 	count_texture = ImageTexture.create_from_image(image)
-	sprite.texture = count_texture
+
 
 	# Update label text
 	var label = get_node("CountLabel")
@@ -96,8 +99,7 @@ func update_display(count: int, urgency: int) -> void:
 		_update_badge_texture(count)
 
 		# Start subtle pulse animation
-		if not has_node("PulseTween"):
-			_start_pulse_animation()
+
 	else:
 		visible = false
 
@@ -117,18 +119,8 @@ func update_display(count: int, urgency: int) -> void:
 		_:
 			badge_color = COLOR_BADGE_NORMAL
 
-	sprite.modulate = badge_color
+	#sprite.modulate = badge_color
 
-func _start_pulse_animation() -> void:
-	var tween = create_tween()
-	tween.set_loops()  # Infinite loops
-
-	# Store original position
-	var original_y = position.y
-
-	# Gentle floating animation
-	tween.tween_property(self, "position:y", original_y + 0.15, 1.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(self, "position:y", original_y, 1.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 func on_click() -> void:
 	# Emit click signal (will be connected to open interactions menu)

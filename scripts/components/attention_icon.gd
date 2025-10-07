@@ -1,6 +1,6 @@
 extends Node3D
 
-## Floating attention icon (!! indicator)
+## Floating icon (!! indicator)
 
 var bob_time: float = 0.0
 
