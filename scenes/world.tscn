@@ -22,7 +22,7 @@ script = ExtResource("2_camera")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.65410745, -0.5348567, 0.5348569, 0, 0.70710695, 0.7071067, -0.7564018, 0.46252373, -0.46252385, 4.730927, 10, -0.28843212)
-light_energy = 0.3
+light_energy = 0.2
 shadow_enabled = true
 shadow_bias = 0.0
 shadow_normal_bias = 3.443
@@ -33,25 +33,25 @@ shadow_blur = 10.0
 environment = SubResource("Environment_world")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 2.0466413, 4.3575606)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 1.5466413, 3.8575606)
 light_color = Color(1, 1, 0.6392157, 1)
-light_energy = 0.3
+light_energy = 0.2
 shadow_enabled = true
 omni_range = 10.0
 omni_attenuation = 2.0
 
 [node name="OmniLight3D5" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 2.0466413, 0.35756063)
-light_color = Color(1, 1, 0.6392157, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 2.0466413, 0.35756063)
+light_color = Color(0.6984641, 0.8683254, 0.9980394, 1)
 light_energy = 0.3
 shadow_enabled = true
 omni_range = 10.0
 omni_attenuation = 2.0
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 2.0742707, -4.408148)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 1.5742707, -3.9081478)
 light_color = Color(1, 1, 0.6392157, 1)
-light_energy = 0.3
+light_energy = 0.2
 shadow_enabled = true
 omni_range = 10.0
 omni_attenuation = 2.0
