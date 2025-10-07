@@ -1,22 +1,34 @@
-[gd_scene load_steps=8 format=3 uid="uid://c8xj4y5kqr3pq"]
+[gd_scene load_steps=14 format=3 uid="uid://c8xj4y5kqr3pq"]
 
-[ext_resource type="Script" path="res://scripts/components/soul.gd" id="1_soul"]
+[ext_resource type="Script" uid="uid://bxq73a1xq3j8n" path="res://scripts/components/soul.gd" id="1_soul"]
 [ext_resource type="Shader" uid="uid://5i4itgqlkoey" path="res://assets/shaders/stylized_fire.gdshader" id="2_shader"]
 [ext_resource type="Texture2D" uid="uid://flldwuhtdvhp" path="res://assets/textures/HoleNoise.png" id="3_noise"]
 [ext_resource type="Texture2D" uid="uid://bko6oayqcslrd" path="res://assets/textures/FireMask.png" id="4_mask"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_soul"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n6usl"]
 render_priority = 0
 shader = ExtResource("2_shader")
-shader_parameter/emission_intensity = 2.0
-shader_parameter/time_scale = 3.0
-shader_parameter/texture_scale = Vector2(1, 1)
-shader_parameter/edge_softness = 0.1
 shader_parameter/noise_texture = ExtResource("3_noise")
 shader_parameter/texture_mask = ExtResource("4_mask")
+shader_parameter/emission_intensity = 1.0
+shader_parameter/time_scale = 2.0
+shader_parameter/texture_scale = Vector2(1, 1)
+shader_parameter/edge_softness = 0.1
 
-[sub_resource type="QuadMesh" id="QuadMesh_soul"]
-size = Vector2(0.5, 0.5)
+[sub_resource type="Curve" id="Curve_n6usl"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3659218, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_jf18v"]
+curve = SubResource("Curve_n6usl")
+
+[sub_resource type="Gradient" id="Gradient_jf18v"]
+offsets = PackedFloat32Array(0, 0.3, 1)
+colors = PackedColorArray(0.5019608, 0.8, 1, 1, 0.5, 0.8, 1, 1, 0.15, 0.24000001, 0.3, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_nqx3q"]
+gradient = SubResource("Gradient_jf18v")
+width = 128
 
 [sub_resource type="Curve" id="Curve_scale"]
 _data = [Vector2(0, 0), 0.0, 3.65289, 0, 0, Vector2(0.556561, 1), 0.0, 0.0, 0, 0]
@@ -26,15 +38,7 @@ point_count = 2
 width = 128
 curve = SubResource("Curve_scale")
 
-[sub_resource type="Gradient" id="Gradient_initial"]
-offsets = PackedFloat32Array(0.0, 1.0)
-colors = PackedColorArray(0.5, 0.8, 1.0, 1.0, 0.5, 0.8, 1.0, 0.0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture_initial"]
-gradient = SubResource("Gradient_initial")
-width = 128
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_soul"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hweci"]
 lifetime_randomness = 0.81
 particle_flag_align_y = true
 direction = Vector3(0, 1, 0)
@@ -46,18 +50,20 @@ linear_accel_min = 4.0
 linear_accel_max = 4.0
 scale_max = 2.0
 scale_curve = SubResource("CurveTexture_scale")
-color_ramp = SubResource("GradientTexture_initial")
+color_ramp = SubResource("GradientTexture1D_nqx3q")
+alpha_curve = SubResource("CurveTexture_jf18v")
+
+[sub_resource type="QuadMesh" id="QuadMesh_soul"]
+size = Vector2(0.5, 0.5)
 
 [node name="Soul" type="Node3D"]
 script = ExtResource("1_soul")
-soul_color = Color(0.5, 0.8, 1, 1)
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
-material_override = SubResource("ShaderMaterial_soul")
+material_override = SubResource("ShaderMaterial_n6usl")
 cast_shadow = 0
 amount = 50
-lifetime = 1.0
 randomness = 0.74
 draw_order = 1
-process_material = SubResource("ParticleProcessMaterial_soul")
+process_material = SubResource("ParticleProcessMaterial_hweci")
 draw_pass_1 = SubResource("QuadMesh_soul")
