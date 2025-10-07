@@ -13,6 +13,7 @@ enum State {
 	FADING              # Disappearing into thin air
 }
 
+var appearing: bool
 var current_state: State = State.BROWSING
 var encounter_data: Dictionary = {}
 var attention_icon: Node3D
@@ -37,6 +38,8 @@ func _ready() -> void:
 	# Get game loop manager reference + animations
 	game_loop_manager = get_node("/root/Root/Gameplay/GameLoopManager")
 	shadeSprite = get_node("ShadeAnimatedSprite3D")
+	appearing = true # play fade in animation once on a new shade
+	
 
 	# Listen for day ending
 	game_loop_manager.day_ended.connect(_on_day_ended)
@@ -96,6 +99,9 @@ func _process(delta: float) -> void:
 	# Don't do other behaviors if day is over
 	if game_loop_manager and not game_loop_manager.is_day_active:
 		return
+	
+	if appearing:
+		_appear()
 
 	match current_state:
 		State.BROWSING:
@@ -114,6 +120,11 @@ func fade() -> void:
 func _fade_behavior(delta: float) -> void:
 	if !shadeSprite.is_playing():
 		queue_free()
+
+func _appear() -> void:
+	if !shadeSprite.is_playing():
+		shadeSprite.play(&"hover")
+		appearing = false
 
 func _browse_behavior(delta: float) -> void:
 	# Move toward current target (plinth)
