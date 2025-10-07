@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cgd5dgqyk7c6n"]
+[gd_scene load_steps=16 format=3 uid="uid://cgd5dgqyk7c6n"]
 
 [ext_resource type="PackedScene" uid="uid://cthjhe3vr1n3c" path="res://assets/models/cube.blend" id="1_mijt2"]
 [ext_resource type="PackedScene" uid="uid://dpk5m8x3xar1q" path="res://scenes/display_plinth.tscn" id="2_1sd8j"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://dady7pq5tvb0" path="res://scenes/notification_indicator.tscn" id="4_uyqkr"]
 [ext_resource type="PackedScene" uid="uid://b2k3m4n5p6q7r" path="res://scenes/shade_spawn_area.tscn" id="5_13rby"]
 [ext_resource type="PackedScene" uid="uid://c18imxwdh6gms" path="res://scenes/storage_pedestal.tscn" id="6_ua645"]
+[ext_resource type="Texture2D" uid="uid://ci73n7hnas2y8" path="res://assets/textures/beacon.png" id="10_13rby"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_k0juu"]
 
@@ -100,6 +101,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, -1, -1)
 
 [node name="cube25" parent="FloorGeometry" instance=ExtResource("1_mijt2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -1, -1)
+
+[node name="cube_cut_diagonal4" parent="FloorGeometry" instance=ExtResource("2_deyxb")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -6, -1, -1)
+
+[node name="cube_cut_diagonal5" parent="FloorGeometry" instance=ExtResource("2_deyxb")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -6, -1, 1)
 
 [node name="cube26" parent="FloorGeometry" instance=ExtResource("1_mijt2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -1, -1)
@@ -635,14 +642,17 @@ transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1, 0
 [node name="cube_narrow16" parent="WallGeometry/StaticBody3D2" instance=ExtResource("3_uyqkr")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1, 0, -2)
 
-[node name="cube_narrow17" parent="WallGeometry/StaticBody3D2" instance=ExtResource("3_uyqkr")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1, 0, -1)
-
-[node name="cube_narrow18" parent="WallGeometry/StaticBody3D2" instance=ExtResource("3_uyqkr")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.5, 0, 0)
-
 [node name="cube_narrow19" parent="WallGeometry/StaticBody3D2" instance=ExtResource("3_uyqkr")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.5, 0, 0)
+
+[node name="cube_narrow22" parent="WallGeometry/StaticBody3D2" instance=ExtResource("3_uyqkr")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+
+[node name="cube_narrow20" parent="WallGeometry/StaticBody3D2" instance=ExtResource("3_uyqkr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 1)
+
+[node name="cube_narrow21" parent="WallGeometry/StaticBody3D2" instance=ExtResource("3_uyqkr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 2)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="WallGeometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, 1)
@@ -651,11 +661,8 @@ physics_material_override = SubResource("PhysicsMaterial_k0juu")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WallGeometry/StaticBody3D"]
 shape = SubResource("ConvexPolygonShape3D_qfnet")
 
-[node name="cube_narrow" parent="WallGeometry/StaticBody3D" instance=ExtResource("3_uyqkr")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1, 0, 0)
-
 [node name="cube_narrow5" parent="WallGeometry/StaticBody3D" instance=ExtResource("3_uyqkr")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.5, 0, 0.5)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0.5)
 
 [node name="cube_narrow6" parent="WallGeometry/StaticBody3D" instance=ExtResource("3_uyqkr")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.5, 0, 0.5)
@@ -682,10 +689,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, -1, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, -1, 1)
 
 [node name="cube53" parent="WallGeometry" instance=ExtResource("1_mijt2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, -1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, -1, 0)
 
 [node name="cube54" parent="WallGeometry" instance=ExtResource("1_mijt2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, -1, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, -1, 1)
 
 [node name="cube23" parent="WallGeometry" instance=ExtResource("1_mijt2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, 0)
@@ -719,6 +726,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -1, 5)
 
 [node name="cube_narrow_diagonal" parent="WallGeometry" instance=ExtResource("4_13rby")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5, 0, -5)
+
+[node name="cube_narrow_diagonal5" parent="WallGeometry" instance=ExtResource("4_13rby")]
+transform = Transform3D(-2.1855693e-07, 0, 1, 0, 1, 0, -1, 0, -2.1855693e-07, -6, 0, -1)
+
+[node name="cube_narrow_diagonal6" parent="WallGeometry" instance=ExtResource("4_13rby")]
+transform = Transform3D(-1, 0, -2.6226832e-07, 0, 1, 0, 2.6226832e-07, 0, -1, -6, 0, 1)
 
 [node name="cube_narrow" parent="WallGeometry" instance=ExtResource("3_uyqkr")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4, 0, -6)
@@ -917,6 +930,11 @@ pedestal_index = 10
 [node name="StoragePedestal12" parent="Objects" instance=ExtResource("6_ua645")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.5, 0, 3)
 pedestal_index = 11
+
+[node name="Sprite3D" type="Sprite3D" parent="Objects"]
+transform = Transform3D(-1.3113416e-07, -3, -1.3113416e-07, 0, -1.3113416e-07, 3, -3, 1.3113416e-07, 5.732056e-15, -7, 0.2, 0)
+texture_filter = 0
+texture = ExtResource("10_13rby")
 
 [node name="cube_cut_diagonal" parent="." instance=ExtResource("2_deyxb")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5, -1, -5)
