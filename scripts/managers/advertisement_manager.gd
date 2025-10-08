@@ -8,7 +8,9 @@ signal advertisement_changed(soul_id: String)
 var advertisements: Dictionary = {}
 
 func _ready() -> void:
-	pass
+	# Connect to discovery signals to auto-update advertisements
+	var discovery_manager = get_node("/root/Root/Gameplay/DiscoveryManager")
+	discovery_manager.discovery_made.connect(_on_discovery_made)
 
 ## Get or create advertisement for a soul
 func get_advertisement(soul_id: String) -> SoulAdvertisement:
@@ -21,9 +23,9 @@ func has_advertisement(soul_id: String) -> bool:
 	return advertisements.has(soul_id)
 
 ## Auto-advertise everything we know about a soul
-func auto_advertise_all_known(soul_id: String, discovery_log: DiscoveryLog) -> void:
+func auto_advertise_all_known(soul_id: String, soul: SoulData, discovery_log: DiscoveryLog) -> void:
 	var ad = get_advertisement(soul_id)
-	ad.auto_advertise_from_discoveries(discovery_log)
+	ad.auto_advertise_from_discoveries(discovery_log, soul)
 	advertisement_changed.emit(soul_id)
 	print("[Advertisement] Auto-advertised all known properties for soul %s" % soul_id)
 
@@ -32,6 +34,23 @@ func clear_advertisement(soul_id: String) -> void:
 	if advertisements.has(soul_id):
 		advertisements.erase(soul_id)
 		print("[Advertisement] Cleared advertisement for soul %s" % soul_id)
+
+## Called when a discovery is made - auto-update advertisement if soul is on display
+func _on_discovery_made(soul_id: String) -> void:
+	# Only auto-update if this soul has an advertisement (i.e., it's on display)
+	if not has_advertisement(soul_id):
+		return
+
+	var inventory_manager = get_node("/root/Root/Gameplay/InventoryManager")
+	var discovery_manager = get_node("/root/Root/Gameplay/DiscoveryManager")
+
+	var soul = inventory_manager.get_soul_by_id(soul_id)
+	if not soul:
+		return
+
+	var discovery_log = discovery_manager.get_discovery_log(soul_id)
+	auto_advertise_all_known(soul_id, soul, discovery_log)
+	print("[Advertisement] Auto-updated advertisement for %s after discovery" % soul_id)
 
 ## Create a virtual soul with only advertised properties (for matching/pricing)
 func create_advertised_soul(soul: SoulData, ad: SoulAdvertisement) -> Dictionary:

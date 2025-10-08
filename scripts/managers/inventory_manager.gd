@@ -89,8 +89,9 @@ func add_to_display(soul_id: String) -> bool:
 	# Auto-advertise everything we know about this soul
 	var discovery_manager = get_node("/root/Root/Gameplay/DiscoveryManager")
 	var advertisement_manager = get_node("/root/Root/Gameplay/AdvertisementManager")
+	var soul = souls[soul_id]
 	var discovery_log = discovery_manager.get_discovery_log(soul_id)
-	advertisement_manager.auto_advertise_all_known(soul_id, discovery_log)
+	advertisement_manager.auto_advertise_all_known(soul_id, soul, discovery_log)
 
 	inventory_changed.emit()
 	return true

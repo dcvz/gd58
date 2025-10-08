@@ -74,8 +74,9 @@ func get_stat_advertisement(stat_key: int) -> Dictionary:
 		return advertised_stats[stat_key].duplicate()
 	return {}
 
-## Auto-advertise everything we know (exact values only)
-func auto_advertise_from_discoveries(discovery_log: DiscoveryLog) -> void:
+## Auto-advertise everything we know (exact values, ranges, and presence)
+## By default, advertise ALL known information about a soul
+func auto_advertise_from_discoveries(discovery_log: DiscoveryLog, soul: SoulData) -> void:
 	advertise_era = discovery_log.known_era
 	advertise_death = discovery_log.known_death
 	advertised_stats.clear()
@@ -84,3 +85,25 @@ func auto_advertise_from_discoveries(discovery_log: DiscoveryLog) -> void:
 	for stat_key in discovery_log.get_discovered_stats():
 		var value = discovery_log.known_stats[stat_key]
 		advertise_stat_exact(stat_key, value)
+
+	# Advertise ranges for stats with hints
+	for stat_key in soul.stats.keys():
+		if not discovery_log.knows_stat(stat_key) and discovery_log.has_stat_hints(stat_key):
+			var hints = discovery_log.get_stat_hints(stat_key)
+			var has_range = false
+
+			# Check if we have a range hint
+			for hint in hints:
+				if "-" in hint and hint != "Present":
+					var parts = hint.split("-")
+					if parts.size() == 2:
+						var min_val = parts[0].to_float()
+						var max_val = parts[1].to_float()
+						if min_val >= 0 and max_val <= 100 and min_val < max_val:
+							advertise_stat_range(stat_key, min_val, max_val)
+							has_range = true
+							break
+
+			# If no range, but we have hints (presence only)
+			if not has_range and hints.size() > 0:
+				advertise_stat_presence(stat_key)
