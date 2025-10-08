@@ -18,6 +18,10 @@ var advertise_death: bool = false
 # stat_key -> {level: AdvertLevel, min: float, max: float, exact: float}
 var advertised_stats: Dictionary = {}
 
+# Track which stats the player has explicitly opted out of advertising
+# This prevents auto-advertise from re-adding them
+var opted_out_stats: Array[int] = []
+
 func _init(p_soul_id: String = "") -> void:
 	soul_id = p_soul_id
 
@@ -34,6 +38,9 @@ func advertise_stat_presence(stat_key: int) -> void:
 	advertised_stats[stat_key] = {
 		"level": AdvertLevel.ADVERTISE_PRESENCE
 	}
+	# Remove from opted-out list if player is now advertising it
+	if opted_out_stats.has(stat_key):
+		opted_out_stats.erase(stat_key)
 
 ## Advertise a stat range (can be speculative/lying)
 func advertise_stat_range(stat_key: int, min_val: float, max_val: float) -> void:
@@ -42,6 +49,9 @@ func advertise_stat_range(stat_key: int, min_val: float, max_val: float) -> void
 		"min": min_val,
 		"max": max_val
 	}
+	# Remove from opted-out list if player is now advertising it
+	if opted_out_stats.has(stat_key):
+		opted_out_stats.erase(stat_key)
 
 ## Advertise exact stat value
 func advertise_stat_exact(stat_key: int, value: float) -> void:
@@ -49,10 +59,16 @@ func advertise_stat_exact(stat_key: int, value: float) -> void:
 		"level": AdvertLevel.ADVERTISE_EXACT,
 		"exact": value
 	}
+	# Remove from opted-out list if player is now advertising it
+	if opted_out_stats.has(stat_key):
+		opted_out_stats.erase(stat_key)
 
-## Remove stat advertisement
+## Remove stat advertisement (player explicitly opted out)
 func unadvertise_stat(stat_key: int) -> void:
 	advertised_stats.erase(stat_key)
+	# Mark as explicitly opted out so auto-advertise won't re-add it
+	if not opted_out_stats.has(stat_key):
+		opted_out_stats.append(stat_key)
 
 ## Check if a stat is being advertised (at any level)
 func is_stat_advertised(stat_key: int) -> bool:
@@ -76,34 +92,50 @@ func get_stat_advertisement(stat_key: int) -> Dictionary:
 
 ## Auto-advertise everything we know (exact values, ranges, and presence)
 ## By default, advertise ALL known information about a soul
+## Respects manual opt-outs - won't re-advertise stats the player has turned off
 func auto_advertise_from_discoveries(discovery_log: DiscoveryLog, soul: SoulData) -> void:
 	advertise_era = discovery_log.known_era
 	advertise_death = discovery_log.known_death
-	advertised_stats.clear()
 
 	# Advertise exact values for discovered stats
 	for stat_key in discovery_log.get_discovered_stats():
+		# Skip if player has explicitly opted out of advertising this stat
+		if opted_out_stats.has(stat_key):
+			continue
+
+		# Advertise or upgrade to exact value
 		var value = discovery_log.known_stats[stat_key]
 		advertise_stat_exact(stat_key, value)
 
 	# Advertise ranges for stats with hints
 	for stat_key in soul.stats.keys():
-		if not discovery_log.knows_stat(stat_key) and discovery_log.has_stat_hints(stat_key):
-			var hints = discovery_log.get_stat_hints(stat_key)
-			var has_range = false
+		# Skip if player has explicitly opted out
+		if opted_out_stats.has(stat_key):
+			continue
 
-			# Check if we have a range hint
-			for hint in hints:
-				if "-" in hint and hint != "Present":
-					var parts = hint.split("-")
-					if parts.size() == 2:
-						var min_val = parts[0].to_float()
-						var max_val = parts[1].to_float()
-						if min_val >= 0 and max_val <= 100 and min_val < max_val:
-							advertise_stat_range(stat_key, min_val, max_val)
-							has_range = true
-							break
+		# Skip if we already have exact value or already advertised
+		if discovery_log.knows_stat(stat_key) or is_stat_advertised(stat_key):
+			continue
 
-			# If no range, but we have hints (presence only)
-			if not has_range and hints.size() > 0:
-				advertise_stat_presence(stat_key)
+		# Only proceed if we have hints
+		if not discovery_log.has_stat_hints(stat_key):
+			continue
+
+		var hints = discovery_log.get_stat_hints(stat_key)
+		var has_range = false
+
+		# Check if we have a range hint
+		for hint in hints:
+			if "-" in hint and hint != "Present":
+				var parts = hint.split("-")
+				if parts.size() == 2:
+					var min_val = parts[0].to_float()
+					var max_val = parts[1].to_float()
+					if min_val >= 0 and max_val <= 100 and min_val < max_val:
+						advertise_stat_range(stat_key, min_val, max_val)
+						has_range = true
+						break
+
+		# If no range, but we have hints (presence only)
+		if not has_range and hints.size() > 0:
+			advertise_stat_presence(stat_key)
