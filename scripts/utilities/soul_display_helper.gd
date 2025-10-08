@@ -45,6 +45,7 @@ static func add_soul_details_with_discoveries(left_container: VBoxContainer, rig
 			var stat_value = discovery_log.known_stats[stat_key]
 			var stat_item = Label.new()
 			stat_item.text = "  • %s: %d%%" % [SoulData.SoulAttribute.keys()[stat_key], int(stat_value)]
+			stat_item.add_theme_color_override("font_color", RarityTables.get_stat_color(int(stat_value)))
 			left_container.add_child(stat_item)
 
 	# RIGHT SIDE: Hints and unknowns
@@ -151,6 +152,7 @@ static func add_soul_details_to_container(container: VBoxContainer, soul: SoulDa
 			var stat_value = soul.stats[stat_key]
 			var stat_item = Label.new()
 			stat_item.text = "  • %s: %d%%" % [SoulData.SoulAttribute.keys()[stat_key], int(stat_value)]
+			stat_item.add_theme_color_override("font_color", RarityTables.get_stat_color(int(stat_value)))
 			container.add_child(stat_item)
 	else:
 		var no_stats_label = Label.new()

@@ -5,13 +5,23 @@ extends RefCounted
 ## This ensures that rare things are actually generated rarely AND valued appropriately
 
 # Rarity tiers and their KP values
-enum RarityTier { COMMON, UNCOMMON, RARE, VERY_RARE }
+enum RarityTier { COMMON, UNCOMMON, RARE, VERY_RARE, LEGENDARY }
 
 const RARITY_VALUES = {
 	RarityTier.COMMON: 5,
 	RarityTier.UNCOMMON: 15,
 	RarityTier.RARE: 30,
-	RarityTier.VERY_RARE: 50
+	RarityTier.VERY_RARE: 50,
+	RarityTier.LEGENDARY: 100
+}
+
+# Rarity colors for UI display
+const RARITY_COLORS = {
+	RarityTier.COMMON: Color.WHITE,
+	RarityTier.UNCOMMON: Color(0.3, 1.0, 0.3),      # Green
+	RarityTier.RARE: Color(0.3, 0.6, 1.0),          # Blue
+	RarityTier.VERY_RARE: Color(0.8, 0.3, 1.0),     # Purple
+	RarityTier.LEGENDARY: Color(1.0, 0.6, 0.0)      # Orange
 }
 
 # Era rarity and generation weights
@@ -104,10 +114,32 @@ static func get_death_value(death: SoulData.CauseOfDeath) -> int:
 		return RARITY_VALUES[DEATH_RARITY[death]]
 	return RARITY_VALUES[RarityTier.COMMON]
 
+## Get rarity tier for a stat based on its value
+## Stats are generated using randfn(0.5, 0.18) * 100, creating a normal distribution
+## centered at 50 with standard deviation of 18
+static func get_stat_rarity(stat_value: int) -> RarityTier:
+	# Legendary: Beyond 2 standard deviations (≥86 or ≤14) - ~5% of stats
+	if stat_value >= 86 or stat_value <= 14:
+		return RarityTier.LEGENDARY
+	# Very Rare: Beyond 1.5 standard deviations (≥77 or ≤23) - ~13% of stats
+	elif stat_value >= 77 or stat_value <= 23:
+		return RarityTier.VERY_RARE
+	# Rare: Beyond 1.2 standard deviations (≥72 or ≤28) - ~23% of stats
+	elif stat_value >= 72 or stat_value <= 28:
+		return RarityTier.RARE
+	# Uncommon: Beyond 0.7 standard deviations (≥63 or ≤37) - ~48% of stats
+	elif stat_value >= 63 or stat_value <= 37:
+		return RarityTier.UNCOMMON
+	# Common: Within 0.7 standard deviations (38-62) - ~52% of stats
+	else:
+		return RarityTier.COMMON
+
+## Get color for a stat based on its rarity
+static func get_stat_color(stat_value: int) -> Color:
+	var rarity = get_stat_rarity(stat_value)
+	return RARITY_COLORS[rarity]
+
 ## Get KP value for a stat based on its value (extreme = rare = valuable)
 static func get_stat_value(stat_value: int) -> int:
-	# Stats below 25 or above 85 are rare
-	if stat_value < STAT_RARE_THRESHOLD or stat_value > (100 - STAT_RARE_THRESHOLD):
-		return RARITY_VALUES[RarityTier.RARE]
-	else:
-		return RARITY_VALUES[RarityTier.COMMON]
+	var rarity = get_stat_rarity(stat_value)
+	return RARITY_VALUES[rarity]
