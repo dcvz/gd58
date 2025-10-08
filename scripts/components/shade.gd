@@ -16,7 +16,6 @@ enum State {
 var appearing: bool
 var current_state: State = State.BROWSING
 var encounter_data: Dictionary = {}
-var attention_icon: Node3D
 var game_loop_manager: Node
 var shadeSprite: AnimatedSprite3D
 
@@ -32,8 +31,6 @@ var will_buy: bool = false
 var selected_soul_plinth: Node3D = null
 var spawn_position: Vector3 = Vector3.ZERO
 
-@onready var icon_scene: PackedScene = preload("res://scenes/attention_icon.tscn")
-
 func _ready() -> void:
 	# Get game loop manager reference + animations
 	game_loop_manager = get_node("/root/Root/Gameplay/GameLoopManager")
@@ -43,12 +40,6 @@ func _ready() -> void:
 
 	# Listen for day ending
 	game_loop_manager.day_ended.connect(_on_day_ended)
-
-	# Create attention icon (hidden by default)
-	attention_icon = icon_scene.instantiate()
-	add_child(attention_icon)
-	attention_icon.visible = false
-	attention_icon.position = Vector3(0, 2, 0)  # Above customer
 
 func setup(encounter: Dictionary) -> void:
 	encounter_data = encounter
@@ -262,7 +253,6 @@ func move_to_checkout() -> void:
 func leave_shop() -> void:
 	current_state = State.WALKING_TO_EXIT
 	current_target = spawn_position
-	attention_icon.visible = false
 
 func _on_day_ended(_day_number: int) -> void:
 	# When day ends, everyone goes home immediately
