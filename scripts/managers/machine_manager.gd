@@ -240,20 +240,8 @@ func _discover_random_stat_wide_range(soul_id: String, soul: SoulData, discovery
 	if undiscovered_stats.size() > 0:
 		var stat_key = undiscovered_stats.pick_random()
 		var actual_value = soul.stats[stat_key]
-
-		# Random range width between 15-40
 		var range_width = randi_range(15, 40)
-
-		# Random position within range (0.0 = at min, 1.0 = at max, 0.5 = centered)
-		var position_in_range = randf()
-
-		# Calculate offset from actual value
-		var offset_below = range_width * position_in_range
-		var offset_above = range_width * (1.0 - position_in_range)
-
-		var min_range = max(0, actual_value - offset_below)
-		var max_range = min(100, actual_value + offset_above)
-		var hint = "%d-%d" % [int(min_range), int(max_range)]
+		var hint = SoulDisplayHelper.generate_stat_range_hint(actual_value, range_width)
 		discovery_manager.add_stat_hint(soul_id, stat_key, hint)
 
 ## Machine 3: Discover random property within 20 points (narrow range)
@@ -268,20 +256,8 @@ func _discover_random_stat_narrow_range(soul_id: String, soul: SoulData, discove
 	if undiscovered_stats.size() > 0:
 		var stat_key = undiscovered_stats.pick_random()
 		var actual_value = soul.stats[stat_key]
-
-		# Fixed range width of 20 points
 		var range_width = 20
-
-		# Random position within range (0.0 = at min, 1.0 = at max, 0.5 = centered)
-		var position_in_range = randf()
-
-		# Calculate offset from actual value
-		var offset_below = range_width * position_in_range
-		var offset_above = range_width * (1.0 - position_in_range)
-
-		var min_range = max(0, actual_value - offset_below)
-		var max_range = min(100, actual_value + offset_above)
-		var hint = "%d-%d" % [int(min_range), int(max_range)]
+		var hint = SoulDisplayHelper.generate_stat_range_hint(actual_value, range_width)
 		discovery_manager.add_stat_hint(soul_id, stat_key, hint)
 
 ## Machine 4: Discover 6 specific properties (presence only, no values)

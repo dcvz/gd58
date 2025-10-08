@@ -77,7 +77,7 @@ func _initialize_starter_package() -> void:
 	print("[GameLoop] Starter package complete!")
 
 func _create_starter_souls(inventory_manager: Node, discovery_manager: Node) -> void:
-	# Soul 1: Well-known - Era + 2 stats (ON DISPLAY)
+	# Soul 1: Well-known - Era + 2 stat hints (ON DISPLAY)
 	var soul1 = SoulData.generate_random_soul()
 	inventory_manager.add_soul(soul1)
 
@@ -87,12 +87,16 @@ func _create_starter_souls(inventory_manager: Node, discovery_manager: Node) -> 
 	var stat_keys1 = soul1.stats.keys()
 	stat_keys1.shuffle()
 	for i in range(min(2, stat_keys1.size())):
-		disc_log1.discover_stat(stat_keys1[i], soul1.stats[stat_keys1[i]])
+		var stat_key = stat_keys1[i]
+		var actual_value = soul1.stats[stat_key]
+		var range_width = 10  # Tighter range for starter soul (helpful)
+		var hint = SoulDisplayHelper.generate_stat_range_hint(actual_value, range_width)
+		disc_log1.add_stat_hint(stat_key, hint)
 
 	inventory_manager.add_to_display(soul1.id)
-	print("[GameLoop] Created starter soul 1: %s (Era + 2 stats, ON DISPLAY)" % soul1.name)
+	print("[GameLoop] Created starter soul 1: %s (Era + 2 stat hints, ON DISPLAY)" % soul1.name)
 
-	# Soul 2: Partially known - 1 stat + hints (ON DISPLAY)
+	# Soul 2: Partially known - stat hints only (ON DISPLAY)
 	var soul2 = SoulData.generate_random_soul()
 	inventory_manager.add_soul(soul2)
 
@@ -101,24 +105,20 @@ func _create_starter_souls(inventory_manager: Node, discovery_manager: Node) -> 
 	var stat_keys2 = soul2.stats.keys()
 	if stat_keys2.size() > 0:
 		stat_keys2.shuffle()
-		disc_log2.discover_stat(stat_keys2[0], soul2.stats[stat_keys2[0]])
-
-		# Add 1-2 stat hints (ranges) for other stats
-		var num_hints = randi_range(1, min(2, stat_keys2.size() - 1))
-		for i in range(1, 1 + num_hints):
+		# Add 1-2 stat hints (ranges) - no exact stats
+		var num_hints = randi_range(1, min(2, stat_keys2.size()))
+		for i in range(num_hints):
 			if i < stat_keys2.size():
 				var stat_key = stat_keys2[i]
 				var actual_value = soul2.stats[stat_key]
-				var range_width = 25
-				var min_val = max(0, actual_value - range_width / 2)
-				var max_val = min(100, actual_value + range_width / 2)
-				var hint = "%d-%d" % [int(min_val), int(max_val)]
+				var range_width = 20  # Medium range
+				var hint = SoulDisplayHelper.generate_stat_range_hint(actual_value, range_width)
 				disc_log2.add_stat_hint(stat_key, hint)
 
 	inventory_manager.add_to_display(soul2.id)
-	print("[GameLoop] Created starter soul 2: %s (1 stat + hints, ON DISPLAY)" % soul2.name)
+	print("[GameLoop] Created starter soul 2: %s (stat hints only, ON DISPLAY)" % soul2.name)
 
-	# Soul 3: Mystery soul - only 1 stat known (IN STORAGE - needs research!)
+	# Soul 3: Mystery soul - single stat hint (IN STORAGE - needs research!)
 	var soul3 = SoulData.generate_random_soul()
 	inventory_manager.add_soul(soul3)
 
@@ -127,10 +127,14 @@ func _create_starter_souls(inventory_manager: Node, discovery_manager: Node) -> 
 	var stat_keys3 = soul3.stats.keys()
 	if stat_keys3.size() > 0:
 		stat_keys3.shuffle()
-		disc_log3.discover_stat(stat_keys3[0], soul3.stats[stat_keys3[0]])
+		var stat_key = stat_keys3[0]
+		var actual_value = soul3.stats[stat_key]
+		var range_width = 30  # Wider range for mystery soul
+		var hint = SoulDisplayHelper.generate_stat_range_hint(actual_value, range_width)
+		disc_log3.add_stat_hint(stat_key, hint)
 
 	# Soul 3 stays in storage - player needs to research it!
-	print("[GameLoop] Created starter soul 3: %s (1 stat only, IN STORAGE)" % soul3.name)
+	print("[GameLoop] Created starter soul 3: %s (1 stat hint, IN STORAGE)" % soul3.name)
 
 func _process(delta: float) -> void:
 	if not is_day_active or is_simulation_paused:

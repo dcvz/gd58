@@ -207,6 +207,17 @@ static func create_two_column_discovery_layout(parent_container: VBoxContainer, 
 
 	add_soul_details_with_discoveries(left_vbox, right_vbox, soul, discovery_log)
 
+## Generate a stat range hint with random positioning
+## The actual value can be anywhere within the returned range
+static func generate_stat_range_hint(actual_value: float, range_width: int) -> String:
+	# Random position within range (0.0 = at min, 1.0 = at max, 0.5 = centered)
+	var position_in_range = randf()
+	var offset_below = range_width * position_in_range
+	var offset_above = range_width * (1.0 - position_in_range)
+	var min_val = max(0, actual_value - offset_below)
+	var max_val = min(100, actual_value + offset_above)
+	return "%d-%d" % [int(min_val), int(max_val)]
+
 ## Generate a "seller's knowledge" discovery log for a soul
 ## Sellers have imperfect knowledge - they know ranges, not exact values
 ## This creates a temporary DiscoveryLog with range hints for a few random stats
@@ -229,12 +240,7 @@ static func create_seller_knowledge(soul: SoulData, range_width: int = 25) -> Di
 		for i in range(num_stats_known):
 			var stat_key = all_stat_keys[i]
 			var actual_value = soul.stats[stat_key]
-
-			# Generate a range centered on the actual value
-			var min_val = max(0, actual_value - range_width / 2)
-			var max_val = min(100, actual_value + range_width / 2)
-
-			var hint = "%d-%d" % [int(min_val), int(max_val)]
+			var hint = generate_stat_range_hint(actual_value, range_width)
 			seller_log.add_stat_hint(stat_key, hint)
 
 	return seller_log
