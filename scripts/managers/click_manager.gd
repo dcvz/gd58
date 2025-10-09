@@ -5,7 +5,7 @@ extends Node
 signal soul_clicked(soul: SoulData, world_position: Vector3)
 signal plinth_clicked(plinth: Node3D)
 
-@onready var camera: Camera3D = get_node("/root/Root/World/Camera3D")
+@onready var camera: Camera3D = get_viewport().get_camera_3d()
 @onready var storage_manager: Node = get_node("/root/Root/Gameplay/StorageManager")
 
 func _input(event: InputEvent) -> void:
