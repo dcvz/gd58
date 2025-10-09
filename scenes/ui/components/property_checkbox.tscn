@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://38f1gxj81ksv"]
-
-[ext_resource type="Script" path="res://scripts/ui/components/property_checkbox.gd" id="1_script"]
-
-[node name="PropertyCheckBox" type="CheckBox"]
-script = ExtResource("1_script")
-
-[connection signal="toggled" from="." to="." method="_on_toggled"]
