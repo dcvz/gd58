@@ -13,22 +13,24 @@ config_version=5
 config/name="Soul Emporium"
 run/main_scene="res://splash.tscn"
 config/features=PackedStringArray("4.5", "GL Compatibility")
-config/icon="res://icon.svg"
+run/max_fps=60
+config/icon="uid://cxso8g5arj23g"
 
 [display]
 
-window/size/viewport_width=1280
-window/size/viewport_height=720
-window/size/mode=2
+window/size/viewport_width=1920
+window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/stretch/scale=2.0
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/GDQuest_GDScript_formatter/plugin.cfg", "res://addons/gd-plug-ui/plugin.cfg")
+enabled=PackedStringArray("res://addons/gd-plug-ui/plugin.cfg")
 
 [gui]
 
+theme/custom="uid://bva0u7eeyq06s"
 theme/custom_font="uid://bivqpgd86yv34"
 
 [rendering]
