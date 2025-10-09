@@ -24,6 +24,7 @@ func _ready() -> void:
 	close_button.pressed.connect(_on_close_pressed)
 	machine_manager.machines_changed.connect(_refresh_machines)
 	display_manager.plinths_changed.connect(_refresh_special)
+	inventory_manager.inventory_slots_changed.connect(_refresh_special)
 	currency_manager.currency_changed.connect(func(_amount):
 		_refresh_machines()
 		_refresh_special()
@@ -122,6 +123,9 @@ func _refresh_special() -> void:
 	for child in special_list.get_children():
 		child.queue_free()
 
+	# Add inventory slot purchase option
+	_create_inventory_purchase_item()
+
 	# Add plinth purchase option
 	_create_plinth_purchase_item()
 
@@ -168,6 +172,53 @@ func _create_plinth_purchase_item() -> void:
 		vbox.add_child(max_label)
 
 	special_list.add_child(panel)
+
+func _create_inventory_purchase_item() -> void:
+	var panel = PanelContainer.new()
+	var vbox = VBoxContainer.new()
+	panel.add_child(vbox)
+
+	# Title
+	var title_label = Label.new()
+	title_label.text = "Storage Capacity"
+	title_label.add_theme_font_size_override("font_size", 16)
+	vbox.add_child(title_label)
+
+	# Description
+	var desc_label = Label.new()
+	desc_label.text = "Expand your storage room to hold more souls"
+	desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	desc_label.custom_minimum_size = Vector2(500, 0)
+	vbox.add_child(desc_label)
+
+	# Info line
+	var info_label = Label.new()
+	info_label.text = "Capacity: %d / %d" % [inventory_manager.max_souls, inventory_manager.MAX_INVENTORY_CAPACITY]
+	vbox.add_child(info_label)
+
+	# Purchase button or max reached
+	if inventory_manager.can_purchase_inventory():
+		var cost = inventory_manager.get_next_inventory_cost()
+		var buy_button = Button.new()
+		buy_button.text = "Purchase Storage Slot (%d KP)" % cost
+		buy_button.pressed.connect(_on_purchase_inventory)
+
+		# Disable if can't afford
+		if not currency_manager.can_afford(cost):
+			buy_button.disabled = true
+			buy_button.text = "Cannot Afford (%d KP)" % cost
+
+		vbox.add_child(buy_button)
+	else:
+		var max_label = Label.new()
+		max_label.text = "✓ MAX CAPACITY"
+		max_label.add_theme_color_override("font_color", Color(0.3, 1.0, 0.3))
+		vbox.add_child(max_label)
+
+	special_list.add_child(panel)
+
+func _on_purchase_inventory() -> void:
+	inventory_manager.purchase_inventory_slot()
 
 func _on_purchase_plinth() -> void:
 	display_manager.purchase_plinth()

@@ -5,8 +5,6 @@ extends Node
 signal storage_updated()
 signal pedestal_clicked(pedestal: Node3D, soul: SoulData)
 
-const INITIAL_CAPACITY = 12
-
 var storage_pedestals: Array = []  # Array of StoragePedestal nodes
 var soul_to_pedestal: Dictionary = {}  # soul_id -> pedestal_index
 
@@ -23,6 +21,7 @@ func _ready() -> void:
 		inventory_manager.soul_added.connect(_on_soul_added_to_inventory)
 		inventory_manager.soul_removed.connect(_on_soul_removed_from_inventory)
 		inventory_manager.inventory_changed.connect(_refresh_storage)
+		inventory_manager.inventory_slots_changed.connect(_update_pedestal_visibility)
 
 func _initialize_pedestals() -> void:
 	"""Find and register all storage pedestals"""
@@ -36,6 +35,9 @@ func _initialize_pedestals() -> void:
 			pedestal.pedestal_clicked.connect(_on_pedestal_clicked)
 
 	print("[StorageManager] Initialized with %d pedestals" % storage_pedestals.size())
+
+	# Update visibility based on current capacity
+	_update_pedestal_visibility()
 
 func _on_soul_added_to_inventory(soul: SoulData) -> void:
 	"""When soul added to inventory, check if it should be in storage"""
@@ -118,8 +120,9 @@ func _refresh_storage() -> void:
 	# Get all souls NOT on display
 	var storage_souls = inventory_manager.get_storage_souls()
 
-	# Place each storage soul on a pedestal
-	for i in range(min(storage_souls.size(), storage_pedestals.size())):
+	# Place each storage soul on a pedestal (only on visible pedestals)
+	var visible_capacity = inventory_manager.max_souls
+	for i in range(min(storage_souls.size(), visible_capacity)):
 		var soul = storage_souls[i]
 		var pedestal = storage_pedestals[i]
 		pedestal.set_soul(soul)
@@ -127,3 +130,14 @@ func _refresh_storage() -> void:
 
 	print("[StorageManager] Refreshed storage: %d souls" % storage_souls.size())
 	storage_updated.emit()
+
+func _update_pedestal_visibility() -> void:
+	"""Show/hide pedestals based on purchased capacity"""
+	var capacity = inventory_manager.max_souls
+	for i in range(storage_pedestals.size()):
+		if i < capacity:
+			storage_pedestals[i].visible = true
+		else:
+			storage_pedestals[i].visible = false
+
+	print("[StorageManager] Updated pedestal visibility: %d / %d visible" % [capacity, storage_pedestals.size()])
