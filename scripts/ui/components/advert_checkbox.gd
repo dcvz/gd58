@@ -2,8 +2,6 @@ extends CheckBox
 class_name AdvertCheckBox
 
 ## Universal checkbox component for advertisement properties
-## Handles both simple properties (era, death) and complex stats (exact/range/presence)
-## Artists can style in scene, devs just set data via simple API
 
 signal toggled_with_data(is_checked: bool, user_data: Dictionary)
 

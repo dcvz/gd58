@@ -1,8 +1,6 @@
 extends Control
 
 ## Context menu that appears when clicking a soul in storage
-## Now uses component-based architecture - much cleaner!
-
 var current_soul: SoulData = null
 var inventory_manager: Node
 var display_manager: Node
