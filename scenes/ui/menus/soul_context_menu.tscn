@@ -1,0 +1,78 @@
+[gd_scene load_steps=3 format=3 uid="uid://cq8j7m3xpv2h1"]
+
+[ext_resource type="Script" uid="uid://04u6qbv65nwg" path="res://scripts/ui/menus/soul_context_menu.gd" id="1_context"]
+[ext_resource type="PackedScene" uid="uid://d3j4k5l6m7n8o" path="res://scenes/ui/sections/advertisement_section.tscn" id="2_ad_section"]
+
+[node name="SoulContextMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_context")
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_right = 540.0
+offset_bottom = 400.0
+
+[node name="MainVBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Panel/MainVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Soul Name"
+horizontal_alignment = 1
+
+[node name="Separator1" type="HSeparator" parent="Panel/MainVBox"]
+layout_mode = 2
+
+[node name="ColumnsHBox" type="HBoxContainer" parent="Panel/MainVBox"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+
+[node name="LeftVBox" type="VBoxContainer" parent="Panel/MainVBox/ColumnsHBox"]
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="Panel/MainVBox/ColumnsHBox"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="RightVBox" type="VBoxContainer" parent="Panel/MainVBox/ColumnsHBox"]
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+
+[node name="JobStatusContainer" type="VBoxContainer" parent="Panel/MainVBox"]
+layout_mode = 2
+
+[node name="AdvertisementSection" parent="Panel/MainVBox" instance=ExtResource("2_ad_section")]
+layout_mode = 2
+
+[node name="Separator2" type="HSeparator" parent="Panel/MainVBox"]
+layout_mode = 2
+
+[node name="ButtonsHBox" type="HBoxContainer" parent="Panel/MainVBox"]
+layout_mode = 2
+
+[node name="DisplayButton" type="Button" parent="Panel/MainVBox/ButtonsHBox"]
+layout_mode = 2
+text = "Display on Plinth"
+
+[node name="StorageButton" type="Button" parent="Panel/MainVBox/ButtonsHBox"]
+visible = false
+layout_mode = 2
+text = "Send to Storage"
+
+[node name="AnalyzeButton" type="Button" parent="Panel/MainVBox/ButtonsHBox"]
+layout_mode = 2
+text = "Analyze"
+
+[node name="DiscardButton" type="Button" parent="Panel/MainVBox/ButtonsHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+text = "Discard"
+
+[connection signal="pressed" from="Panel/MainVBox/ButtonsHBox/DisplayButton" to="." method="_on_display_pressed"]
+[connection signal="pressed" from="Panel/MainVBox/ButtonsHBox/StorageButton" to="." method="_on_send_to_storage_pressed"]
+[connection signal="pressed" from="Panel/MainVBox/ButtonsHBox/AnalyzeButton" to="." method="_on_machine_pressed"]
+[connection signal="pressed" from="Panel/MainVBox/ButtonsHBox/DiscardButton" to="." method="_on_discard_pressed"]

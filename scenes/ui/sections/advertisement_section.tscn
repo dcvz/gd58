@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://d3j4k5l6m7n8o"]
+
+[ext_resource type="Script" path="res://scripts/ui/sections/advertisement_section.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://b8x9k2m4n5p6q" path="res://scenes/ui/components/advert_checkbox.tscn" id="2_checkbox"]
+
+[node name="AdvertisementSection" type="VBoxContainer"]
+script = ExtResource("1_script")
+
+[node name="Separator" type="HSeparator" parent="."]
+layout_mode = 2
+
+[node name="Header" type="Label" parent="."]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
+text = "ADVERTISE PROPERTIES (what collectors see)"
+
+[node name="ContentMargin" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Indent" type="Control" parent="ContentMargin"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="ControlsVBox" type="VBoxContainer" parent="ContentMargin"]
+layout_mode = 2
+
+[node name="EraCheckbox" parent="ContentMargin/ControlsVBox" instance=ExtResource("2_checkbox")]
+layout_mode = 2
+
+[node name="DeathCheckbox" parent="ContentMargin/ControlsVBox" instance=ExtResource("2_checkbox")]
+layout_mode = 2
+
+[node name="StatsLabel" type="Label" parent="ContentMargin/ControlsVBox"]
+layout_mode = 2
+text = "Stats:"
+
+[node name="StatsContainer" type="VBoxContainer" parent="ContentMargin/ControlsVBox"]
+layout_mode = 2

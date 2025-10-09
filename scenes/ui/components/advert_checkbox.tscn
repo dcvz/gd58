@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8x9k2m4n5p6q"]
+
+[ext_resource type="Script" path="res://scripts/ui/components/advert_checkbox.gd" id="1_script"]
+
+[node name="AdvertCheckBox" type="CheckBox"]
+script = ExtResource("1_script")
+
+[connection signal="toggled" from="." to="." method="_on_toggled"]

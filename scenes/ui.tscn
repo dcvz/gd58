@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://b5kqm2r8xax3p" path="res://scenes/interaction_menu.tscn" id="2_yev5y"]
 [ext_resource type="PackedScene" uid="uid://c7n8k3nap2q1r" path="res://scenes/end_of_day_menu.tscn" id="3_eod"]
 [ext_resource type="PackedScene" uid="uid://c8kqm3saxbx4q" path="res://scenes/shade_interactions_menu.tscn" id="4_shade_interactions"]
-[ext_resource type="PackedScene" uid="uid://cq8j7m3xpv2h1" path="res://scenes/soul_context_menu.tscn" id="5_context_menu"]
+[ext_resource type="PackedScene" uid="uid://cq8j7m3xpv2h1" path="res://scenes/ui/menus/soul_context_menu.tscn" id="5_context_menu"]
 [ext_resource type="PackedScene" uid="uid://ctv8k3m5qax2r" path="res://scenes/tutorial_popup.tscn" id="6_tutorial"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_day"]
