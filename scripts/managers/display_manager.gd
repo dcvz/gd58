@@ -47,8 +47,10 @@ func _ready() -> void:
 	for i in range(display_plinths.size()):
 		if i < owned_plinth_count:
 			display_plinths[i].visible = true
+			_set_plinth_collision_enabled(display_plinths[i], true)
 		else:
 			display_plinths[i].visible = false
+			_set_plinth_collision_enabled(display_plinths[i], false)
 
 	print("[DisplayManager] Initialized with %d plinths (%d visible, %d hidden)" % [display_plinths.size(), owned_plinth_count, display_plinths.size() - owned_plinth_count])
 
@@ -88,6 +90,7 @@ func purchase_plinth() -> bool:
 		# Reveal the next hidden plinth
 		if owned_plinth_count < display_plinths.size():
 			display_plinths[owned_plinth_count].visible = true
+			_set_plinth_collision_enabled(display_plinths[owned_plinth_count], true)
 
 		owned_plinth_count += 1
 		inventory_manager.max_display_slots = owned_plinth_count
@@ -194,3 +197,11 @@ func get_browsable_plinths() -> Array:
 			browsable.append(plinth)
 
 	return browsable
+
+## Enable or disable collision for a plinth
+func _set_plinth_collision_enabled(plinth: Node3D, enabled: bool) -> void:
+	# Find the StaticBody3D child and disable its collision
+	var static_body = plinth.get_node_or_null("StaticBody3D")
+	if static_body:
+		static_body.set_collision_layer_value(1, enabled)
+		static_body.set_collision_mask_value(1, enabled)
