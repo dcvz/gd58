@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c2ffhdbm0wuvn"]
 
-[ext_resource type="Script" path="res://scripts/ui/loading_screen.gd" id="1"]
+[ext_resource type="Script" uid="uid://vvossa3cknr6" path="res://scripts/ui/loading_screen.gd" id="1"]
 
 [node name="LoadingScreen" type="Control"]
 layout_mode = 3
@@ -33,6 +33,7 @@ layout_mode = 2
 
 [node name="Title" type="Label" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.9019608, 0.9019608, 0.9019608, 1)
 theme_override_font_sizes/font_size = 48
 text = "Soul Emporium"
 horizontal_alignment = 1
@@ -43,6 +44,7 @@ layout_mode = 2
 
 [node name="LoadingLabel" type="Label" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.9019608, 0.9019608, 0.9019608, 1)
 theme_override_font_sizes/font_size = 24
 text = "Loading..."
 horizontal_alignment = 1
